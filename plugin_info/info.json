@@ -13,7 +13,7 @@
     "author": "TiTidom & Mips or Mips & TiTidom",
     "require": "4.4",
     "hasDependency": false,
-    "category": "monitoring",
+    "category": "programming",
     "language": [
         "fr_FR",
         "en_US",
@@ -21,9 +21,7 @@
         "de_DE"
     ],
     "compatibility": [
-        "jeedomboard",
         "smart",
-        "miniplus",
         "rpi",
         "docker",
         "diy",
@@ -31,7 +29,7 @@
         "atlas"
     ],
     "os": {
-        "min" : 11
+        "min": 11
     },
     "link": {
         "forum": "https://community.jeedom.com/tag/plugin-sshmanager",
