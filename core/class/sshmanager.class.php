@@ -22,6 +22,9 @@ class sshmanager extends eqLogic {
     const CONFIG_PORT = 'port';
     const CONFIG_TIMEOUT = 'timeout';
 
+    const AUTH_METHOD_PASSWORD = 'password';
+    const AUTH_METHOD_SSH_KEY = 'ssh-key';
+    const AUTH_METHOD_AGENT = 'agent';
     const DEFAULT_AUTH_METHOD = 'password';
 
     public function decrypt() {

@@ -27,7 +27,7 @@ $("#table_cmd").sortable({
 /* Fonction permettant l'affichage des commandes dans l'équipement */
 function addCmdToTable(_cmd) {
 	if (!isset(_cmd)) {
-		var _cmd = {configuration: {}};
+		var _cmd = { configuration: {} };
 	}
 
 	// TODO: Ajouter l'affichage des commandes
@@ -51,39 +51,39 @@ function addCmdToTable(_cmd) {
 	tr += '<td>';
 	tr += '<span class="cmdAttr" data-l1key="htmlstate"></span>';
 	tr += '</td>';
-	
+
 	tr += '<td>';
 	if (is_numeric(_cmd.id)) {
 		tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
-        tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
+		tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
 	}
 	tr += '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove" title="{{Supprimer la commande}}"></i>';
 	tr += '</td>';
-	
+
 	tr += '</tr>';
 	$('#table_cmd tbody').append(tr);
-  	var tr = $('#table_cmd tbody tr').last();
-  	jeedom.eqLogic.buildSelectCmd({
-    	id: $('.eqLogicAttr[data-l1key=id]').value(),
-    	filter: { type: 'info' },
-    	error: function (error) {
-      		$('#div_alert').showAlert({ message: error.message, level: 'danger' })
-    	},
-    	success: function (result) {
-      		tr.find('.cmdAttr[data-l1key=value]').append(result)
-      		tr.setValues(_cmd, '.cmdAttr')
-      		jeedom.cmd.changeType(tr, init(_cmd.subType))
-    	}
-  	});
+	var tr = $('#table_cmd tbody tr').last();
+	jeedom.eqLogic.buildSelectCmd({
+		id: $('.eqLogicAttr[data-l1key=id]').value(),
+		filter: { type: 'info' },
+		error: function (error) {
+			$('#div_alert').showAlert({ message: error.message, level: 'danger' })
+		},
+		success: function (result) {
+			tr.find('.cmdAttr[data-l1key=value]').append(result)
+			tr.setValues(_cmd, '.cmdAttr')
+			jeedom.cmd.changeType(tr, init(_cmd.subType))
+		}
+	});
 }
 
-document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(function(element) {
-	element.addEventListener('click', function() {
+document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(function (element) {
+	element.addEventListener('click', function () {
 		window.open(this.getAttribute("data-location"), "_blank", null);
 	});
 });
 
-document.querySelector('.eqLogicAttr[data-l2key="pull_use_custom"]').addEventListener('change', function() {
+document.querySelector('.eqLogicAttr[data-l2key="pull_use_custom"]').addEventListener('change', function () {
 	if (this.checked) {
 		document.querySelector('.pull_class').style.display = "block";
 	} else {
@@ -91,7 +91,7 @@ document.querySelector('.eqLogicAttr[data-l2key="pull_use_custom"]').addEventLis
 	}
 });
 
-$(".eqLogicAttr[data-l2key='pwdorkey']").on('change', function () {
+$(".eqLogicAttr[data-l2key='auth-method']").on('change', function () {
 	if (this.selectedIndex == 0) {
 		document.querySelector(".remote-pwd").style.display = "block";
 		document.querySelector(".remote-key").style.display = "none";
@@ -106,7 +106,7 @@ function toggleSSHPassword() {
 	var sshPasswordField = document.getElementById("ssh-password");
 	sshPasswordIcon.className = sshPasswordField.type === "password" ? "fas fa-eye-slash" : "fas fa-eye";
 	sshPasswordField.type = sshPasswordField.type === "password" ? "text" : "password";
-	
+
 }
 
 function toggleSSHPassphrase() {
