@@ -6,7 +6,9 @@
 		"fr_FR": "SSH-Manager",
 		"en_US": "SSH-Manager",
 		"es_ES": "SSH-Manager",
-		"de_DE": "SSH-Manager"
+		"de_DE": "SSH-Manager",
+		"it_IT": "Gestore SSH",
+		"pt_PT": "Gestor SSH"
 	},
 	"utilization": "SSH-Manager",
 	"licence": "AGPL",
