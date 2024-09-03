@@ -14,11 +14,11 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-document.querySelector(".eqLogicAttr[data-l2key='auth-method']").addEventListener('change', function () {
-	if (this.selectedIndex == 0) {
+document.querySelector(".eqLogicAttr[data-l2key='auth-method']").addEventListener('change', function (element) {
+	if (element.selectedIndex == 0) {
 		document.querySelector(".remote-pwd").style.display = "block";
 		document.querySelector(".remote-key").style.display = "none";
-	} else if (this.selectedIndex == 1) {
+	} else if (element.selectedIndex == 1) {
 		document.querySelector(".remote-pwd").style.display = "none";
 		document.querySelector(".remote-key").style.display = "block";
 	}
