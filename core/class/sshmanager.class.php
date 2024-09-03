@@ -12,7 +12,7 @@ if (!defined('NET_SSH2_LOGGING')) {
 
 class sshmanager extends eqLogic {
     public function decrypt() {
-        // TODO: Implement decrypt() method.
+        // TODO: Update decrypt() method.
 		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
 		$this->setConfiguration('ssh-key', utils::decrypt($this->getConfiguration('ssh-key')));
@@ -20,7 +20,7 @@ class sshmanager extends eqLogic {
 	}
 	
 	public function encrypt() {
-        // TODO: Implement encrypt() method.
+        // TODO: Update encrypt() method.
 		$this->setConfiguration('user', utils::encrypt($this->getConfiguration('user')));
 		$this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
 		$this->setConfiguration('ssh-key', utils::encrypt($this->getConfiguration('ssh-key')));
