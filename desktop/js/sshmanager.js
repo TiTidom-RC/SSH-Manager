@@ -85,7 +85,7 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(fun
 
 document.querySelector('#bt_confnewssh').addEventListener('click', function() {
 	jeedomUtils.showAlert({
-		title: "SSH-Manager - Add New SSH Conf",
+		title: "SSH Manager - Add New SSH Conf",
 		message: "Add New SSH Conf", 
 		level: 'danger',
 		emptyBefore: false
@@ -99,7 +99,7 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function() {
 		contentUrl: 'index.php?v=d&plugin=sshmanager&modal=newconf',
 		callback: function() { 
 			jeedomUtils.showAlert({
-				title: "SSH-Manager - Add New SSH Conf",
+				title: "SSH Manager - Add New SSH Conf",
 				message: "Callback", 
 				level: 'danger',
 				emptyBefore: false
@@ -112,7 +112,7 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function() {
 			callback: {
 			  click: function(event) {
 				jeedomUtils.showAlert({
-					title: "SSH-Manager - Add New SSH Conf",
+					title: "SSH Manager - Add New SSH Conf",
 					message: "Click :: Valider", 
 					level: 'danger',
 					emptyBefore: false
@@ -127,12 +127,13 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function() {
 			callback: {
 			  	click: function(event) {
 					jeedomUtils.showAlert({
-						title: "SSH-Manager	- Add New SSH Conf",
+						title: "SSH Manager	- Add New SSH Conf",
 						message: "Click :: Cancel", 
 						level: 'danger',
 						emptyBefore: false
 					});
-					document.getElementById('mod_addnewssh')._jeeDialog.destroy()
+					jeeDialog.get('#mod_addnewssh').destroy()
+					// document.getElementById('mod_addnewssh')._jeeDialog.destroy()
 			  	}
 			}
 		  }
