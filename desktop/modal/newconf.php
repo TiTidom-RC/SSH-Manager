@@ -8,7 +8,7 @@ if (!isConnect('admin')) {
     <div role="tabpanel" class="tab-pane active" id="addnewssh">
         <br />
         <div>
-            <div class="col-sm-6">
+            <div class="col-sm-10">
                 <form class="form-horizontal">
                     <fieldset>
                         <div class="form-group">
