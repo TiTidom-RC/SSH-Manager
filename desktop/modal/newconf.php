@@ -90,7 +90,7 @@ if (!isConnect('admin')) {
                                     <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_USERNAME ?>" type="text" autocomplete="ssh-user" placeholder="{{Saisir le login}}" />
                                 </div>
                             </div>
-                            <div class="remote-pwd" style="display:none;">
+                            <div class="remote-pwd" style="display:block;">
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">{{Mot de passe}}</label>
                                     <div class="col-md-6 input-group">
