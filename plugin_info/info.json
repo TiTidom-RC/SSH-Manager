@@ -1,0 +1,44 @@
+{
+    "id": "sshmanager",
+    "name": "SSH-Manager",
+    "pluginVersion": "0.0.1",
+    "description": {
+        "fr_FR": "SSH-Manager",
+        "en_US": "SSH-Manager",
+        "es_ES": "SSH-Manager",
+        "de_DE": "SSH-Manager"
+    },
+    "utilization": "SSH-Manager",
+    "licence": "AGPL",
+    "author": "TiTidom & Mips or Mips & TiTidom",
+    "require": "4.4",
+    "hasDependency": false,
+    "category": "monitoring",
+    "language": [
+        "fr_FR",
+        "en_US",
+        "es_ES",
+        "de_DE"
+    ],
+    "compatibility": [
+        "jeedomboard",
+        "smart",
+        "miniplus",
+        "rpi",
+        "docker",
+        "diy",
+        "v4",
+        "atlas"
+    ],
+    "os": {
+        "min" : 11
+    },
+    "link": {
+        "forum": "https://community.jeedom.com/tag/plugin-sshmanager",
+        "video": ""
+    },
+    "changelog": "https://titidom-rc.github.io/Documentation/#language#/SSHManager/changelog",
+    "documentation": "https://titidom-rc.github.io/Documentation/#language#/SSHManager/index",
+    "changelog_beta": "https://titidom-rc.github.io/Documentation/#language#/SSHManager/beta/changelog",
+    "documentation_beta": "https://titidom-rc.github.io/Documentation/#language#/SSHManager/beta/index"
+}
