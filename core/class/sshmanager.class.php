@@ -82,6 +82,7 @@ class sshmanager extends eqLogic {
         if (!is_object($sshmanager)) {
             throw new Exception('Invalid host id');
         }
+        log::add(__CLASS__, 'debug', "executeCmds on {$sshmanager->getName()}");
         return $sshmanager->internalExecuteCmds($commands);
     }
 
