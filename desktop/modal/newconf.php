@@ -14,41 +14,7 @@ if (!isConnect('admin')) {
                         <div class="form-group">
                             <label class="col-md-4 control-label">{{Nom de l'équipement}}</label>
                             <div class="col-md-6">
-                                <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
-                                <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement SSH-Manager}}" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">{{Objet parent}}</label>
-                            <div class="col-sm-6">
-                                <select class="form-control eqLogicAttr" data-l1key="object_id">
-                                    <option value="">{{Aucun}}</option>
-                                    <?php $options = '';
-                                    foreach ((jeeObject::buildTree(null, false)) as $object) {
-                                        $options .= '<option value="' . $object->getId() . '">' . str_repeat('&nbsp;&nbsp;', $object->getConfiguration('parentNumber')) . $object->getName() . '</option>';
-                                    }
-                                    echo $options;
-                                    ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">{{Catégorie}}</label>
-                            <div class="col-sm-8">
-                                <?php
-                                foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
-                                    echo '<label class="checkbox-inline">';
-                                    echo '<input type="checkbox" class="eqLogicAttr" data-l1key="category" data-l2key="' . $key . '" />' . $value['name'];
-                                    echo '</label>';
-                                }
-                                ?>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label"></label>
-                            <div class="col-md-8">
-                                <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked />{{Activer}}</label>
-                                <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked />{{Visible}}</label>
+                                <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom Equipement SSH Manager}}" />
                             </div>
                         </div>
                         <br />
@@ -84,6 +50,7 @@ if (!isConnect('admin')) {
                                     <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_TIMEOUT ?>" type="text" placeholder="{{Saisir le timeout SSH}}" />
                                 </div>
                             </div>
+                            <br />
                             <div class="form-group">
                                 <label class="col-md-4 control-label">{{Identifiant}}</label>
                                 <div class="col-md-6">
