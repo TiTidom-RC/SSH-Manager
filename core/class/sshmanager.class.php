@@ -293,6 +293,10 @@ class sshmanager extends eqLogic {
             }
         }
     }
+
+    public function preInsert() {
+        $this->setConfiguration(self::CONFIG_AUTH_METHOD, self::DEFAULT_AUTH_METHOD);
+    }
 }
 
 class sshmanagerCmd extends cmd {
