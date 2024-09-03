@@ -85,7 +85,7 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(fun
 
 document.querySelector('#bt_confnewssh').addEventListener('click', function() {
 	jeedomUtils.showAlert({
-		title: "SSH-Manager",
+		title: "SSH-Manager - Add New SSH Conf",
 		message: "Add New SSH Conf", 
 		level: 'danger',
 		emptyBefore: false
@@ -99,7 +99,7 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function() {
 		contentUrl: 'index.php?v=d&plugin=sshmanager&modal=newconf',
 		callback: function() { 
 			jeedomUtils.showAlert({
-				title: "SSH-Manager",
+				title: "SSH-Manager - Add New SSH Conf",
 				message: "Callback", 
 				level: 'danger',
 				emptyBefore: false
@@ -112,7 +112,7 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function() {
 			callback: {
 			  click: function(event) {
 				jeedomUtils.showAlert({
-					title: "SSH-Manager",
+					title: "SSH-Manager - Add New SSH Conf",
 					message: "Click :: Valider", 
 					level: 'danger',
 					emptyBefore: false
@@ -127,7 +127,7 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function() {
 			callback: {
 			  	click: function(event) {
 					jeedomUtils.showAlert({
-						title: "SSH-Manager",
+						title: "SSH-Manager	- Add New SSH Conf",
 						message: "Click :: Cancel", 
 						level: 'danger',
 						emptyBefore: false
@@ -148,27 +148,27 @@ document.querySelector('.eqLogicAttr[data-l2key="pull_use_custom"]').addEventLis
 	}
 });
 
-document.querySelector(".eqLogicAttr[data-l2key='auth-method']").addEventListener('change', function () {
+document.querySelector('.eqLogicAttr[data-l2key="auth-method"]').addEventListener('change', function () {
 	if (this.selectedIndex == 0) {
-		document.querySelector(".remote-pwd").style.display = "block";
-		document.querySelector(".remote-key").style.display = "none";
+		document.querySelector('.remote-pwd').style.display = "block";
+		document.querySelector('.remote-key').style.display = "none";
 	} else if (this.selectedIndex == 1) {
-		document.querySelector(".remote-pwd").style.display = "none";
-		document.querySelector(".remote-key").style.display = "block";
+		document.querySelector('.remote-pwd').style.display = "none";
+		document.querySelector('.remote-key').style.display = "block";
 	}
 });
 
 function toggleSSHPassword() {
-	var sshPasswordIcon = document.getElementById("btnToggleSSHPasswordIcon");
-	var sshPasswordField = document.getElementById("ssh-password");
+	var sshPasswordIcon = document.getElementById('btnToggleSSHPasswordIcon');
+	var sshPasswordField = document.getElementById('ssh-password');
 	sshPasswordIcon.className = sshPasswordField.type === "password" ? "fas fa-eye-slash" : "fas fa-eye";
 	sshPasswordField.type = sshPasswordField.type === "password" ? "text" : "password";
 
 }
 
 function toggleSSHPassphrase() {
-	var sshPassphraseIcon = document.getElementById("btnToggleSSHPassphraseIcon");
-	var sshPassphraseField = document.getElementById("ssh-passphrase");
+	var sshPassphraseIcon = document.getElementById('btnToggleSSHPassphraseIcon');
+	var sshPassphraseField = document.getElementById('ssh-passphrase');
 	sshPassphraseIcon.className = sshPassphraseField.type === "password" ? "fas fa-eye-slash" : "fas fa-eye";
 	sshPassphraseField.type = sshPassphraseField.type === "password" ? "text" : "password";
 }
