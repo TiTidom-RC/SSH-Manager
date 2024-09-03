@@ -8,6 +8,8 @@ sendVarToJS('eqType', $plugin->getId());
 $eqLogics = eqLogic::byType($plugin->getId());
 ?>
 
+<div id="mod_addnewssh"></div>
+
 <div class="row row-overflow">
     <!-- Page d'accueil du plugin -->
     <div class="col-xs-12 eqLogicThumbnailDisplay">
@@ -21,7 +23,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                         <br />
                         <span style="color:var(--txt-color)">{{Ajouter}}</span>
                     </div>
-                    <div class="cursor eqLogicAction logoPrimary" data-action="addnewssh">
+                    <div class="cursor eqLogicAction logoPrimary" id="bt_confnewssh" data-action="addnewssh">
                         <i class="fas fa-plus-circle"></i>
                         <br />
                         <span style="color:var(--txt-color)">{{Ajouter Hôte SSH}}</span>
