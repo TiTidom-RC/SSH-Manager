@@ -21,6 +21,11 @@ $eqLogics = eqLogic::byType($plugin->getId());
                         <br />
                         <span style="color:var(--txt-color)">{{Ajouter}}</span>
                     </div>
+                    <div class="cursor eqLogicAction logoPrimary" data-action="addssh">
+                        <i class="fas fa-plus-circle"></i>
+                        <br />
+                        <span style="color:var(--txt-color)">{{Ajouter Hôte SSH}}</span>
+                    </div>
                     <div class="cursor eqLogicAction logoSecondary" data-action="gotoPluginConf">
                         <i class="fas fa-wrench"></i>
                         <br>

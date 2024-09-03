@@ -83,6 +83,41 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(fun
 	});
 });
 
+document.querySelector('.pluginAction[data-action=addssh]').addEventListener('click', function() {
+	jeeDialog.dialog({
+		id: 'mod_addnewssh',
+		title: '{{Ajouter un hôte SSH}}',
+		height: 250,
+		width: 800,
+		top: '20vh',
+		contentUrl: 'index.php?v=d&plugin=sshmanager&modal=newconf',
+		callback: function() { mod_addnewssh.setOptions(_options) },
+		buttons: {
+		  confirm: {
+			label: '{{Valider}}',
+			className: 'success',
+			callback: {
+			  click: function(event) {
+				document.getElementById('mod_addnewssh')._jeeDialog.destroy()
+			  }
+			}
+		  },
+		  cancel: {
+			label: '{{Annuler}}',
+			className: 'warning',
+			callback: {
+			  click: function(event) {
+				if (isset(_options.returnCancel) && 'function' === typeof (_callback)) {
+				  _callback({})
+				}
+				document.getElementById('mod_addnewssh')._jeeDialog.destroy()
+			  }
+			}
+		  }
+		}
+	  })
+});
+
 document.querySelector('.eqLogicAttr[data-l2key="pull_use_custom"]').addEventListener('change', function () {
 	if (this.checked) {
 		document.querySelector('.pull_class').style.display = "block";
@@ -91,7 +126,7 @@ document.querySelector('.eqLogicAttr[data-l2key="pull_use_custom"]').addEventLis
 	}
 });
 
-$(".eqLogicAttr[data-l2key='auth-method']").on('change', function () {
+document.querySelector(".eqLogicAttr[data-l2key='auth-method']").addEventListener('change', function () {
 	if (this.selectedIndex == 0) {
 		document.querySelector(".remote-pwd").style.display = "block";
 		document.querySelector(".remote-key").style.display = "none";
