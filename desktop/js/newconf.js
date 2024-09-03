@@ -15,10 +15,10 @@
  */
 
 document.querySelector('.eqLogicAttr[data-l2key="auth-method"]').addEventListener('change', function () {
-	if ($this.selectedIndex == 0) {
+	if (this.selectedIndex == 0) {
 		document.querySelector('.remote-pwd').style.display = "block";
 		document.querySelector('.remote-key').style.display = "none";
-	} else if ($this.selectedIndex == 1) {
+	} else if (this.selectedIndex == 1) {
 		document.querySelector('.remote-pwd').style.display = "none";
 		document.querySelector('.remote-key').style.display = "block";
 	}
