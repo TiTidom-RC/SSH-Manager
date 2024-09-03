@@ -1,0 +1,14 @@
+{
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {},
+        "platform": {
+            "php": "7.4"
+        }
+    },
+    "require": {
+        "phpseclib/phpseclib": "^3.0"
+    }
+}
