@@ -7,8 +7,8 @@ if (!isConnect('admin')) {
 <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
     <div role="tabpanel" class="tab-pane active" id="addnewssh">
         <br />
-        <div class="row">
-            <div class="col-sm-6">
+        <div>
+            <div class="col-sm-10">
                 <form class="form-horizontal">
                     <fieldset>
                         <div class="form-group">
@@ -56,7 +56,7 @@ if (!isConnect('admin')) {
                             <label class="col-md-4 control-label">{{Password ou Clé ?}}</label>
                             <div class="col-md-6">
                                 <select id="pwdorkey" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_AUTH_METHOD ?>">
-                                    <option value="<?= sshmanager::AUTH_METHOD_PASSWORD ?>">{{Mot de Passe}}</option>
+                                    <option value="<?= sshmanager::AUTH_METHOD_PASSWORD ?>" selected>{{Mot de Passe}}</option>
                                     <option value="<?= sshmanager::AUTH_METHOD_SSH_KEY ?>">{{Clé SSH}}</option>
                                 </select>
                             </div>
@@ -90,7 +90,7 @@ if (!isConnect('admin')) {
                                     <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_USERNAME ?>" type="text" autocomplete="ssh-user" placeholder="{{Saisir le login}}" />
                                 </div>
                             </div>
-                            <div class="remote-pwd" style="display:none;">
+                            <div class="remote-pwd" style="display:block;">
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">{{Mot de passe}}</label>
                                     <div class="col-md-6 input-group">
