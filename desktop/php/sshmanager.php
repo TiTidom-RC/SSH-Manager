@@ -50,7 +50,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
         <?php
         if (count($eqLogics) == 0) {
-            echo '<br><div class="text-center" style="font-size:1.2em;font-weight:bold;">{{Aucun équipement SSH-Manager trouvé, cliquer sur "Ajouter" pour commencer}}</div>';
+            echo '<br><div class="text-center" style="font-size:1.2em;font-weight:bold;">{{Aucun équipement SSH Manager trouvé, cliquer sur "Ajouter" pour commencer}}</div>';
         } else {
             // Champ de recherche
             echo '<div class="input-group" style="margin:5px;">';
@@ -94,7 +94,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
         <!-- Onglets -->
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a></li>
-            <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-laptop-code"></i> {{SSH-Manager}}</a></li>
+            <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-laptop-code"></i> {{SSH Manager}}</a></li>
             <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i> {{Commandes}}</a></li>
         </ul>
         <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
@@ -109,7 +109,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <label class="col-md-4 control-label">{{Nom de l'équipement}}</label>
                                     <div class="col-md-6">
                                         <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
-                                        <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement SSH-Manager}}" />
+                                        <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement SSH Manager}}" />
                                     </div>
                                 </div>
 
