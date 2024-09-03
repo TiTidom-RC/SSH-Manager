@@ -13,16 +13,14 @@ if (!defined('NET_SSH2_LOGGING')) {
 
 class sshmanager extends eqLogic {
     public function decrypt() {
-        // TODO: Update decrypt() method.
-        $this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
+        $this->setConfiguration('username', utils::decrypt($this->getConfiguration('username')));
         $this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
         $this->setConfiguration('ssh-key', utils::decrypt($this->getConfiguration('ssh-key')));
         $this->setConfiguration('ssh-passphrase', utils::decrypt($this->getConfiguration('ssh-passphrase')));
     }
 
     public function encrypt() {
-        // TODO: Update encrypt() method.
-        $this->setConfiguration('user', utils::encrypt($this->getConfiguration('user')));
+        $this->setConfiguration('username', utils::encrypt($this->getConfiguration('username')));
         $this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
         $this->setConfiguration('ssh-key', utils::encrypt($this->getConfiguration('ssh-key')));
         $this->setConfiguration('ssh-passphrase', utils::encrypt($this->getConfiguration('ssh-passphrase')));
@@ -49,6 +47,8 @@ class sshmanager extends eqLogic {
         log::add(__CLASS__, 'info', '[VERSION] PluginVersion :: ' . $pluginVersion);
         return $pluginVersion;
     }
+
+    // Methods used by client plugins
 
     public static function getRemoteHosts() {
         $hosts = [];
@@ -88,31 +88,7 @@ class sshmanager extends eqLogic {
         return $sshmanager->internalGetFile($remoteFile, $localFile);
     }
 
-    private function internalSendFile(string $localFile, string $remoteFile) {
-        [$host, $port, $timeout] = $this->getConnectionData();
-        [$username, $keyOrpassword] = $this->getAuthenticationData();
-
-        $sftp = new SFTP($host, $port, $timeout);
-        if ($sftp->login($username, $keyOrpassword)) {
-            log::add(__CLASS__, 'debug', "send file to {$host}");
-            return $sftp->put($remoteFile, $localFile, SFTP::SOURCE_LOCAL_FILE);
-        }
-        log::add(__CLASS__, 'debug', "login failed, could not put file {$remoteFile}");
-        return false;
-    }
-
-    private function internalGetFile(string $remoteFile, string $localFile) {
-        [$host, $port, $timeout] = $this->getConnectionData();
-        [$username, $keyOrpassword] = $this->getAuthenticationData();
-
-        $sftp = new SFTP($host, $port, $timeout);
-        if ($sftp->login($username, $keyOrpassword)) {
-            log::add(__CLASS__, 'debug', "get file from {$host}");
-            return $sftp->get($remoteFile, $localFile);
-        }
-        log::add(__CLASS__, 'debug', "login failed, could not get file {$remoteFile}");
-        return false;
-    }
+    // end methods used by client plugins
 
     private function getConnectionData() {
         /** @var string */
@@ -133,10 +109,10 @@ class sshmanager extends eqLogic {
     private function getAuthenticationData() {
 
         /** @var string */
-        $username = $this->getConfiguration('user');
+        $username = $this->getConfiguration('username');
         if ($username == "") {
-            log::add(__CLASS__, 'error', 'User not defined');
-            throw new RuntimeException('User not defined');
+            log::add(__CLASS__, 'error', 'username not defined');
+            throw new RuntimeException('username not defined');
         }
 
         /** @var string */
@@ -167,6 +143,32 @@ class sshmanager extends eqLogic {
                 throw new RuntimeException("Unsupported auth method: {$authmethod}");
         }
         return [$username, $keyOrpassword];
+    }
+
+    private function internalSendFile(string $localFile, string $remoteFile) {
+        [$host, $port, $timeout] = $this->getConnectionData();
+        [$username, $keyOrpassword] = $this->getAuthenticationData();
+
+        $sftp = new SFTP($host, $port, $timeout);
+        if ($sftp->login($username, $keyOrpassword)) {
+            log::add(__CLASS__, 'debug', "send file to {$host}");
+            return $sftp->put($remoteFile, $localFile, SFTP::SOURCE_LOCAL_FILE);
+        }
+        log::add(__CLASS__, 'debug', "login failed, could not put file {$remoteFile}");
+        return false;
+    }
+
+    private function internalGetFile(string $remoteFile, string $localFile) {
+        [$host, $port, $timeout] = $this->getConnectionData();
+        [$username, $keyOrpassword] = $this->getAuthenticationData();
+
+        $sftp = new SFTP($host, $port, $timeout);
+        if ($sftp->login($username, $keyOrpassword)) {
+            log::add(__CLASS__, 'debug', "get file from {$host}");
+            return $sftp->get($remoteFile, $localFile);
+        }
+        log::add(__CLASS__, 'debug', "login failed, could not get file {$remoteFile}");
+        return false;
     }
 
     private function internalExecuteCmds(array $commands) {
