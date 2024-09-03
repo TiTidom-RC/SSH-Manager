@@ -5,49 +5,157 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 use phpseclib3\Net\SSH2;
 use phpseclib3\Crypt\PublicKeyLoader;
+use phpseclib3\Net\SFTP;
 
 if (!defined('NET_SSH2_LOGGING')) {
-	define('NET_SSH2_LOGGING', 2);
+    define('NET_SSH2_LOGGING', 2);
 }
 
 class sshmanager extends eqLogic {
     public function decrypt() {
         // TODO: Update decrypt() method.
-		$this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
-		$this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
-		$this->setConfiguration('ssh-key', utils::decrypt($this->getConfiguration('ssh-key')));
-		$this->setConfiguration('ssh-passphrase', utils::decrypt($this->getConfiguration('ssh-passphrase')));
-	}
-	
-	public function encrypt() {
+        $this->setConfiguration('user', utils::decrypt($this->getConfiguration('user')));
+        $this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
+        $this->setConfiguration('ssh-key', utils::decrypt($this->getConfiguration('ssh-key')));
+        $this->setConfiguration('ssh-passphrase', utils::decrypt($this->getConfiguration('ssh-passphrase')));
+    }
+
+    public function encrypt() {
         // TODO: Update encrypt() method.
-		$this->setConfiguration('user', utils::encrypt($this->getConfiguration('user')));
-		$this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
-		$this->setConfiguration('ssh-key', utils::encrypt($this->getConfiguration('ssh-key')));
-		$this->setConfiguration('ssh-passphrase', utils::encrypt($this->getConfiguration('ssh-passphrase')));
-	}
+        $this->setConfiguration('user', utils::encrypt($this->getConfiguration('user')));
+        $this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
+        $this->setConfiguration('ssh-key', utils::encrypt($this->getConfiguration('ssh-key')));
+        $this->setConfiguration('ssh-passphrase', utils::encrypt($this->getConfiguration('ssh-passphrase')));
+    }
 
     public static function getPluginVersion() {
         $pluginVersion = '0.0.0';
-		try {
-			if (!file_exists(dirname(__FILE__) . '/../../plugin_info/info.json')) {
-				log::add(__CLASS__, 'warning', '[VERSION] fichier info.json manquant');
-			}
-			$data = json_decode(file_get_contents(dirname(__FILE__) . '/../../plugin_info/info.json'), true);
-			if (!is_array($data)) {
-				log::add(__CLASS__, 'warning', '[VERSION] Impossible de décoder le fichier info.json');
-			}
-			try {
-				$pluginVersion = $data['pluginVersion'];
-			} catch (\Exception $e) {
-				log::add(__CLASS__, 'warning', '[VERSION] Impossible de récupérer la version du plugin');
-			}
-		}
-		catch (\Exception $e) {
-			log::add(__CLASS__, 'warning', '[VERSION] Get ERROR :: ' . $e->getMessage());
-		}
-		log::add(__CLASS__, 'info', '[VERSION] PluginVersion :: ' . $pluginVersion);
+        try {
+            if (!file_exists(dirname(__FILE__) . '/../../plugin_info/info.json')) {
+                log::add(__CLASS__, 'warning', '[VERSION] fichier info.json manquant');
+            }
+            $data = json_decode(file_get_contents(dirname(__FILE__) . '/../../plugin_info/info.json'), true);
+            if (!is_array($data)) {
+                log::add(__CLASS__, 'warning', '[VERSION] Impossible de décoder le fichier info.json');
+            }
+            try {
+                $pluginVersion = $data['pluginVersion'];
+            } catch (\Exception $e) {
+                log::add(__CLASS__, 'warning', '[VERSION] Impossible de récupérer la version du plugin');
+            }
+        } catch (\Exception $e) {
+            log::add(__CLASS__, 'warning', '[VERSION] Get ERROR :: ' . $e->getMessage());
+        }
+        log::add(__CLASS__, 'info', '[VERSION] PluginVersion :: ' . $pluginVersion);
         return $pluginVersion;
+    }
+
+    public static function getRemoteHosts() {
+        $hosts = [];
+        foreach (eqLogic::byType(__CLASS__, true) as $sshmanager) {
+            $hosts[] = [
+                'id' => $sshmanager->getId(),
+                'name' => $sshmanager->getName(),
+            ];
+        }
+        return $hosts;
+    }
+
+    public static function executeCmds(int $hostId, array $commands) {
+        /** @var sshmanager */
+        $sshmanager = eqLogic::byId($hostId);
+        if (!is_object($sshmanager)) {
+            throw new Exception('Invalid host id');
+        }
+        return $sshmanager->internalExecuteCmds($commands);
+    }
+
+    private function getConnectionData() {
+        /** @var string */
+        $host = $this->getConfiguration('host');
+        /** @var int */
+        $port = $this->getConfiguration('port', 22);
+        /** @var int */
+        $timeout = $this->getConfiguration('timeout', 10);
+
+        if ($host == "") {
+            log::add(__CLASS__, 'error', 'Host name or IP not defined');
+            throw new RuntimeException('Host name or IP not defined');
+        }
+
+        return [$host, $port, $timeout];
+    }
+
+    private function getAuthenticationData() {
+
+        /** @var string */
+        $username = $this->getConfiguration('user');
+        if ($username == "") {
+            log::add(__CLASS__, 'error', 'User not defined');
+            throw new RuntimeException('User not defined');
+        }
+
+        /** @var string */
+        $authmethod = $this->getConfiguration('auth-method', 'password');
+
+        switch ($authmethod) {
+            case 'password':
+                $keyOrpassword = $this->getConfiguration('password');
+                if ($keyOrpassword == "") {
+                    log::add(__CLASS__, 'error', 'Password not defined');
+                    throw new RuntimeException('Password not defined');
+                }
+                break;
+            case 'sshkey':
+                $sshkey = $this->getConfiguration('ssh-key');
+                $sshpassphrase = $this->getConfiguration('ssh-passphrase');
+                if ($sshkey == "") {
+                    log::add(__CLASS__, 'error', 'SSH key not defined');
+                    throw new RuntimeException('SSH key not defined');
+                }
+                $keyOrpassword = PublicKeyLoader::load($sshkey, $sshpassphrase);
+                break;
+            case 'agent':
+                //TODO: check if agent auth could be usefull?
+                throw new RuntimeException("Unsupported auth method: {$authmethod}");
+                break;
+            default:
+                throw new RuntimeException("Unsupported auth method: {$authmethod}");
+        }
+        return [$username, $keyOrpassword];
+    }
+
+    private function getSSH2() {
+        [$host, $port, $timeout] = $this->getConnectionData();
+        return new SSH2($host, $port, $timeout);
+    }
+
+    private function getSFTP() {
+        [$host, $port, $timeout] = $this->getConnectionData();
+        return new SFTP($host, $port, $timeout);
+    }
+
+    private function internalExecuteCmds(array $commands) {
+        $ssh = $this->getSSH2();
+
+        [$username, $keyOrpassword] = $this->getAuthenticationData();
+
+
+        if (!$ssh->login($username, $keyOrpassword)) {
+            $error = "Authentification SSH KO";
+            log::add(__CLASS__, 'error', $error, 'authKO');
+            throw new Exception($error);
+        }
+
+        $results = [];
+        foreach ($commands as $cmd) {
+            $cmd = str_replace("{user}", $username, $cmd);
+            $result = $ssh->exec($cmd);
+            log::add(__CLASS__, 'debug', "SSH exec:{$cmd} => {$result}");
+            $results[] = explode("\n", $result);
+        }
+
+        return $results;
     }
 
     public function execSSH($_commands = array()) {
@@ -69,9 +177,9 @@ class sshmanager extends eqLogic {
             // Début de la connexion SSH
             try {
                 $sshconnection = new SSH2($ip, $port, $timeout);
-                log::add(__CLASS__, 'debug', '['. $equipement .'][connectSSH] Connexion SSH :: IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout);
+                log::add(__CLASS__, 'debug', '[' . $equipement . '][connectSSH] Connexion SSH :: IP/Port: ' . $ip . ':' . $port . ' / Timeout: ' . $timeout);
             } catch (Exception $e) {
-                log::add(__CLASS__, 'error', '['. $equipement .'][connectSSH] Connexion SSH :: '. $e->getMessage());
+                log::add(__CLASS__, 'error', '[' . $equipement . '][connectSSH] Connexion SSH :: ' . $e->getMessage());
                 $cnx_ssh = 'KO';
             }
 
@@ -79,54 +187,52 @@ class sshmanager extends eqLogic {
                 if ($confLocalOrRemote == 'deporte-key') {
                     try {
                         $keyOrPwd = PublicKeyLoader::load($sshkey, $sshpassphrase);
-                        log::add(__CLASS__, 'debug', '['. $equipement .'][connectSSH] PublicKeyLoader :: OK');
+                        log::add(__CLASS__, 'debug', '[' . $equipement . '][connectSSH] PublicKeyLoader :: OK');
                     } catch (Exception $e) {
-                        log::add(__CLASS__, 'error', '['. $equipement .'][connectSSH] PublicKeyLoader :: '. $e->getMessage());
+                        log::add(__CLASS__, 'error', '[' . $equipement . '][connectSSH] PublicKeyLoader :: ' . $e->getMessage());
                         $keyOrPwd = '';
                     }
-                }
-                else {
+                } else {
                     $keyOrPwd = $pass;
-                    log::add(__CLASS__, 'debug', '['. $equipement .'][connectSSH] Authentification SSH par Mot de passe');
+                    log::add(__CLASS__, 'debug', '[' . $equipement . '][connectSSH] Authentification SSH par Mot de passe');
                 }
 
                 try {
                     if (!$sshconnection->login($user, $keyOrPwd)) {
-                        log::add(__CLASS__, 'error', '['. $equipement .'][connectSSH] Login ERROR :: ' . $user);
+                        log::add(__CLASS__, 'error', '[' . $equipement . '][connectSSH] Login ERROR :: ' . $user);
                         $cnx_ssh = 'KO';
                     }
                 } catch (Exception $e) {
-                    log::add(__CLASS__, 'error', '['. $equipement .'][connectSSH] Authentification SSH :: '. $e->getMessage());
+                    log::add(__CLASS__, 'error', '[' . $equipement . '][connectSSH] Authentification SSH :: ' . $e->getMessage());
                     $cnx_ssh = 'KO';
                 }
 
                 try {
                     if ($sshconnection->isConnected()) {
-                        log::add(__CLASS__, 'debug', '['. $equipement .'][connectSSH] Connexion SSH (isConnected) :: OK');
+                        log::add(__CLASS__, 'debug', '[' . $equipement . '][connectSSH] Connexion SSH (isConnected) :: OK');
                         if ($sshconnection->isAuthenticated()) {
-                            log::add(__CLASS__, 'debug', '['. $equipement .'][connectSSH] Connexion SSH (isAuthenticated) :: OK');
-                        }
-                        else {
-                            log::add(__CLASS__, 'error', '['. $equipement .'][connectSSH] Connexion SSH (isAuthenticated) :: KO');
-                            log::add(__CLASS__, 'debug', '['. $equipement .'][connectSSH] Connexion SSH LastError :: ' . $sshconnection->getLastError());
+                            log::add(__CLASS__, 'debug', '[' . $equipement . '][connectSSH] Connexion SSH (isAuthenticated) :: OK');
+                        } else {
+                            log::add(__CLASS__, 'error', '[' . $equipement . '][connectSSH] Connexion SSH (isAuthenticated) :: KO');
+                            log::add(__CLASS__, 'debug', '[' . $equipement . '][connectSSH] Connexion SSH LastError :: ' . $sshconnection->getLastError());
                             $cnx_ssh = 'KO';
                         }
                     } else {
-                        log::add(__CLASS__, 'error', '['. $equipement .'][connectSSH] Connexion SSH (isConnected) :: KO');
-                        log::add(__CLASS__, 'debug', '['. $equipement .'][connectSSH] Connexion SSH LastError :: ' . $sshconnection->getLastError());
+                        log::add(__CLASS__, 'error', '[' . $equipement . '][connectSSH] Connexion SSH (isConnected) :: KO');
+                        log::add(__CLASS__, 'debug', '[' . $equipement . '][connectSSH] Connexion SSH LastError :: ' . $sshconnection->getLastError());
                         $cnx_ssh = 'KO';
                     }
                 } catch (Exception $e) {
-                    log::add(__CLASS__, 'error', '['. $equipement .'][connectSSH] Connexion SSH :: '. $e->getMessage());
-                    log::add(__CLASS__, 'debug', '['. $equipement .'][connectSSH] Connexion SSH Log :: ' . $sshconnection->getLog());
+                    log::add(__CLASS__, 'error', '[' . $equipement . '][connectSSH] Connexion SSH :: ' . $e->getMessage());
+                    log::add(__CLASS__, 'debug', '[' . $equipement . '][connectSSH] Connexion SSH Log :: ' . $sshconnection->getLog());
                     $cnx_ssh = 'KO';
                 }
 
                 // Fin de la connexion SSH
                 if ($cnx_ssh != 'KO') {
                     $cnx_ssh = 'OK';
-                    log::add(__CLASS__, 'debug', '['. $equipement .'][connectSSH] Connexion SSH (cnx_ssh) :: OK');
-                    
+                    log::add(__CLASS__, 'debug', '[' . $equipement . '][connectSSH] Connexion SSH (cnx_ssh) :: OK');
+
                     $result = array();
                     foreach ($_commands as $command) {
                         $result[$command] = $sshconnection->exec($command);
@@ -135,7 +241,6 @@ class sshmanager extends eqLogic {
                 }
             }
         }
-
     }
 }
 
