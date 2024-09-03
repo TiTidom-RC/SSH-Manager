@@ -12,18 +12,30 @@ if (!defined('NET_SSH2_LOGGING')) {
 }
 
 class sshmanager extends eqLogic {
+
+    const CONFIG_USERNAME = 'username';
+    const CONFIG_PASSWORD = 'password';
+    const CONFIG_SSH_KEY = 'ssh-key';
+    const CONFIG_SSH_PASSPHRASE = 'ssh-passphrase';
+    const CONFIG_AUTH_METHOD = 'auth-method';
+    const CONFIG_HOST = 'host';
+    const CONFIG_PORT = 'port';
+    const CONFIG_TIMEOUT = 'timeout';
+
+    const DEFAULT_AUTH_METHOD = 'password';
+
     public function decrypt() {
-        $this->setConfiguration('username', utils::decrypt($this->getConfiguration('username')));
-        $this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
-        $this->setConfiguration('ssh-key', utils::decrypt($this->getConfiguration('ssh-key')));
-        $this->setConfiguration('ssh-passphrase', utils::decrypt($this->getConfiguration('ssh-passphrase')));
+        $this->setConfiguration(self::CONFIG_USERNAME, utils::decrypt($this->getConfiguration(self::CONFIG_USERNAME)));
+        $this->setConfiguration(self::CONFIG_PASSWORD, utils::decrypt($this->getConfiguration(self::CONFIG_PASSWORD)));
+        $this->setConfiguration(self::CONFIG_SSH_KEY, utils::decrypt($this->getConfiguration(self::CONFIG_SSH_KEY)));
+        $this->setConfiguration(self::CONFIG_SSH_PASSPHRASE, utils::decrypt($this->getConfiguration(self::CONFIG_SSH_PASSPHRASE)));
     }
 
     public function encrypt() {
-        $this->setConfiguration('username', utils::encrypt($this->getConfiguration('username')));
-        $this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
-        $this->setConfiguration('ssh-key', utils::encrypt($this->getConfiguration('ssh-key')));
-        $this->setConfiguration('ssh-passphrase', utils::encrypt($this->getConfiguration('ssh-passphrase')));
+        $this->setConfiguration(self::CONFIG_USERNAME, utils::encrypt($this->getConfiguration(self::CONFIG_USERNAME)));
+        $this->setConfiguration(self::CONFIG_PASSWORD, utils::encrypt($this->getConfiguration(self::CONFIG_PASSWORD)));
+        $this->setConfiguration(self::CONFIG_SSH_KEY, utils::encrypt($this->getConfiguration(self::CONFIG_SSH_KEY)));
+        $this->setConfiguration(self::CONFIG_SSH_PASSPHRASE, utils::encrypt($this->getConfiguration(self::CONFIG_SSH_PASSPHRASE)));
     }
 
     public static function getPluginVersion() {
@@ -92,11 +104,11 @@ class sshmanager extends eqLogic {
 
     private function getConnectionData() {
         /** @var string */
-        $host = $this->getConfiguration('host');
+        $host = $this->getConfiguration(self::CONFIG_HOST);
         /** @var int */
-        $port = $this->getConfiguration('port', 22);
+        $port = $this->getConfiguration(self::CONFIG_PORT, 22);
         /** @var int */
-        $timeout = $this->getConfiguration('timeout', 10);
+        $timeout = $this->getConfiguration(self::CONFIG_TIMEOUT, 10);
 
         if ($host == "") {
             log::add(__CLASS__, 'error', 'Host name or IP not defined');
@@ -109,26 +121,26 @@ class sshmanager extends eqLogic {
     private function getAuthenticationData() {
 
         /** @var string */
-        $username = $this->getConfiguration('username');
+        $username = $this->getConfiguration(self::CONFIG_USERNAME);
         if ($username == "") {
             log::add(__CLASS__, 'error', 'username not defined');
             throw new RuntimeException('username not defined');
         }
 
         /** @var string */
-        $authmethod = $this->getConfiguration('auth-method', 'password');
+        $authmethod = $this->getConfiguration(self::CONFIG_AUTH_METHOD, self::DEFAULT_AUTH_METHOD);
 
         switch ($authmethod) {
-            case 'password':
-                $keyOrpassword = $this->getConfiguration('password');
+            case self::CONFIG_PASSWORD:
+                $keyOrpassword = $this->getConfiguration(self::CONFIG_PASSWORD);
                 if ($keyOrpassword == "") {
                     log::add(__CLASS__, 'error', 'Password not defined');
                     throw new RuntimeException('Password not defined');
                 }
                 break;
             case 'sshkey':
-                $sshkey = $this->getConfiguration('ssh-key');
-                $sshpassphrase = $this->getConfiguration('ssh-passphrase');
+                $sshkey = $this->getConfiguration(self::CONFIG_SSH_KEY);
+                $sshpassphrase = $this->getConfiguration(self::CONFIG_SSH_PASSPHRASE);
                 if ($sshkey == "") {
                     log::add(__CLASS__, 'error', 'SSH key not defined');
                     throw new RuntimeException('SSH key not defined');
