@@ -106,7 +106,7 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function() {
 			});
 		 },
 		buttons: {
-		  confirmssh: {
+		  confirm: {
 			label: '{{Valider}}',
 			className: 'success',
 			callback: {
@@ -121,7 +121,7 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function() {
 			  }
 			}
 		  },
-		  cancelssh: {
+		  cancel: {
 			label: '{{Annuler}}',
 			className: 'warning',
 			callback: {
