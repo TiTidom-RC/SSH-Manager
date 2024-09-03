@@ -70,6 +70,50 @@ class sshmanager extends eqLogic {
         return $sshmanager->internalExecuteCmds($commands);
     }
 
+    public static function sendFile(int $hostId, string $localFile, string $remoteFile) {
+        /** @var sshmanager */
+        $sshmanager = eqLogic::byId($hostId);
+        if (!is_object($sshmanager)) {
+            throw new Exception('Invalid host id');
+        }
+        return $sshmanager->internalSendFile($localFile, $remoteFile);
+    }
+
+    public static function getFile(int $hostId, string $remoteFile, string $localFile) {
+        /** @var sshmanager */
+        $sshmanager = eqLogic::byId($hostId);
+        if (!is_object($sshmanager)) {
+            throw new Exception('Invalid host id');
+        }
+        return $sshmanager->internalGetFile($remoteFile, $localFile);
+    }
+
+    private function internalSendFile(string $localFile, string $remoteFile) {
+        [$host, $port, $timeout] = $this->getConnectionData();
+        [$username, $keyOrpassword] = $this->getAuthenticationData();
+
+        $sftp = new SFTP($host, $port, $timeout);
+        if ($sftp->login($username, $keyOrpassword)) {
+            log::add(__CLASS__, 'debug', "send file to {$host}");
+            return $sftp->put($remoteFile, $localFile, SFTP::SOURCE_LOCAL_FILE);
+        }
+        log::add(__CLASS__, 'debug', "login failed, could not put file {$remoteFile}");
+        return false;
+    }
+
+    private function internalGetFile(string $remoteFile, string $localFile) {
+        [$host, $port, $timeout] = $this->getConnectionData();
+        [$username, $keyOrpassword] = $this->getAuthenticationData();
+
+        $sftp = new SFTP($host, $port, $timeout);
+        if ($sftp->login($username, $keyOrpassword)) {
+            log::add(__CLASS__, 'debug', "get file from {$host}");
+            return $sftp->get($remoteFile, $localFile);
+        }
+        log::add(__CLASS__, 'debug', "login failed, could not get file {$remoteFile}");
+        return false;
+    }
+
     private function getConnectionData() {
         /** @var string */
         $host = $this->getConfiguration('host');
@@ -125,21 +169,11 @@ class sshmanager extends eqLogic {
         return [$username, $keyOrpassword];
     }
 
-    private function getSSH2() {
-        [$host, $port, $timeout] = $this->getConnectionData();
-        return new SSH2($host, $port, $timeout);
-    }
-
-    private function getSFTP() {
-        [$host, $port, $timeout] = $this->getConnectionData();
-        return new SFTP($host, $port, $timeout);
-    }
-
     private function internalExecuteCmds(array $commands) {
-        $ssh = $this->getSSH2();
-
+        [$host, $port, $timeout] = $this->getConnectionData();
         [$username, $keyOrpassword] = $this->getAuthenticationData();
 
+        $ssh = new SSH2($host, $port, $timeout);
 
         if (!$ssh->login($username, $keyOrpassword)) {
             $error = "Authentification SSH KO";
