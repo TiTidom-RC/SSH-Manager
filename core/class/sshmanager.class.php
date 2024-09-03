@@ -45,7 +45,7 @@ class sshmanager extends eqLogic {
 		catch (\Exception $e) {
 			log::add(__CLASS__, 'warning', '[VERSION] Get ERROR :: ' . $e->getMessage());
 		}
-		log::add('Monitoring', 'info', '[VERSION] PluginVersion :: ' . $pluginVersion);
+		log::add(__CLASS__, 'info', '[VERSION] PluginVersion :: ' . $pluginVersion);
         return $pluginVersion;
     }
 }
