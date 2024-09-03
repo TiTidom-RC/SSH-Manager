@@ -106,7 +106,7 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function() {
 			});
 		 },
 		buttons: {
-		  confirm: {
+		  confirmssh: {
 			label: '{{Valider}}',
 			className: 'success',
 			callback: {
@@ -117,11 +117,11 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function() {
 					level: 'danger',
 					emptyBefore: false
 				});
-				document.getElementById('mod_addnewssh')._jeeDialog.destroy()
+				jeeDialog.get('#mod_addnewssh').destroy()
 			  }
 			}
 		  },
-		  cancel: {
+		  cancelssh: {
 			label: '{{Annuler}}',
 			className: 'warning',
 			callback: {
