@@ -56,7 +56,7 @@ if (!isConnect('admin')) {
                             <label class="col-md-4 control-label">{{Password ou Clé ?}}</label>
                             <div class="col-md-6">
                                 <select id="pwdorkey" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_AUTH_METHOD ?>">
-                                    <option selected="selected" value="<?= sshmanager::AUTH_METHOD_PASSWORD ?>">{{Mot de Passe}}</option>
+                                    <option value="<?= sshmanager::AUTH_METHOD_PASSWORD ?>" selected>{{Mot de Passe}}</option>
                                     <option value="<?= sshmanager::AUTH_METHOD_SSH_KEY ?>">{{Clé SSH}}</option>
                                 </select>
                             </div>
