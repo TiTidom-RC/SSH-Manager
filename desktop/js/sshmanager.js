@@ -83,7 +83,7 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(fun
 	});
 });
 
-document.querySelector('.pluginAction[data-action=addssh]').addEventListener('click', function() {
+document.querySelector('.pluginAction[data-action=addnewssh]').addEventListener('click', function() {
 	jeeDialog.dialog({
 		id: 'mod_addnewssh',
 		title: '{{Ajouter un hôte SSH}}',

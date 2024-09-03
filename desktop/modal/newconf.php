@@ -5,7 +5,7 @@ if (!isConnect('admin')) {
 ?>
 
 <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
-    <div role="tabpanel" class="tab-pane active" id="newconftab">
+    <div role="tabpanel" class="tab-pane active" id="mod_addnewssh">
         <br />
         <div class="row">
             <div class="col-sm-6">
