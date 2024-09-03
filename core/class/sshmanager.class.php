@@ -68,10 +68,7 @@ class sshmanager extends eqLogic {
     public static function getRemoteHosts() {
         $hosts = [];
         foreach (eqLogic::byType(__CLASS__, true) as $sshmanager) {
-            $hosts[] = [
-                'id' => $sshmanager->getId(),
-                'name' => $sshmanager->getName(),
-            ];
+            $hosts[$sshmanager->getId()] = $sshmanager->getName();
         }
         return $hosts;
     }
@@ -142,7 +139,7 @@ class sshmanager extends eqLogic {
                     throw new RuntimeException('Password not defined');
                 }
                 break;
-            case 'sshkey':
+            case self::AUTH_METHOD_SSH_KEY:
                 $sshkey = $this->getConfiguration(self::CONFIG_SSH_KEY);
                 $sshpassphrase = $this->getConfiguration(self::CONFIG_SSH_PASSPHRASE);
                 if ($sshkey == "") {
@@ -151,7 +148,7 @@ class sshmanager extends eqLogic {
                 }
                 $keyOrpassword = PublicKeyLoader::load($sshkey, $sshpassphrase);
                 break;
-            case 'agent':
+            case self::AUTH_METHOD_AGENT:
                 //TODO: check if agent auth could be usefull?
                 throw new RuntimeException("Unsupported auth method: {$authmethod}");
                 break;
