@@ -111,13 +111,8 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function() {
 			className: 'success',
 			callback: {
 			  click: function(event) {
-				jeedomUtils.showAlert({
-					title: "SSH Manager - Add New SSH Conf",
-					message: "Click :: Valider", 
-					level: 'danger',
-					emptyBefore: false
-				});
 				let response = jeeDialog.get('#mod_addnewssh', 'content')
+				
 				let new_name = response.querySelector('.eqLogicAttr[data-l1key="name"]').value
 				let new_host = response.querySelector('.eqLogicAttr[data-l2key="host"]').value
 				let new_port = response.querySelector('.eqLogicAttr[data-l2key="port"]').value
