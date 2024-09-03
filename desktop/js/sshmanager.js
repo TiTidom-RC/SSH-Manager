@@ -84,16 +84,26 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(fun
 });
 
 document.querySelector('#bt_confnewssh').addEventListener('click', function() {
-	$('#div_alert').showAlert({ message: "Add New SSH Conf", level: 'danger' });
+	jeeDialog.showAlert({
+		title: "SSH-Manager",
+		message: "Add New SSH Conf", 
+		level: 'danger',
+		emptyBefore: false
+	});
 	jeeDialog.dialog({
 		id: 'mod_addnewssh',
 		title: '{{Ajouter un hôte SSH}}',
-		height: 600,
-		width: 800,
-		top: '20vh',
+		width: 650,
+		height: 700,
+		top: '10vh',
 		contentUrl: 'index.php?v=d&plugin=sshmanager&modal=newconf',
 		callback: function() { 
-			$('#div_alert').showAlert({ message: "Callback", level: 'danger' });
+			jeeDialog.showAlert({
+				title: "SSH-Manager",
+				message: "Callback", 
+				level: 'danger',
+				emptyBefore: false
+			});
 		 },
 		buttons: {
 		  confirm: {
@@ -101,7 +111,12 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function() {
 			className: 'success',
 			callback: {
 			  click: function(event) {
-				$('#div_alert').showAlert({ message: "Click Valider", level: 'danger' });
+				jeeDialog.showAlert({
+					title: "SSH-Manager",
+					message: "Click :: Valider", 
+					level: 'danger',
+					emptyBefore: false
+				});
 				document.getElementById('mod_addnewssh')._jeeDialog.destroy()
 			  }
 			}
@@ -111,7 +126,12 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function() {
 			className: 'warning',
 			callback: {
 			  	click: function(event) {
-					$('#div_alert').showAlert({ message: "Click Cancel", level: 'danger' });
+					jeeDialog.showAlert({
+						title: "SSH-Manager",
+						message: "Click :: Cancel", 
+						level: 'danger',
+						emptyBefore: false
+					});
 					document.getElementById('mod_addnewssh')._jeeDialog.destroy()
 			  	}
 			}

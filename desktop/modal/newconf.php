@@ -7,7 +7,7 @@ if (!isConnect('admin')) {
 <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
     <div role="tabpanel" class="tab-pane active" id="addnewssh">
         <br />
-        <div class="row">
+        <div>
             <div class="col-sm-6">
                 <form class="form-horizontal">
                     <fieldset>
