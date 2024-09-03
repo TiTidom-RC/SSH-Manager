@@ -50,10 +50,10 @@ class sshmanager extends eqLogic {
         return $pluginVersion;
     }
 
-    public function execSSH() {
+    public function execSSH($_commands = array()) {
         // TODO : Méthode extraite du plugin Monitoring, à adapter pour SSHManager.
         $equipement = $this->getName();
-        $confLocalOrRemote = $this->getConfiguration('maitreesclave'); // local ou déporté, et si déporté, par mot de passe ou par clé
+        $confLocalOrRemote = $this->getConfiguration('maitreesclave'); // local ou déporté, et si déporté (qui nous intéresse ici), par mot de passe ou par clé
 
         if (($confLocalOrRemote == 'deporte' || $confLocalOrRemote == 'deporte-key') && $this->getIsEnable()) {
             $ip = $this->getConfiguration('addressip');
@@ -126,7 +126,12 @@ class sshmanager extends eqLogic {
                 if ($cnx_ssh != 'KO') {
                     $cnx_ssh = 'OK';
                     log::add(__CLASS__, 'debug', '['. $equipement .'][connectSSH] Connexion SSH (cnx_ssh) :: OK');
-                    // Code à exécuter si la connexion SSH est OK
+                    
+                    $result = array();
+                    foreach ($_commands as $command) {
+                        $result[$command] = $sshconnection->exec($command);
+                    }
+                    // Suite du code à exécuter si la connexion SSH est OK
                 }
             }
         }
