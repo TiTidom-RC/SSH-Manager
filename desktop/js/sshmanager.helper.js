@@ -64,8 +64,8 @@ document.querySelector('.sshmanagerHelper[data-helper=add]').addEventListener('c
                                     level: 'success',
                                     emptyBefore: false
                                 });
+                                buildSelectHost();
                                 jeeDialog.get('#mod_add_sshmanager').destroy()
-
                             }
 
                         });
