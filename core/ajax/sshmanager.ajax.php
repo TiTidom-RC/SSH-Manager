@@ -30,9 +30,13 @@ try {
     */
     ajax::init(array());
 
+    if (init('action') == 'getRemoteHosts') {
+        $remoteHosts = sshmanager::getRemoteHosts();
+        ajax::success($remoteHosts);
+    }
+
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
 } catch (Exception $e) {
     ajax::error(displayException($e), $e->getCode());
 }
-?>
