@@ -14,7 +14,7 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-function saveNewSSH() {
+/* function saveNewSSH() {
 	let response = jeeDialog.get('#mod_add_sshmanager', 'content')
 
 	let new_name = response.querySelector('.eqLogicAttr[data-l1key="name"]').value
@@ -63,4 +63,4 @@ function saveNewSSH() {
 		}
 
 	});
-}
+} */

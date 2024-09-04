@@ -36,7 +36,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                         <br />
                         <span style="color:var(--txt-color)">{{Ajouter}}</span>
                     </div>
-                    <div class="cursor eqLogicAction logoPrimary" id="bt_confnewssh" data-action="addnewssh">
+                    <div class="cursor eqLogicAction logoPrimary sshmanagerHelper" data-helper="add">
                         <i class="fas fa-plus-circle"></i>
                         <br />
                         <span style="color:var(--txt-color)">{{Ajouter Hôte SSH}}</span>
@@ -216,5 +216,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
 <!-- Inclusion du fichier javascript du plugin (dossier, nom_du_fichier, extension_du_fichier, id_du_plugin) -->
 <?php include_file('desktop', 'sshmanager', 'js', 'sshmanager'); ?>
+<?php include_file('desktop', 'sshmanager.helpder', 'js', 'sshmanager'); ?>
 <!-- Inclusion du fichier javascript du core - NE PAS MODIFIER NI SUPPRIMER -->
 <?php include_file('core', 'plugin.template', 'js'); ?>
