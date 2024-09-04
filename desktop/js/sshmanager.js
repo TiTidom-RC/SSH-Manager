@@ -92,18 +92,18 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function () {
 	});
 	jeeDialog.dialog({
 		id: 'mod_addnewssh',
-		title: '{{Ajouter un hôte SSH}}',
+		title: '{{SSH Manager}}',
 		width: 750,
-		height: 550,
+		height: 600,
 		top: '10vh',
 		contentUrl: 'index.php?v=d&plugin=sshmanager&modal=newconf',
 		callback: function () {
-			jeedomUtils.showAlert({
+			/* jeedomUtils.showAlert({
 				title: "SSH Manager - Add New SSH Conf",
 				message: "Callback",
 				level: 'danger',
 				emptyBefore: false
-			});
+			}); */
 		},
 		buttons: {
 			confirm: {
@@ -120,12 +120,12 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function () {
 				className: 'warning',
 				callback: {
 					click: function (event) {
-						jeedomUtils.showAlert({
+						/* jeedomUtils.showAlert({
 							title: "SSH Manager	- Add New SSH Conf",
 							message: "Click :: Cancel",
 							level: 'danger',
 							emptyBefore: false
-						});
+						}); */
 						jeeDialog.get('#mod_addnewssh').destroy()
 					}
 				}

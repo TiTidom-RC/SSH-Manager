@@ -91,6 +91,7 @@ sendVarToJS('CONFIG_AUTH_METHOD', sshmanager::CONFIG_AUTH_METHOD);
                                     </div>
                                 </div>
                             </div>
+                            <br />
                             <div class='form-group'>
                                 <label class="col-md-4 control-label">{{Sauvegarder}}
                                     <sup><i class="fas fa-question-circle tooltips" title="{{Sauvegarder les informations de connexion SSH}}"></i></sup>
