@@ -66,7 +66,7 @@ function saveNewSSH() {
 				'password': new_password,
 				'ssh-key': new_key,
 				'ssh-passphrase': new_passphrase,
-				'auth-method': new_auth_method
+				'auth-method': new_auth_method,
 			}
 		}],
 		error: function (error) {
