@@ -66,7 +66,7 @@ function saveNewSSH() {
 				'password': new_password,
 				'ssh-key': new_key,
 				'ssh-passphrase': new_passphrase,
-				'auth-method': new_auth_method,
+				'auth-method': new_auth_method
 			}
 		}],
 		error: function (error) {
@@ -80,7 +80,7 @@ function saveNewSSH() {
 		success: function (data) {
 			jeedomUtils.showAlert({
 				title: "SSH Manager - Add New SSH Conf",
-				message: "Success: {{Equipement créé}} :: " + data.name,
+				message: "Success: {{Equipement créé}} :: " + data.name + " - " + data.configuration['auth-method'],
 				level: 'success',
 				emptyBefore: false
 			});
