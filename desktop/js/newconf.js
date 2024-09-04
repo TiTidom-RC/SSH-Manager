@@ -38,3 +38,24 @@ function toggleSSHPassphrase() {
 	sshPassphraseIcon.className = sshPassphraseField.type === "password" ? "fas fa-eye-slash" : "fas fa-eye";
 	sshPassphraseField.type = sshPassphraseField.type === "password" ? "text" : "password";
 }
+
+function saveNewSSH() {
+	let response = jeeDialog.get('#mod_addnewssh', 'content')
+
+	let new_name = response.querySelector('.eqLogicAttr[data-l1key="name"]').value
+	let new_host = response.querySelector('.eqLogicAttr[data-l2key="host"]').value
+	let new_port = response.querySelector('.eqLogicAttr[data-l2key="port"]').value
+	let new_timeout = response.querySelector('.eqLogicAttr[data-l2key="timeout"]').value
+	let new_user = response.querySelector('.eqLogicAttr[data-l2key="username"]').value
+	let new_password = response.querySelector('.eqLogicAttr[data-l2key="password"]').value
+	let new_key = response.querySelector('.eqLogicAttr[data-l2key="ssh-key"]').value
+	let new_passphrase = response.querySelector('.eqLogicAttr[data-l2key="ssh-passphrase"]').value
+	let new_auth_method = response.querySelector('.eqLogicAttr[data-l2key="auth-method"]').value
+
+	jeedomUtils.showAlert({
+		title: "SSH Manager - Add New SSH Conf",
+		message: "Click (Valider) :: " + new_name + " - " + new_host + " - " + new_port + " - " + new_timeout + " - " + new_user + " - " + new_password + " - " + new_key + " - " + new_passphrase + " - " + new_auth_method,
+		level: 'danger',
+		emptyBefore: false
+	});
+}

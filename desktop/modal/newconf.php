@@ -9,6 +9,7 @@ sendVarToJS('CONFIG_AUTH_METHOD', sshmanager::CONFIG_AUTH_METHOD);
 
 <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
     <div role="tabpanel" class="tab-pane active" id="addnewssh">
+        <legend><i class="fas fa-list-alt"></i> {{Ajout d'un nouvel équipement SSH Manager :}}</legend>
         <br />
         <div>
             <div class="col-sm-10">
@@ -88,6 +89,14 @@ sendVarToJS('CONFIG_AUTH_METHOD', sshmanager::CONFIG_AUTH_METHOD);
                                     <div class="col-md-8">
                                         <textarea class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>" placeholder="{{Saisir la clé SSH}}" wrap="off" spellcheck="false"></textarea>
                                     </div>
+                                </div>
+                            </div>
+                            <div class='form-group'>
+                                <label class="col-md-4 control-label">{{Sauvegarder}}
+                                    <sup><i class="fas fa-question-circle tooltips" title="{{Sauvegarder les informations de connexion SSH}}"></i></sup>
+                                </label>
+                                <div class="col-lg-4">
+                                    <a class="btn btn-success btn-xm" onclick="saveNewSSH()"><i id="btnSaveNewSSH" class="fas fa-save"> {{Sauvegarder Hôte SSH}}</i></a>
                                 </div>
                             </div>
                         </div>
