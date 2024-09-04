@@ -52,28 +52,37 @@ function saveNewSSH() {
 	let new_passphrase = response.querySelector('.eqLogicAttr[data-l2key="ssh-passphrase"]').value
 	let new_auth_method = response.querySelector('.eqLogicAttr[data-l2key="auth-method"]').value
 
-	domUtils.ajax({
-		type: 'POST',
-		url: 'plugins/sshmanager/core/ajax/sshmanager.ajax.php',
-		data: {
-			action: 'addNewSSH',
+	jeedom.eqLogic.save({
+		type: 'sshmanager',
+		eqLogics: [{
 			name: new_name,
-			host: new_host,
-			port: new_port,
-			timeout: new_timeout,
-			username: new_user,
-			password: new_password,
-			ssh_key: new_key,
-			ssh_passphrase: new_passphrase,
-			auth_method: new_auth_method
+			isEnable: 1,
+			isVisible: 0,
+			configuration: {
+				host: new_host,
+				port: new_port,
+				timeout: new_timeout,
+				username: new_user,
+				password: new_password,
+				ssh_key: new_key,
+				ssh_passphrase: new_passphrase,
+				auth_method: new_auth_method
+			}
+		}],
+		error: function (error) {
+			jeedomUtils.showAlert({
+				title: "SSH Manager - Add New SSH Conf",
+				message: "Error: " + error.message,
+				level: 'danger',
+				emptyBefore: false
+			});
 		},
-		dataType: 'json',
 		success: function (data) {
 			if (data.state != 'ok') {
 				jeedomUtils.showAlert({
 					title: "SSH Manager - Add New SSH Conf",
 					message: "Error: " + data.result,
-					level: 'danger',
+					level: 'warning',
 					emptyBefore: false
 				});
 			} else {
@@ -85,6 +94,7 @@ function saveNewSSH() {
 				});
 			}
 		}
+		
 	});
 
 	jeedomUtils.showAlert({
