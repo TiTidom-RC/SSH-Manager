@@ -34,6 +34,14 @@ try {
         $sshmanager = new sshmanager();
         $sshmanager->setName(init('name'));
         $sshmanager->setEqType_name('sshmanager');
+        $sshmanager->setConfiguration(sshmanager::CONFIG_AUTH_METHOD, init('authmethod'));
+        $sshmanager->setConfiguration(sshmanager::CONFIG_HOST, init('host'));
+        $sshmanager->setConfiguration(sshmanager::CONFIG_PORT, init('port'));
+        $sshmanager->setConfiguration(sshmanager::CONFIG_TIMEOUT, init('timeout'));
+        $sshmanager->setConfiguration(sshmanager::CONFIG_USERNAME, init('username'));
+        $sshmanager->setConfiguration(sshmanager::CONFIG_PASSWORD, init('password'));
+        $sshmanager->setConfiguration(sshmanager::CONFIG_SSH_KEY, init('ssh_key'));
+        $sshmanager->setConfiguration(sshmanager::CONFIG_SSH_PASSPHRASE, init('ssh_passphrase'));
         $sshmanager->save();
         ajax::success($sshmanager->getHumanName());
     }
