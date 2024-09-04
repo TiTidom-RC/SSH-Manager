@@ -80,7 +80,7 @@ function saveNewSSH() {
 		success: function (data) {
 			jeedomUtils.showAlert({
 				title: "SSH Manager - Add New SSH Conf",
-				message: "Success: " + data.result,
+				message: "Success: {{Equipement créé}} :: " + data.name,
 				level: 'success',
 				emptyBefore: false
 			});
