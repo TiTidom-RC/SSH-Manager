@@ -94,7 +94,7 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function () {
 		id: 'mod_addnewssh',
 		title: '{{SSH Manager}}',
 		width: 750,
-		height: 600,
+		height: 650,
 		top: '10vh',
 		contentUrl: 'index.php?v=d&plugin=sshmanager&modal=newconf',
 		callback: function () {
