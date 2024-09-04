@@ -84,12 +84,12 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(fun
 });
 
 document.querySelector('#bt_confnewssh').addEventListener('click', function () {
-	jeedomUtils.showAlert({
+	/* jeedomUtils.showAlert({
 		title: "SSH Manager - Add New SSH Conf",
 		message: "Add New SSH Conf",
 		level: 'danger',
 		emptyBefore: false
-	});
+	}); */
 	jeeDialog.dialog({
 		id: 'mod_addnewssh',
 		title: '{{SSH Manager}}',
@@ -133,8 +133,6 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function () {
 		}
 	})
 });
-
-
 
 document.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_AUTH_METHOD + '"]').addEventListener('change', function () {
 	if (this.selectedIndex == 0) {
