@@ -59,14 +59,14 @@ function saveNewSSH() {
 			isEnable: 1,
 			isVisible: 0,
 			configuration: {
-				host: new_host,
-				port: new_port,
-				timeout: new_timeout,
-				username: new_user,
-				password: new_password,
-				ssh_key: new_key,
-				ssh_passphrase: new_passphrase,
-				auth_method: new_auth_method
+				'host': new_host,
+				'port': new_port,
+				'timeout': new_timeout,
+				'username': new_user,
+				'password': new_password,
+				'ssh_key': new_key,
+				'ssh_passphrase': new_passphrase,
+				'auth-method': new_auth_method
 			}
 		}],
 		error: function (error) {
