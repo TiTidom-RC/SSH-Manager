@@ -30,6 +30,13 @@ try {
     */
     ajax::init(array());
 
+    if (init('action') == 'addNewSSH') {
+        $sshmanager = new sshmanager();
+        $sshmanager->setName(init('name'));
+        $sshmanager->save();
+        ajax::success($sshmanager->getHumanName());
+    }
+
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
 } catch (Exception $e) {
