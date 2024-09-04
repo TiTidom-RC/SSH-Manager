@@ -207,7 +207,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <div class="form-group">
                                         <label class="col-md-4 control-label">{{Clé SSH}}</label>
                                         <div class="col-md-8">
-                                            <textarea class="eqLogicAttr form-control autogrow" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>" placeholder="{{Saisir la clé SSH}}" wrap="off" spellcheck="false"></textarea>
+                                            <textarea class="eqLogicAttr form-control" rows="10" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>" placeholder="{{Saisir la clé SSH}}" wrap="off" spellcheck="false"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -233,7 +233,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{Description}}</label>
                                 <div class="col-sm-6">
-                                    <textarea class="form-control eqLogicAttr autogrow" data-l1key="comment"></textarea>
+                                    <textarea class="form-control eqLogicAttr" rows="10" data-l1key="comment"></textarea>
                                 </div>
                             </div>
                         </div>
