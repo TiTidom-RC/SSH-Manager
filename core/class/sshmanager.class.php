@@ -30,6 +30,9 @@ class sshmanager extends eqLogic {
     const AUTH_METHOD_AGENT = 'agent';
     const DEFAULT_AUTH_METHOD = 'password';
 
+    const DEFAULT_TIMEOUT = 10;
+    const DEFAULT_PORT = 22;
+
     public function decrypt() {
         $this->setConfiguration(self::CONFIG_USERNAME, utils::decrypt($this->getConfiguration(self::CONFIG_USERNAME)));
         $this->setConfiguration(self::CONFIG_PASSWORD, utils::decrypt($this->getConfiguration(self::CONFIG_PASSWORD)));
@@ -117,9 +120,9 @@ class sshmanager extends eqLogic {
         /** @var string */
         $host = $this->getConfiguration(self::CONFIG_HOST);
         /** @var int */
-        $port = $this->getConfiguration(self::CONFIG_PORT, 22);
+        $port = $this->getConfiguration(self::CONFIG_PORT, self::DEFAULT_PORT);
         /** @var int */
-        $timeout = $this->getConfiguration(self::CONFIG_TIMEOUT, 10);
+        $timeout = $this->getConfiguration(self::CONFIG_TIMEOUT, self::DEFAULT_TIMEOUT);
 
         if ($host == "") {
             log::add(__CLASS__, 'error', 'Host name or IP not defined');
