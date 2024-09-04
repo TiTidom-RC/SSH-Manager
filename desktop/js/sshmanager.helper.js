@@ -93,6 +93,9 @@ document.querySelector('.sshmanagerHelper[data-helper=add]').addEventListener('c
 
 function buildSelectHost(currentValue) {
     const selectHost = document.querySelector('.sshmanagerHelper[data-helper=list]');
+    if (currentValue === undefined) {
+        currentValue = selectHost.value;
+    }
     //TODO test if selectHost is null
     selectHost.innerHTML = '';
     let option = document.createElement('option');
@@ -115,9 +118,6 @@ function buildSelectHost(currentValue) {
             if (data.state != 'ok') {
                 $('#modal_alert').showAlert({ message: data.result, level: 'danger' });
                 return;
-            }
-            if (currentValue === undefined) {
-                currentValue = selectHost.value;
             }
             for (const id in data.result) {
                 selectHost.append(new Option(data.result[id], id));
