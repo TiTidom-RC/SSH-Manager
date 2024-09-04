@@ -23,33 +23,32 @@ sendVarToJS([
     <div role="tabpanel" class="tab-pane active" id="addnewssh">
         <legend><i class="fas fa-list-alt"></i> {{Ajout d'un nouvel équipement SSH Manager :}}</legend>
         <br />
-        <div>
-            <div class="col-sm-12">
-                <form class="form-horizontal">
-                    <fieldset>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">{{Nom de l'équipement}}</label>
-                            <div class="col-md-6">
-                                <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom Equipement SSH Manager}}" />
-                            </div>
+        <div class="col-sm-12">
+            <form class="form-horizontal">
+                <fieldset>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{Nom de l'équipement}}</label>
+                        <div class="col-md-6">
+                            <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom Equipement SSH Manager}}" />
                         </div>
+                    </div>
 
-                        <br />
-                        <?php include_file('desktop', 'params.sshmanager.inc', 'php', 'sshmanager'); ?>
-                        <br />
+                    <br />
+                    <?php include_file('desktop', 'params.sshmanager.inc', 'php', 'sshmanager'); ?>
+                    <br />
 
-                        <div class='form-group'>
-                            <label class="col-md-4 control-label">{{Sauvegarder}}
-                                <sup><i class="fas fa-question-circle tooltips" title="{{Sauvegarder les informations de connexion SSH}}"></i></sup>
-                            </label>
-                            <div class="col-lg-4">
-                                <a class="btn btn-success btn-xm" onclick="saveNewSSH()"><i id="btnSaveNewSSH" class="fas fa-save"></i> {{Sauvegarder Hôte SSH}}</a>
-                            </div>
+                    <div class='form-group'>
+                        <label class="col-md-4 control-label">{{Sauvegarder}}
+                            <sup><i class="fas fa-question-circle tooltips" title="{{Sauvegarder les informations de connexion SSH}}"></i></sup>
+                        </label>
+                        <div class="col-lg-4">
+                            <a class="btn btn-success btn-xm" onclick="saveNewSSH()"><i id="btnSaveNewSSH" class="fas fa-save"></i> {{Sauvegarder Hôte SSH}}</a>
                         </div>
-                    </fieldset>
-                </form>
-            </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
+        
     </div>
 </div>
 
