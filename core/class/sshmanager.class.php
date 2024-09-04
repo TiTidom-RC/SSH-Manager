@@ -158,7 +158,7 @@ class sshmanager extends eqLogic {
 
         if ($host == "") {
             log::add(__CLASS__, 'error', 'Host name or IP not defined');
-            throw new RuntimeException('Host name or IP not defined');
+            throw new RuntimeException(__('Adresse IP ou nom d\'hôte non configuré', __FILE__));
         }
 
         return [$host, $port, $timeout];
@@ -170,7 +170,7 @@ class sshmanager extends eqLogic {
         $username = $this->getConfiguration(self::CONFIG_USERNAME);
         if ($username == "") {
             log::add(__CLASS__, 'error', 'username not defined');
-            throw new RuntimeException('username not defined');
+            throw new RuntimeException(__('Nom d\'utilisateur non configuré', __FILE__));
         }
 
         /** @var string */
@@ -181,7 +181,7 @@ class sshmanager extends eqLogic {
                 $keyOrpassword = $this->getConfiguration(self::CONFIG_PASSWORD);
                 if ($keyOrpassword == "") {
                     log::add(__CLASS__, 'error', 'Password not defined');
-                    throw new RuntimeException('Password not defined');
+                    throw new RuntimeException(__('Mot de passe non configuré', __FILE__));
                 }
                 break;
             case self::AUTH_METHOD_SSH_KEY:
@@ -189,7 +189,7 @@ class sshmanager extends eqLogic {
                 $sshpassphrase = $this->getConfiguration(self::CONFIG_SSH_PASSPHRASE);
                 if ($sshkey == "") {
                     log::add(__CLASS__, 'error', 'SSH key not defined');
-                    throw new RuntimeException('SSH key not defined');
+                    throw new RuntimeException(__('Clé SSH non configurée', __FILE__));
                 }
                 try {
                     $keyOrpassword = PublicKeyLoader::load($sshkey, $sshpassphrase);
@@ -201,10 +201,10 @@ class sshmanager extends eqLogic {
                 break;
             case self::AUTH_METHOD_AGENT:
                 //TODO: check if agent auth could be usefull?
-                throw new RuntimeException("Unsupported auth method: {$authmethod}");
+                throw new RuntimeException(sprintf(__("Méthode d'authentification non supportée: %s", __FILE__), $authmethod));
                 break;
             default:
-                throw new RuntimeException("Unsupported auth method: {$authmethod}");
+                throw new RuntimeException(sprintf(__("Méthode d'authentification non supportée: %s", __FILE__), $authmethod));
         }
         return [$username, $keyOrpassword];
     }
