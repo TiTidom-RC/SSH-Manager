@@ -21,6 +21,9 @@ document.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_AUTH_METHOD + '"]').
 	} else if (this.selectedIndex == 1) {
 		document.querySelector('.remote-pwd').style.display = "none";
 		document.querySelector('.remote-key').style.display = "block";
+	} else {
+		document.querySelector('.remote-pwd').style.display = "none";
+		document.querySelector('.remote-key').style.display = "none";
 	}
 });
 
@@ -50,7 +53,7 @@ function saveNewSSH() {
 	let new_password = response.querySelector('.eqLogicAttr[data-l2key="password"]').value
 	let new_key = response.querySelector('.eqLogicAttr[data-l2key="ssh-key"]').value
 	let new_passphrase = response.querySelector('.eqLogicAttr[data-l2key="ssh-passphrase"]').value
-	let new_auth_method = response.querySelector('.eqLogicAttr[data-l2key="auth-method"]').value
+	let new_auth_method = response.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_AUTH_METHOD + '"]').value
 
 	jeedom.eqLogic.save({
 		type: 'sshmanager',

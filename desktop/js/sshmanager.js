@@ -141,6 +141,9 @@ document.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_AUTH_METHOD + '"]').
 	} else if (this.selectedIndex == 1) {
 		document.querySelector('.remote-pwd').style.display = "none";
 		document.querySelector('.remote-key').style.display = "block";
+	} else {
+		document.querySelector('.remote-pwd').style.display = "none";
+		document.querySelector('.remote-key').style.display = "none";
 	}
 });
 
