@@ -152,13 +152,7 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function () {
 	})
 });
 
-document.querySelector('.eqLogicAttr[data-l2key="pull_use_custom"]').addEventListener('change', function () {
-	if (this.checked) {
-		document.querySelector('.pull_class').style.display = "block";
-	} else {
-		document.querySelector('.pull_class').style.display = "none";
-	}
-});
+
 
 document.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_AUTH_METHOD + '"]').addEventListener('change', function () {
 	if (this.selectedIndex == 0) {
