@@ -55,7 +55,7 @@ function saveNewSSH() {
 		success: function (data) {
 			jeedomUtils.showAlert({
 				title: "SSH Manager - Add New SSH Conf",
-				message: "Success: {{Equipement créé}} :: " + data.name + " - " + data.configuration['auth-method'],
+				message: "Success: {{Equipement créé}} :: " + data.name + " (" + data.configuration['auth-method'] + ")",
 				level: 'success',
 				emptyBefore: false
 			});
