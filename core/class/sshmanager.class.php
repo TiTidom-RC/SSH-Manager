@@ -69,7 +69,6 @@ class sshmanager extends eqLogic {
         return $pluginVersion;
     }
 
-
     public static function cron() {
         /** @var sshmanager */
         foreach (self::byType(__CLASS__, true) as $sshmanager) {
@@ -78,14 +77,13 @@ class sshmanager extends eqLogic {
             try {
                 $cron = new Cron\CronExpression($autorefresh, new Cron\FieldFactory);
                 if ($cron->isDue()) {
-                    // TODO: check if any info command with a ssh command to execute
+                    // TODO: check if any info command with a custom ssh command to execute
                 }
             } catch (Exception $e) {
                 log::add(__CLASS__, 'error', __('Expression cron non valide pour ', __FILE__) . $sshmanager->getName() . ' : ' . $autorefresh);
             }
         }
     }
-
 
     // Methods used by client plugins
 
