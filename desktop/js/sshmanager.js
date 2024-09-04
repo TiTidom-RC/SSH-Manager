@@ -84,8 +84,10 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(fun
 });
 
 document.querySelector('#bt_confnewssh').addEventListener('click', function () {
+	document.getElementById('mod_add_sshmanager')?.remove()
+  	document.body.insertAdjacentHTML('beforeend', '<div id="mod_add_sshmanager" ></div>')
 	jeeDialog.dialog({
-		id: 'mod_addnewssh',
+		id: 'mod_add_sshmanager',
 		title: '{{SSH Manager}}',
 		width: 750,
 		height: 650,

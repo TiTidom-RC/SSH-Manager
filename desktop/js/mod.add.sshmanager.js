@@ -15,7 +15,7 @@
  */
 
 function saveNewSSH() {
-	let response = jeeDialog.get('#mod_addnewssh', 'content')
+	let response = jeeDialog.get('#mod_add_sshmanager', 'content')
 
 	let new_name = response.querySelector('.eqLogicAttr[data-l1key="name"]').value
 	let new_host = response.querySelector('.eqLogicAttr[data-l2key="host"]').value
@@ -59,15 +59,8 @@ function saveNewSSH() {
 				level: 'success',
 				emptyBefore: false
 			});
-			jeeDialog.get('#mod_addnewssh').destroy()
+			jeeDialog.get('#mod_add_sshmanager').destroy()
 		}
 
 	});
-
-	/* jeedomUtils.showAlert({
-		title: "SSH Manager - Add New SSH Conf",
-		message: "Click (Sauvegarder) :: " + new_name + " - " + new_host + " - " + new_port + " - " + new_timeout + " - " + new_user + " - " + new_password + " - " + new_key + " - " + new_passphrase + " - " + new_auth_method,
-		level: 'danger',
-		emptyBefore: false
-	}); */
 }
