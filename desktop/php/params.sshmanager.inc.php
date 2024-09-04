@@ -71,7 +71,7 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
     <div class="form-group">
         <label class="col-md-4 control-label">{{Clé SSH}}</label>
         <div class="col-md-8">
-            <textarea class="eqLogicAttr form-control" rows="10" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>" placeholder="{{Saisir la clé SSH}}" wrap="off" spellcheck="false"></textarea>
+            <textarea class="eqLogicAttr form-control" rows="3" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>" placeholder="{{Saisir la clé SSH}}" wrap="off" spellcheck="false"></textarea>
         </div>
     </div>
 </div>
