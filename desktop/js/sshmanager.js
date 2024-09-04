@@ -18,41 +18,50 @@
 /* Fonction permettant l'affichage des commandes dans l'équipement */
 function addCmdToTable(_cmd) {
 	if (!isset(_cmd)) {
-		var _cmd = { configuration: {} };
+		var _cmd = {configuration: {}};
 	}
-
-	// TODO: Ajouter l'affichage des commandes
 	var tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">';
 	tr += '<td class="hidden-xs">';
 	tr += '<span class="cmdAttr" data-l1key="id"></span>';
 	tr += '</td>';
 	tr += '<td>';
+	tr += '<div class="input-group">'
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="type" value="info" style="display: none">';
-	tr += '<input class="cmdAttr form-control input-sm" data-l1key="name" placeholder="{{Nom de la commande}}" style="margin: 1px auto;">';
+	tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="name" placeholder="{{Nom de la commande}}">';
+	tr += '<span class="input-group-btn"><a class="cmdAction btn btn-sm btn-default" data-l1key="chooseIcon" title="{{Choisir une icône}}"><i class="fas fa-icons"></i></a></span>';
+	tr += '<span class="cmdAttr input-group-addon roundedRight" data-l1key="display" data-l2key="icon" style="font-size:19px;padding: 0 5px 0 5px!important;"></span>';
+	tr += '</div>';
 	tr += '</td>';
 	tr += '<td>';
+	tr += '<span><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '" style="margin: 1px auto;width: 70%;display: inherit" ></input></span>';
+	tr += '<span class="cmdAttr"> Unité : <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_unite" style="margin: 1px auto;width: 10%;display: inherit" ></input></span>';
+	tr += '<br/><span class="cmdAttr" style="color: green;font-weight: bold;">[Vert] \< <input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorlow" type="text" style="margin: 1px auto;width: 60px;display: inherit" /></span><span class="cmdAttr" style="color: orange;font-weight: bold;"> \u{2264} [Orange] \u{2264} </span><span class="cmdAttr" style="color: red;font-weight: bold;"><input class="cmdAttr eqLogicAttr form-control input-sm" data-l1key="configuration" data-l2key="' + init(_cmd.logicalId) + '_colorhigh" style="margin: 1px auto;width: 60px;display: inherit" /> \< [Rouge]</span>';
 	tr += '</td>';
-
 	tr += '<td>';
+	tr += '<span><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isVisible" checked/> {{Afficher}}<br/></span>';
+	tr += '<span><input type="checkbox" class="cmdAttr" data-size="mini" data-l1key="isHistorized"/> {{Historiser}}</span>';
 	tr += '</td>';
-
 	tr += '<td>';
+	tr += '<span class="type" type="info"></span>';
+	tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
 	tr += '</td>';
-
 	tr += '<td>';
 	tr += '<span class="cmdAttr" data-l1key="htmlstate"></span>';
 	tr += '</td>';
-
 	tr += '<td>';
 	if (is_numeric(_cmd.id)) {
 		tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> ';
-		tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
+        tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>';
 	}
-	tr += '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove" title="{{Supprimer la commande}}"></i>';
+	tr += '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove"></i>';
 	tr += '</td>';
-
 	tr += '</tr>';
-	$('#table_cmd tbody').append(tr);
+
+	document.querySelector('#table_cmd tbody').insertAdjacentHTML('beforeend', tr);
+	document.querySelectorAll('#table_cmd tbody tr').last().setJeeValues(_cmd, '.cmdAttr')
+	jeedom.cmd.changeType(document.querySelectorAll('#table_cmd tbody tr').last(), init(_cmd.subType));
+
+/* 	$('#table_cmd tbody').append(tr);
 	var tr = $('#table_cmd tbody tr').last();
 	jeedom.eqLogic.buildSelectCmd({
 		id: $('.eqLogicAttr[data-l1key=id]').value(),
@@ -66,6 +75,7 @@ function addCmdToTable(_cmd) {
 			jeedom.cmd.changeType(tr, init(_cmd.subType))
 		}
 	});
+ */
 }
 
 document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(function (element) {
