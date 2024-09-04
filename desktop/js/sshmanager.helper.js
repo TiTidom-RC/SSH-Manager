@@ -103,7 +103,37 @@ function buildSelectHost(currentValue) {
     option.value = '';
     selectHost.add(option);
 
-    return $.ajax({
+    return domUtils.ajax({
+        type: 'POST',
+        url: 'plugins/sshmanager/core/ajax/sshmanager.ajax.php',
+        data: {
+            action: "getRemoteHosts",
+        },
+        dataType: 'json',
+        // async: true,
+        global: false,
+        error: function (request, status, error) {
+            handleAjaxError(request, status, error);
+        },
+        success: function (data) {
+            if (data.state != 'ok') {
+                jeedomUtils.showAlert({
+                    title: "SSH Manager - Build Select Host",
+                    message: data.result,
+                    level: 'danger',
+                    emptyBefore: false
+                });
+                return;
+            } else {
+                for (const id in data.result) {
+                    selectHost.append(new Option(data.result[id], id));
+                }
+                selectHost.value = currentValue;
+            }
+        }
+    });
+
+    /* return $.ajax({
         type: "POST",
         url: "plugins/sshmanager/core/ajax/sshmanager.ajax.php",
         data: {
@@ -124,5 +154,5 @@ function buildSelectHost(currentValue) {
             }
             selectHost.value = currentValue;
         }
-    });
+    }); */
 }
