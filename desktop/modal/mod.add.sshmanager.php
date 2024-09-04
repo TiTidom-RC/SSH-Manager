@@ -29,14 +29,13 @@ sendVarToJS([
                     <div class="form-group">
                         <label class="col-md-4 control-label">{{Nom de l'équipement}}</label>
                         <div class="col-md-6">
-                            <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom Equipement SSH Manager}}" />
+                            <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement}}" />
                         </div>
                     </div>
 
                     <br />
                     <?php include_file('desktop', 'params.sshmanager.inc', 'php', 'sshmanager'); ?>
                     <br />
-
                     <div class='form-group'>
                         <label class="col-md-4 control-label">{{Sauvegarder}}
                             <sup><i class="fas fa-question-circle tooltips" title="{{Sauvegarder les informations de connexion SSH}}"></i></sup>
