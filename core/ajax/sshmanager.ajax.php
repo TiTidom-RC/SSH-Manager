@@ -34,7 +34,7 @@ try {
         $sshmanager = new sshmanager();
         $sshmanager->setName(init('name'));
         $sshmanager->setEqType_name('sshmanager');
-        $sshmanager->setConfiguration(sshmanager::CONFIG_AUTH_METHOD, init('authmethod'));
+        $sshmanager->setConfiguration(sshmanager::CONFIG_AUTH_METHOD, init('auth_method'));
         $sshmanager->setConfiguration(sshmanager::CONFIG_HOST, init('host'));
         $sshmanager->setConfiguration(sshmanager::CONFIG_PORT, init('port'));
         $sshmanager->setConfiguration(sshmanager::CONFIG_TIMEOUT, init('timeout'));
