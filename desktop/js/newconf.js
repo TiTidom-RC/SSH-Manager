@@ -64,8 +64,8 @@ function saveNewSSH() {
 				'timeout': new_timeout,
 				'username': new_user,
 				'password': new_password,
-				'ssh_key': new_key,
-				'ssh_passphrase': new_passphrase,
+				'ssh-key': new_key,
+				'ssh-passphrase': new_passphrase,
 				'auth-method': new_auth_method
 			}
 		}],
