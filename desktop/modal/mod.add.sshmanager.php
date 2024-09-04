@@ -35,7 +35,7 @@ sendVarToJS([
                         </div>
 
                         <br />
-                        <?php include_file('desktop', 'specificparams.inc', 'php', 'sshmanager'); ?>
+                        <?php include_file('desktop', 'params.sshmanager.inc', 'php', 'sshmanager'); ?>
                         <br />
 
                         <div class='form-group'>
@@ -54,5 +54,5 @@ sendVarToJS([
 </div>
 
 <?php
-include_file('desktop', 'newconf', 'js', 'sshmanager');
+include_file('desktop', 'mod.add.sshmanager', 'js', 'sshmanager');
 ?>

@@ -96,7 +96,7 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function () {
 		width: 750,
 		height: 650,
 		top: '10vh',
-		contentUrl: 'index.php?v=d&plugin=sshmanager&modal=newconf',
+		contentUrl: 'index.php?v=d&plugin=sshmanager&modal=mod.add.sshmanager',
 		callback: function () {
 			/* jeedomUtils.showAlert({
 				title: "SSH Manager - Add New SSH Conf",

@@ -160,7 +160,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             </div>
 
                             <legend><i class="fas fa-cogs"></i> {{Paramètres spécifiques}}</legend>
-                            <?php include_file('desktop', 'specificparams.inc', 'php', 'sshmanager'); ?>
+                            <?php include_file('desktop', 'params.sshmanager.inc', 'php', 'sshmanager'); ?>
 
                             <div class="form-group">
                                 <label class="col-sm-4 control-label help" data-help="{{Fréquence de rafraîchissement des commandes infos de l'équipement}}">{{Auto-actualisation}}</label>
