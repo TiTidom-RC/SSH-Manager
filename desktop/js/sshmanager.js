@@ -14,15 +14,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Permet la réorganisation des commandes dans l'équipement : plus nécessaire en 4.4
-$("#table_cmd").sortable({
-	axis: "y",
-	cursor: "move",
-	items: ".cmd",
-	placeholder: "ui-state-highlight",
-	tolerance: "intersect",
-	forcePlaceholderSize: true
-  }); */
 
 /* Fonction permettant l'affichage des commandes dans l'équipement */
 function addCmdToTable(_cmd) {
@@ -82,19 +73,3 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(fun
 		window.open(this.getAttribute("data-location"), "_blank", null);
 	});
 });
-
-/* document.querySelector('#bt_confnewssh').addEventListener('click', function () {
-	// document.getElementById('mod_add_sshmanager')?.remove()
-  	// document.body.insertAdjacentHTML('beforeend', '<div id="mod_add_sshmanager" ></div>')
-	jeeDialog.dialog({
-		id: 'mod_add_sshmanager',
-		title: '{{SSH Manager}}',
-		width: 750,
-		height: 650,
-		top: '10vh',
-		contentUrl: 'index.php?v=d&plugin=sshmanager&modal=mod.add.sshmanager',
-		callback: function () {
-		}
-	})
-});
- */

@@ -1,7 +1,7 @@
 {
 	"id": "sshmanager",
 	"name": "SSH Manager",
-	"pluginVersion": "0.0.2",
+	"pluginVersion": "0.1.0",
 	"description": {
 		"fr_FR": "SSH Manager",
 		"en_US": "SSH Manager",
@@ -12,7 +12,7 @@
 	},
 	"utilization": "SSH Manager",
 	"licence": "AGPL",
-	"author": "TiTidom & Mips || Mips & TiTidom",
+	"author": "TiTidom & Mips",
 	"require": "4.4",
 	"hasDependency": false,
 	"category": "programming",
