@@ -20,7 +20,7 @@ sendVarToJS([
 ?>
 
 <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
-    <div role="tabpanel" class="tab-pane active" id="addnewssh">
+    <div role="tabpanel" class="tab-pane active">
         <legend><i class="fas fa-list-alt"></i> {{Ajout d'un nouvel équipement SSH Manager :}}</legend>
         <br />
         <div class="col-sm-12">
