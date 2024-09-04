@@ -14,15 +14,6 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Permet la réorganisation des commandes dans l'équipement : plus nécessaire en 4.4
-$("#table_cmd").sortable({
-	axis: "y",
-	cursor: "move",
-	items: ".cmd",
-	placeholder: "ui-state-highlight",
-	tolerance: "intersect",
-	forcePlaceholderSize: true
-  }); */
 
 /* Fonction permettant l'affichage des commandes dans l'équipement */
 function addCmdToTable(_cmd) {
@@ -82,36 +73,3 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(fun
 		window.open(this.getAttribute("data-location"), "_blank", null);
 	});
 });
-
-document.querySelector('.eqLogicAttr[data-l2key="pull_use_custom"]').addEventListener('change', function () {
-	if (this.checked) {
-		document.querySelector('.pull_class').style.display = "block";
-	} else {
-		document.querySelector('.pull_class').style.display = "none";
-	}
-});
-
-$(".eqLogicAttr[data-l2key='auth-method']").on('change', function () {
-	if (this.selectedIndex == 0) {
-		document.querySelector(".remote-pwd").style.display = "block";
-		document.querySelector(".remote-key").style.display = "none";
-	} else if (this.selectedIndex == 1) {
-		document.querySelector(".remote-pwd").style.display = "none";
-		document.querySelector(".remote-key").style.display = "block";
-	}
-});
-
-function toggleSSHPassword() {
-	var sshPasswordIcon = document.getElementById("btnToggleSSHPasswordIcon");
-	var sshPasswordField = document.getElementById("ssh-password");
-	sshPasswordIcon.className = sshPasswordField.type === "password" ? "fas fa-eye-slash" : "fas fa-eye";
-	sshPasswordField.type = sshPasswordField.type === "password" ? "text" : "password";
-
-}
-
-function toggleSSHPassphrase() {
-	var sshPassphraseIcon = document.getElementById("btnToggleSSHPassphraseIcon");
-	var sshPassphraseField = document.getElementById("ssh-passphrase");
-	sshPassphraseIcon.className = sshPassphraseField.type === "password" ? "fas fa-eye-slash" : "fas fa-eye";
-	sshPassphraseField.type = sshPassphraseField.type === "password" ? "text" : "password";
-}

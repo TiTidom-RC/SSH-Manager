@@ -4,9 +4,24 @@ if (!isConnect('admin')) {
 }
 
 $plugin = plugin::byId('sshmanager');
-sendVarToJS('eqType', $plugin->getId());
+sendVarToJS([
+    'eqType' => $plugin->getId(),
+    'CONFIG_HOST' => sshmanager::CONFIG_HOST,
+    'CONFIG_PORT' => sshmanager::CONFIG_PORT,
+    'CONFIG_TIMEOUT' => sshmanager::CONFIG_TIMEOUT,
+    'CONFIG_USERNAME' => sshmanager::CONFIG_USERNAME,
+    'CONFIG_PASSWORD' => sshmanager::CONFIG_PASSWORD,
+    'CONFIG_SSH_KEY' => sshmanager::CONFIG_SSH_KEY,
+    'CONFIG_SSH_PASSPHRASE' => sshmanager::CONFIG_SSH_PASSPHRASE,
+    'CONFIG_AUTH_METHOD' => sshmanager::CONFIG_AUTH_METHOD,
+    'AUTH_METHOD_PASSWORD' => sshmanager::AUTH_METHOD_PASSWORD,
+    'AUTH_METHOD_SSH_KEY' => sshmanager::AUTH_METHOD_SSH_KEY,
+    'AUTH_METHOD_AGENT' => sshmanager::AUTH_METHOD_AGENT
+]);
 $eqLogics = eqLogic::byType($plugin->getId());
 ?>
+
+<div id="mod_add_sshmanager" ></div>
 
 <div class="row row-overflow">
     <!-- Page d'accueil du plugin -->
@@ -20,6 +35,11 @@ $eqLogics = eqLogic::byType($plugin->getId());
                         <i class="fas fa-plus-circle"></i>
                         <br />
                         <span style="color:var(--txt-color)">{{Ajouter}}</span>
+                    </div>
+                    <div class="cursor eqLogicAction logoPrimary sshmanagerHelper" data-helper="add">
+                        <i class="fas fa-plus-circle"></i>
+                        <br />
+                        <span style="color:var(--txt-color)">{{Ajouter Hôte SSH}}</span>
                     </div>
                     <div class="cursor eqLogicAction logoSecondary" data-action="gotoPluginConf">
                         <i class="fas fa-wrench"></i>
@@ -43,7 +63,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
         <?php
         if (count($eqLogics) == 0) {
-            echo '<br><div class="text-center" style="font-size:1.2em;font-weight:bold;">{{Aucun équipement SSH-Manager trouvé, cliquer sur "Ajouter" pour commencer}}</div>';
+            echo '<br><div class="text-center" style="font-size:1.2em;font-weight:bold;">{{Aucun équipement SSH Manager trouvé, cliquer sur "Ajouter" pour commencer}}</div>';
         } else {
             // Champ de recherche
             echo '<div class="input-group" style="margin:5px;">';
@@ -87,164 +107,87 @@ $eqLogics = eqLogic::byType($plugin->getId());
         <!-- Onglets -->
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation"><a href="#" class="eqLogicAction" aria-controls="home" role="tab" data-toggle="tab" data-action="returnToThumbnailDisplay"><i class="fas fa-arrow-circle-left"></i></a></li>
-            <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-laptop-code"></i> {{SSH-Manager}}</a></li>
+            <li role="presentation" class="active"><a href="#eqlogictab" aria-controls="home" role="tab" data-toggle="tab"><i class="fas fa-laptop-code"></i> {{SSH Manager}}</a></li>
             <li role="presentation"><a href="#commandtab" aria-controls="profile" role="tab" data-toggle="tab"><i class="fas fa-list-alt"></i> {{Commandes}}</a></li>
         </ul>
         <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
             <!-- Onglet de configuration de l'équipement -->
             <div role="tabpanel" class="tab-pane active" id="eqlogictab">
-                <br />
-                <div class="row">
-                    <div class="col-sm-6">
-                        <form class="form-horizontal">
-                            <fieldset>
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label">{{Nom de l'équipement}}</label>
-                                    <div class="col-md-6">
-                                        <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
-                                        <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement SSH-Manager}}" />
-                                    </div>
+                <form class="form-horizontal">
+                    <fieldset>
+                        <div class="col-lg-6">
+                            <legend><i class="fas fa-wrench"></i> {{Paramètres généraux}}</legend>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label">{{Nom de l'équipement}}</label>
+                                <div class="col-md-6">
+                                    <input type="text" class="eqLogicAttr form-control" data-l1key="id" style="display : none;" />
+                                    <input type="text" class="eqLogicAttr form-control" data-l1key="name" placeholder="{{Nom de l'équipement SSH Manager}}" />
                                 </div>
+                            </div>
 
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label">{{Objet parent}}</label>
-                                    <div class="col-sm-6">
-                                        <select class="form-control eqLogicAttr" data-l1key="object_id">
-                                            <option value="">{{Aucun}}</option>
-                                            <?php $options = '';
-                                            foreach ((jeeObject::buildTree(null, false)) as $object) {
-                                                $options .= '<option value="' . $object->getId() . '">' . str_repeat('&nbsp;&nbsp;', $object->getConfiguration('parentNumber')) . $object->getName() . '</option>';
-                                            }
-                                            echo $options;
-                                            ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-4 control-label">{{Catégorie}}</label>
-                                    <div class="col-sm-8">
-                                        <?php
-                                        foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
-                                            echo '<label class="checkbox-inline">';
-                                            echo '<input type="checkbox" class="eqLogicAttr" data-l1key="category" data-l2key="' . $key . '" />' . $value['name'];
-                                            echo '</label>';
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">{{Objet parent}}</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control eqLogicAttr" data-l1key="object_id">
+                                        <option value="">{{Aucun}}</option>
+                                        <?php $options = '';
+                                        foreach ((jeeObject::buildTree(null, false)) as $object) {
+                                            $options .= '<option value="' . $object->getId() . '">' . str_repeat('&nbsp;&nbsp;', $object->getConfiguration('parentNumber')) . $object->getName() . '</option>';
                                         }
+                                        echo $options;
                                         ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">{{Catégorie}}</label>
+                                <div class="col-sm-8">
+                                    <?php
+                                    foreach (jeedom::getConfiguration('eqLogic:category') as $key => $value) {
+                                        echo '<label class="checkbox-inline">';
+                                        echo '<input type="checkbox" class="eqLogicAttr" data-l1key="category" data-l2key="' . $key . '" />' . $value['name'];
+                                        echo '</label>';
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label"></label>
+                                <div class="col-md-8">
+                                    <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked />{{Activer}}</label>
+                                    <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked />{{Visible}}</label>
+                                </div>
+                            </div>
+
+                            <legend><i class="fas fa-cogs"></i> {{Paramètres spécifiques}}</legend>
+                            <?php include_file('desktop', 'params.sshmanager.inc', 'php', 'sshmanager'); ?>
+
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label help" data-help="{{Fréquence de rafraîchissement des commandes infos de l'équipement}}">{{Auto-actualisation}}</label>
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <input type="text" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="autorefresh" placeholder="{{Cliquer sur ? pour afficher l'assistant cron}}">
+                                        <span class="input-group-btn">
+                                            <a class="btn btn-default cursor jeeHelper roundedRight" data-helper="cron" title="Assistant cron">
+                                                <i class="fas fa-question-circle"></i>
+                                            </a>
+                                        </span>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label"></label>
-                                    <div class="col-md-8">
-                                        <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked />{{Activer}}</label>
-                                        <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked />{{Visible}}</label>
-                                    </div>
+                            </div>
+                        </div>
+                        <!-- Partie droite de l'onglet "Équipement" -->
+                        <div class="col-lg-6">
+                            <legend><i class="fas fa-info"></i> {{Informations}}</legend>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">{{Description}}</label>
+                                <div class="col-sm-6">
+                                    <textarea class="form-control eqLogicAttr" rows="10" data-l1key="comment"></textarea>
                                 </div>
-                                <br />
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label">{{Password ou Clé ?}}</label>
-                                    <div class="col-md-6">
-                                        <select id="pwdorkey" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_AUTH_METHOD ?>">
-                                            <option value="<?= sshmanager::AUTH_METHOD_PASSWORD ?>">{{Mot de Passe}}</option>
-                                            <option value="<?= sshmanager::AUTH_METHOD_SSH_KEY ?>">{{Clé SSH}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label">{{Adresse IP}}</label>
-                                        <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_HOST ?>" type="text" placeholder="{{Saisir l'adresse IP}}" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label">{{Port SSH}}
-                                            <sup><i class="fas fa-question-circle tooltips" title="{{Port SSH (par défaut : 22)}}"></i></sup>
-                                        </label>
-                                        <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_PORT ?>" type="text" placeholder="{{Saisir le port SSH}}" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label">{{Timeout SSH}}
-                                            <sup><i class="fas fa-question-circle tooltips" title="{{Durée maximale (en secondes) avant expiration de la connexion SSH (par défaut : 30s)}}"></i></sup>
-                                        </label>
-                                        <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_TIMEOUT ?>" type="text" placeholder="{{Saisir le timeout SSH}}" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label">{{Identifiant}}</label>
-                                        <div class="col-md-6">
-                                            <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_USERNAME ?>" type="text" autocomplete="ssh-user" placeholder="{{Saisir le login}}" />
-                                        </div>
-                                    </div>
-                                    <div class="remote-pwd" style="display:none;">
-                                        <div class="form-group">
-                                            <label class="col-md-4 control-label">{{Mot de passe}}</label>
-                                            <div class="col-md-6 input-group">
-                                                <input type="password" id="ssh-password" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_PASSWORD ?>" placeholder="{{Saisir le password}}" />
-                                                <span class="input-group-btn">
-                                                    <a class="btn btn-default form-control roundedRight" onclick="toggleSSHPassword()"><i id="btnToggleSSHPasswordIcon" class="fas fa-eye"></i></a>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="remote-key" style="display:none;">
-                                        <div class="form-group">
-                                            <label class="col-md-4 control-label">{{Passphrase}}
-                                                <sup><i class="fas fa-question-circle tooltips" title="{{Optionnel : Phrase secrète pour la clé SSH}}"></i></sup>
-                                            </label>
-                                            <div class="col-md-6 input-group">
-                                                <input type="password" id="ssh-passphrase" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_SSH_PASSPHRASE ?>" placeholder="{{Saisir la passphrase SSH}}" />
-                                                <span class="input-group-btn">
-                                                    <a class="btn btn-default form-control roundedRight" onclick="toggleSSHPassphrase()"><i id="btnToggleSSHPassphraseIcon" class="fas fa-eye"></i></a>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-4 control-label">{{Clé SSH}}</label>
-                                            <div class="col-md-8">
-                                                <textarea class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>" placeholder="{{Saisir la clé SSH}}" wrap="off" spellcheck="false"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </form>
-                    </div>
-                    <!-- Partie droite de l'onglet "Équipement" -->
-                    <div class="col-xs-6">
-                        <form class="form-horizontal">
-                            <fieldset>
-                                <legend>{{Auto-Actualisation (Cron)}} :</legend>
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">{{Activer}}
-                                        <sup><i class="fas fa-question-circle tooltips" title="{{Si cette option n'est pas cochée, le cron par défaut du plugin sera utilisé}}"></i></sup>
-                                    </label>
-                                    <div class="col-md-8">
-                                        <input type="checkbox" class="eqLogicAttr" data-l1key="configuration" data-l2key="pull_use_custom" />
-                                        <span style="font-size: 85%;">({{A cocher pour spécifier une auto-actualisation des commandes personnalisée}})</span>
-                                    </div>
-                                </div>
-                                <div class="form-group pull_class" style="display:none;">
-                                    <label class="col-md-2 control-label">{{Cron Personnalisé}}
-                                        <sup><i class="fas fa-question-circle tooltips" title="{{Fréquence de rafraîchissement des commandes de l'équipement}}"></i></sup>
-                                    </label>
-                                    <div class="col-sm-6">
-                                        <div class="input-group">
-                                            <input type="text" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="pull_cron" placeholder="{{Cliquer sur ? pour afficher l'assistant cron}}">
-                                            <span class="input-group-btn">
-                                                <a class="btn btn-default cursor jeeHelper roundedRight" data-helper="cron" title="Assistant cron">
-                                                    <i class="fas fa-question-circle"></i>
-                                                </a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </fieldset>
-                        </form>
-                    </div>
-                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
             </div>
 
             <!-- Onglet des commandes de l'équipement -->
@@ -273,5 +216,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
 <!-- Inclusion du fichier javascript du plugin (dossier, nom_du_fichier, extension_du_fichier, id_du_plugin) -->
 <?php include_file('desktop', 'sshmanager', 'js', 'sshmanager'); ?>
+<?php include_file('desktop', 'sshmanager.helper', 'js', 'sshmanager'); ?>
 <!-- Inclusion du fichier javascript du core - NE PAS MODIFIER NI SUPPRIMER -->
 <?php include_file('core', 'plugin.template', 'js'); ?>
