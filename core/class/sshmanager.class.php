@@ -112,7 +112,15 @@ class sshmanager extends eqLogic {
         return $sshmanager->internalExecuteCmds($commands);
     }
 
-    public static function sendFile(int $hostId, string $localFile, string $remoteFile) {
+    /**
+     * send a file to the remote host
+     *
+     * @param int $hostId
+     * @param string $localFile - path to the local file
+     * @param string $remoteFile - path to the remote file
+     * @return bool - true if the file was sent successfully
+     */
+    public static function sendFile($hostId, string $localFile, string $remoteFile) {
         /** @var sshmanager */
         $sshmanager = eqLogic::byId($hostId);
         if (!is_object($sshmanager)) {
@@ -121,7 +129,15 @@ class sshmanager extends eqLogic {
         return $sshmanager->internalSendFile($localFile, $remoteFile);
     }
 
-    public static function getFile(int $hostId, string $remoteFile, string $localFile) {
+    /**
+     * get a file from the remote host
+     *
+     * @param int $hostId
+     * @param string $remoteFile - path to the remote file
+     * @param string $localFile - path to the local file
+     * @return bool - true if the file was received successfully
+     */
+    public static function getFile($hostId, string $remoteFile, string $localFile) {
         /** @var sshmanager */
         $sshmanager = eqLogic::byId($hostId);
         if (!is_object($sshmanager)) {
