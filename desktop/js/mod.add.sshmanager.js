@@ -59,7 +59,7 @@ function saveNewSSH() {
 				level: 'success',
 				emptyBefore: false
 			});
-			jeeDialog.get('#mod_addnewssh').detroy()
+			jeeDialog.get('#mod_addnewssh').destroy()
 		}
 
 	});
