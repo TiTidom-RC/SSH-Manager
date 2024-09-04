@@ -14,7 +14,7 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-document.querySelector('.eqLogicAttr[data-l2key="auth-method"]').addEventListener('change', function () {
+document.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_AUTH_METHOD + '"]').addEventListener('change', function () {
 	if (this.selectedIndex == 0) {
 		document.querySelector('.remote-pwd').style.display = "block";
 		document.querySelector('.remote-key').style.display = "none";

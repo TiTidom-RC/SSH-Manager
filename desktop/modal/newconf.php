@@ -2,6 +2,9 @@
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
+
+sendVarToJS('CONFIG_AUTH_METHOD', sshmanager::CONFIG_AUTH_METHOD);
+
 ?>
 
 <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
