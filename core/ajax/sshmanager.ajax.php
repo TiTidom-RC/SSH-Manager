@@ -33,6 +33,7 @@ try {
     if (init('action') == 'addNewSSH') {
         $sshmanager = new sshmanager();
         $sshmanager->setName(init('name'));
+        $sshmanager->setEqType_name('sshmanager');
         $sshmanager->save();
         ajax::success($sshmanager->getHumanName());
     }
