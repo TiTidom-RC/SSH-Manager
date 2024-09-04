@@ -149,35 +149,32 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
                             <legend><i class="fas fa-cogs"></i> {{Paramètres spécifiques}}</legend>
                             <div class="form-group">
-                                <label class="col-md-4 control-label">{{Password ou Clé ?}}</label>
+                                <label class="col-md-4 control-label">{{Méthode d'authentification}}</label>
                                 <div class="col-md-6">
                                     <select id="pwdorkey" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_AUTH_METHOD ?>">
                                         <option value="<?= sshmanager::AUTH_METHOD_PASSWORD ?>" selected>{{Mot de Passe}}</option>
                                         <option value="<?= sshmanager::AUTH_METHOD_SSH_KEY ?>">{{Clé SSH}}</option>
+                                        <option value="<?= sshmanager::AUTH_METHOD_AGENT ?>">{{Agent (non-supporté)}}</option>
                                     </select>
                                 </div>
                             </div>
                             <div>
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label">{{Adresse IP}}</label>
+                                    <label class="col-md-4 control-label help" data-help="{{Adresse IP ou nom de l'hôte}}">{{Hôte distant}}</label>
                                     <div class="col-md-6">
-                                        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_HOST ?>" type="text" placeholder="{{Saisir l'adresse IP}}" />
+                                        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_HOST ?>" type="text" placeholder="{{Saisir l'adresse IP ou le nom}}" />
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label">{{Port SSH}}
-                                        <sup><i class="fas fa-question-circle tooltips" title="{{Port SSH (par défaut : 22)}}"></i></sup>
-                                    </label>
+                                    <label class="col-md-4 control-label help" data-help="{{Port par défaut: 22}}">{{Port SSH}}</label>
                                     <div class="col-md-6">
-                                        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_PORT ?>" type="text" placeholder="{{Saisir le port SSH}}" />
+                                        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_PORT ?>" type="text" placeholder="{{Saisir le port SSH (par défaut: 22)}}" />
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label">{{Timeout SSH}}
-                                        <sup><i class="fas fa-question-circle tooltips" title="{{Durée maximale (en secondes) avant expiration de la connexion SSH (par défaut : 30s)}}"></i></sup>
-                                    </label>
+                                    <label class="col-md-4 control-label help" data-help="{{Durée maximale (en secondes) avant expiration de la connexion SSH (par défaut : 10s)}}">{{Timeout SSH}}</label>
                                     <div class="col-md-6">
-                                        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_TIMEOUT ?>" type="text" placeholder="{{Saisir le timeout SSH}}" />
+                                        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_TIMEOUT ?>" type="text" placeholder="{{Saisir le timeout SSH (par défaut : 10s)}}" />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -199,9 +196,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
                                 <div class="remote-key" style="display:none;">
                                     <div class="form-group">
-                                        <label class="col-md-4 control-label">{{Passphrase}}
-                                            <sup><i class="fas fa-question-circle tooltips" title="{{Optionnel : Phrase secrète pour la clé SSH}}"></i></sup>
-                                        </label>
+                                        <label class="col-md-4 control-label help" data-help="{{Optionnel : Phrase secrète pour la clé SSH}}">{{Passphrase}}</label>
                                         <div class="col-md-6 input-group">
                                             <input type="password" id="ssh-passphrase" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_SSH_PASSPHRASE ?>" placeholder="{{Saisir la passphrase SSH}}" />
                                             <span class="input-group-btn">
@@ -219,9 +214,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             </div>
 
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{Auto-actualisation}}
-                                    <sup><i class="fas fa-question-circle tooltips" title="{{Fréquence de rafraîchissement des commandes infos de l'équipement}}"></i></sup>
-                                </label>
+                                <label class="col-sm-4 control-label help" data-help="{{Fréquence de rafraîchissement des commandes infos de l'équipement}}">{{Auto-actualisation}}</label>
                                 <div class="col-sm-6">
                                     <div class="input-group">
                                         <input type="text" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="autorefresh" placeholder="{{Cliquer sur ? pour afficher l'assistant cron}}">
