@@ -12,7 +12,7 @@
 	},
 	"utilization": "SSH Manager",
 	"licence": "AGPL",
-	"author": "TiTidom & Mips or Mips & TiTidom",
+	"author": "Mips & TiTidom",
 	"require": "4.4",
 	"hasDependency": false,
 	"category": "programming",
