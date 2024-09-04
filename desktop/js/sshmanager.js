@@ -83,10 +83,10 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(fun
 	});
 });
 
-document.querySelector('#bt_confnewssh').addEventListener('click', function() {
+document.querySelector('#bt_confnewssh').addEventListener('click', function () {
 	jeedomUtils.showAlert({
 		title: "SSH Manager - Add New SSH Conf",
-		message: "Add New SSH Conf", 
+		message: "Add New SSH Conf",
 		level: 'danger',
 		emptyBefore: false
 	});
@@ -97,59 +97,59 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function() {
 		height: 550,
 		top: '10vh',
 		contentUrl: 'index.php?v=d&plugin=sshmanager&modal=newconf',
-		callback: function() { 
+		callback: function () {
 			jeedomUtils.showAlert({
 				title: "SSH Manager - Add New SSH Conf",
-				message: "Callback", 
+				message: "Callback",
 				level: 'danger',
 				emptyBefore: false
 			});
-		 },
+		},
 		buttons: {
-		  confirm: {
-			label: '{{Valider}}',
-			className: 'success',
-			callback: {
-			  click: function(event) {
-				let response = jeeDialog.get('#mod_addnewssh', 'content')
-				
-				let new_name = response.querySelector('.eqLogicAttr[data-l1key="name"]').value
-				let new_host = response.querySelector('.eqLogicAttr[data-l2key="host"]').value
-				let new_port = response.querySelector('.eqLogicAttr[data-l2key="port"]').value
-				let new_timeout = response.querySelector('.eqLogicAttr[data-l2key="timeout"]').value
-				let new_user = response.querySelector('.eqLogicAttr[data-l2key="username"]').value
-				let new_password = response.querySelector('.eqLogicAttr[data-l2key="password"]').value
-				let new_key = response.querySelector('.eqLogicAttr[data-l2key="ssh-key"]').value
-				let new_passphrase = response.querySelector('.eqLogicAttr[data-l2key="ssh-passphrase"]').value
-				let new_auth_method = response.querySelector('.eqLogicAttr[data-l2key="auth-method"]').value
+			confirm: {
+				label: '{{Valider}}',
+				className: 'success',
+				callback: {
+					click: function (event) {
+						let response = jeeDialog.get('#mod_addnewssh', 'content')
 
-				jeedomUtils.showAlert({
-					title: "SSH Manager - Add New SSH Conf",
-					message: "Click (Valider) :: " + new_name + " - " + new_host + " - " + new_port + " - " + new_timeout + " - " + new_user + " - " + new_password + " - " + new_key + " - " + new_passphrase + " - " + new_auth_method, 
-					level: 'danger',
-					emptyBefore: false
-				});
-				// jeeDialog.get('#mod_addnewssh').destroy()
-			  }
+						let new_name = response.querySelector('.eqLogicAttr[data-l1key="name"]').value
+						let new_host = response.querySelector('.eqLogicAttr[data-l2key="host"]').value
+						let new_port = response.querySelector('.eqLogicAttr[data-l2key="port"]').value
+						let new_timeout = response.querySelector('.eqLogicAttr[data-l2key="timeout"]').value
+						let new_user = response.querySelector('.eqLogicAttr[data-l2key="username"]').value
+						let new_password = response.querySelector('.eqLogicAttr[data-l2key="password"]').value
+						let new_key = response.querySelector('.eqLogicAttr[data-l2key="ssh-key"]').value
+						let new_passphrase = response.querySelector('.eqLogicAttr[data-l2key="ssh-passphrase"]').value
+						let new_auth_method = response.querySelector('.eqLogicAttr[data-l2key="auth-method"]').value
+
+						jeedomUtils.showAlert({
+							title: "SSH Manager - Add New SSH Conf",
+							message: "Click (Valider) :: " + new_name + " - " + new_host + " - " + new_port + " - " + new_timeout + " - " + new_user + " - " + new_password + " - " + new_key + " - " + new_passphrase + " - " + new_auth_method,
+							level: 'danger',
+							emptyBefore: false
+						});
+						// jeeDialog.get('#mod_addnewssh').destroy()
+					}
+				}
+			},
+			cancel: {
+				label: '{{Annuler}}',
+				className: 'warning',
+				callback: {
+					click: function (event) {
+						jeedomUtils.showAlert({
+							title: "SSH Manager	- Add New SSH Conf",
+							message: "Click :: Cancel",
+							level: 'danger',
+							emptyBefore: false
+						});
+						jeeDialog.get('#mod_addnewssh').destroy()
+					}
+				}
 			}
-		  },
-		  cancel: {
-			label: '{{Annuler}}',
-			className: 'warning',
-			callback: {
-			  	click: function(event) {
-					jeedomUtils.showAlert({
-						title: "SSH Manager	- Add New SSH Conf",
-						message: "Click :: Cancel", 
-						level: 'danger',
-						emptyBefore: false
-					});
-					jeeDialog.get('#mod_addnewssh').destroy()
-			  	}
-			}
-		  }
 		}
-	  })
+	})
 });
 
 document.querySelector('.eqLogicAttr[data-l2key="pull_use_custom"]').addEventListener('change', function () {
@@ -160,7 +160,7 @@ document.querySelector('.eqLogicAttr[data-l2key="pull_use_custom"]').addEventLis
 	}
 });
 
-document.querySelector('.eqLogicAttr[data-l2key="auth-method"]').addEventListener('change', function () {
+document.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_AUTH_METHOD + '"]').addEventListener('change', function () {
 	if (this.selectedIndex == 0) {
 		document.querySelector('.remote-pwd').style.display = "block";
 		document.querySelector('.remote-key').style.display = "none";

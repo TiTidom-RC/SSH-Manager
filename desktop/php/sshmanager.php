@@ -5,6 +5,7 @@ if (!isConnect('admin')) {
 
 $plugin = plugin::byId('sshmanager');
 sendVarToJS('eqType', $plugin->getId());
+sendVarToJS('CONFIG_AUTH_METHOD', sshmanager::CONFIG_AUTH_METHOD);
 $eqLogics = eqLogic::byType($plugin->getId());
 ?>
 
