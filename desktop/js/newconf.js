@@ -78,21 +78,12 @@ function saveNewSSH() {
 			});
 		},
 		success: function (data) {
-			if (data.state != 'ok') {
-				jeedomUtils.showAlert({
-					title: "SSH Manager - Add New SSH Conf",
-					message: "Error: " + data.result,
-					level: 'warning',
-					emptyBefore: false
-				});
-			} else {
-				jeedomUtils.showAlert({
-					title: "SSH Manager - Add New SSH Conf",
-					message: "Success: " + data.result,
-					level: 'success',
-					emptyBefore: false
-				});
-			}
+			jeedomUtils.showAlert({
+				title: "SSH Manager - Add New SSH Conf",
+				message: "Success: " + data.result,
+				level: 'success',
+				emptyBefore: false
+			});
 		}
 		
 	});
