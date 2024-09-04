@@ -43,7 +43,7 @@ sendVarToJS([
                                 <sup><i class="fas fa-question-circle tooltips" title="{{Sauvegarder les informations de connexion SSH}}"></i></sup>
                             </label>
                             <div class="col-lg-4">
-                                <a class="btn btn-success btn-xm" onclick="saveNewSSH()"><i id="btnSaveNewSSH" class="fas fa-save"> {{Sauvegarder Hôte SSH}}</i></a>
+                                <a class="btn btn-success btn-xm" onclick="saveNewSSH()"><i id="btnSaveNewSSH" class="fas fa-save"></i> {{Sauvegarder Hôte SSH}}</a>
                             </div>
                         </div>
                     </fieldset>
