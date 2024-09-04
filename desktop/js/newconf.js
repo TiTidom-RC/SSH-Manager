@@ -87,10 +87,10 @@ function saveNewSSH() {
 		}
 	});
 
-	/* jeedomUtils.showAlert({
+	jeedomUtils.showAlert({
 		title: "SSH Manager - Add New SSH Conf",
-		message: "Click (Valider) :: " + new_name + " - " + new_host + " - " + new_port + " - " + new_timeout + " - " + new_user + " - " + new_password + " - " + new_key + " - " + new_passphrase + " - " + new_auth_method,
+		message: "Click (Sauvegarder) :: " + new_name + " - " + new_host + " - " + new_port + " - " + new_timeout + " - " + new_user + " - " + new_password + " - " + new_key + " - " + new_passphrase + " - " + new_auth_method,
 		level: 'danger',
 		emptyBefore: false
-	}); */
+	});
 }
