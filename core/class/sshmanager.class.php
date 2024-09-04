@@ -275,7 +275,9 @@ class sshmanager extends eqLogic {
     }
 
     public function preInsert() {
-        $this->setConfiguration(self::CONFIG_AUTH_METHOD, self::DEFAULT_AUTH_METHOD);
+        if ($this->getConfiguration(self::CONFIG_AUTH_METHOD) == '') {
+            $this->setConfiguration(self::CONFIG_AUTH_METHOD, self::DEFAULT_AUTH_METHOD);
+        }
     }
 }
 
