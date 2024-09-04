@@ -59,14 +59,15 @@ function saveNewSSH() {
 				level: 'success',
 				emptyBefore: false
 			});
+			jeeDialog.get('#mod_addnewssh').detroy()
 		}
 
 	});
 
-	jeedomUtils.showAlert({
+	/* jeedomUtils.showAlert({
 		title: "SSH Manager - Add New SSH Conf",
 		message: "Click (Sauvegarder) :: " + new_name + " - " + new_host + " - " + new_port + " - " + new_timeout + " - " + new_user + " - " + new_password + " - " + new_key + " - " + new_passphrase + " - " + new_auth_method,
 		level: 'danger',
 		emptyBefore: false
-	});
+	}); */
 }

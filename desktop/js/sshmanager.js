@@ -92,26 +92,6 @@ document.querySelector('#bt_confnewssh').addEventListener('click', function () {
 		top: '10vh',
 		contentUrl: 'index.php?v=d&plugin=sshmanager&modal=mod.add.sshmanager',
 		callback: function () {
-		},
-		buttons: {
-			confirm: {
-				label: '{{OK}}',
-				className: 'success',
-				callback: {
-					click: function (event) {
-						jeeDialog.get('#mod_addnewssh').destroy()
-					}
-				}
-			},
-			cancel: {
-				label: '{{Fermer}}',
-				className: 'warning',
-				callback: {
-					click: function (event) {
-						jeeDialog.get('#mod_addnewssh').destroy()
-					}
-				}
-			}
 		}
 	})
 });
