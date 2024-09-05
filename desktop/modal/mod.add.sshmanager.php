@@ -24,14 +24,6 @@ sendVarToJS(sshmanager::CONST_TO_JS);
                     <br />
                     <?php include_file('desktop', 'params.sshmanager.inc', 'php', 'sshmanager'); ?>
                     <br />
-                    <!-- <div class='form-group'>
-                        <label class="col-md-4 control-label">{{Sauvegarder}}
-                            <sup><i class="fas fa-question-circle tooltips" title="{{Sauvegarder les informations de connexion SSH}}"></i></sup>
-                        </label>
-                        <div class="col-lg-4">
-                            <a class="btn btn-success btn-xm" onclick="saveNewSSH()"><i id="btnSaveNewSSH" class="fas fa-save"></i> {{Sauvegarder Hôte SSH}}</a>
-                        </div>
-                    </div> -->
                 </fieldset>
             </form>
         </div>
