@@ -327,7 +327,7 @@ class sshmanager extends eqLogic {
             $refresh->setEqLogic_id($this->getId());
             $refresh->save();
         }
-        if ($this->getIsEnable() == 1) {
+        if ($this->getIsEnable() == 1 && config::byKey('refreshOnSave', 'sshmanager', '1') == '1') {
             $this->refreshAllInfo();
         }
     }

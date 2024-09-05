@@ -21,11 +21,21 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 function sshmanager_install() {
     $pluginVersion = sshmanager::getPluginVersion();
     config::save('pluginVersion', $pluginVersion, 'sshmanager');
+
+    // Init des valeurs par défaut
+    if (config::byKey('refreshOnSave', 'sshmanager') == '') {
+        config::save('refreshOnSave', '1', 'sshmanager');
+    }
 }
 
 function sshmanager_update() {
     $pluginVersion = sshmanager::getPluginVersion();
     config::save('pluginVersion', $pluginVersion, 'sshmanager');
+
+    // Init des valeurs par défaut
+    if (config::byKey('refreshOnSave', 'sshmanager') == '') {
+        config::save('refreshOnSave', '1', 'sshmanager');
+    }
 
     /* Ménage dans les répertoires du plugin si besoin */
     try {
