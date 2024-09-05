@@ -3,19 +3,7 @@ if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
 
-sendVarToJS([
-    'CONFIG_HOST' => sshmanager::CONFIG_HOST,
-    'CONFIG_PORT' => sshmanager::CONFIG_PORT,
-    'CONFIG_TIMEOUT' => sshmanager::CONFIG_TIMEOUT,
-    'CONFIG_USERNAME' => sshmanager::CONFIG_USERNAME,
-    'CONFIG_PASSWORD' => sshmanager::CONFIG_PASSWORD,
-    'CONFIG_SSH_KEY' => sshmanager::CONFIG_SSH_KEY,
-    'CONFIG_SSH_PASSPHRASE' => sshmanager::CONFIG_SSH_PASSPHRASE,
-    'CONFIG_AUTH_METHOD' => sshmanager::CONFIG_AUTH_METHOD,
-    'AUTH_METHOD_PASSWORD' => sshmanager::AUTH_METHOD_PASSWORD,
-    'AUTH_METHOD_SSH_KEY' => sshmanager::AUTH_METHOD_SSH_KEY,
-    'AUTH_METHOD_AGENT' => sshmanager::AUTH_METHOD_AGENT
-]);
+sendVarToJS(sshmanager::CONST_TO_JS);
 
 ?>
 
@@ -47,7 +35,7 @@ sendVarToJS([
                 </fieldset>
             </form>
         </div>
-        
+
     </div>
 </div>
 

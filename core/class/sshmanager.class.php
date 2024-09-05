@@ -33,6 +33,20 @@ class sshmanager extends eqLogic {
     const DEFAULT_TIMEOUT = 10;
     const DEFAULT_PORT = 22;
 
+    const CONST_TO_JS = [
+        'CONFIG_USERNAME' => self::CONFIG_USERNAME,
+        'CONFIG_PASSWORD' => self::CONFIG_PASSWORD,
+        'CONFIG_SSH_KEY' => self::CONFIG_SSH_KEY,
+        'CONFIG_SSH_PASSPHRASE' => self::CONFIG_SSH_PASSPHRASE,
+        'CONFIG_AUTH_METHOD' => self::CONFIG_AUTH_METHOD,
+        'CONFIG_HOST' => self::CONFIG_HOST,
+        'CONFIG_PORT' => self::CONFIG_PORT,
+        'CONFIG_TIMEOUT' => self::CONFIG_TIMEOUT,
+        'AUTH_METHOD_PASSWORD' => self::AUTH_METHOD_PASSWORD,
+        'AUTH_METHOD_SSH_KEY' => self::AUTH_METHOD_SSH_KEY,
+        'AUTH_METHOD_AGENT' => self::AUTH_METHOD_AGENT,
+    ];
+
     public function decrypt() {
         $this->setConfiguration(self::CONFIG_USERNAME, utils::decrypt($this->getConfiguration(self::CONFIG_USERNAME)));
         $this->setConfiguration(self::CONFIG_PASSWORD, utils::decrypt($this->getConfiguration(self::CONFIG_PASSWORD)));
@@ -200,7 +214,8 @@ class sshmanager extends eqLogic {
 
                 break;
             case self::AUTH_METHOD_AGENT:
-                //TODO: check if agent auth could be usefull?
+                //TODO: check if agent auth could be usefull? we only need to uncomment the following line and remove the exception
+                // $keyOrpassword = new \phpseclib3\System\SSH\Agent();
                 throw new RuntimeException(sprintf(__("Méthode d'authentification non supportée: %s", __FILE__), $authmethod));
                 break;
             default:
