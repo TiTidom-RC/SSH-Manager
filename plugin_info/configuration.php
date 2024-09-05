@@ -19,25 +19,25 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 include_file('core', 'authentification', 'php');
 if (!isConnect()) {
-  include_file('desktop', '404', 'php');
-  die();
+    include_file('desktop', '404', 'php');
+    die();
 }
 ?>
 
 <form class="form-horizontal">
-  <fieldset>
-    <div>
-      <legend><i class="fas fa-info"></i> {{Plugin}}</legend>
-      <div class="form-group">
-        <label class="col-md-4 control-label">{{Version}}
-          <sup><i class="fas fa-question-circle tooltips" title="{{Version du plugin à indiquer sur Community}}"></i></sup>
-        </label>
-        <div class="col-md-1">
-          <input class="configKey form-control" data-l1key="pluginVersion" readonly />
-        </div>
-      </div>
-      <legend><i class="fas fa-list-alt"></i> {{Options}}</legend>
-      <div class="form-group">
+    <fieldset>
+        <div>
+            <legend><i class="fas fa-info"></i> {{Plugin}}</legend>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">{{Version}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Version du plugin à indiquer sur Community}}"></i></sup>
+                </label>
+                <div class="col-md-1">
+                    <input class="configKey form-control" data-l1key="pluginVersion" readonly />
+                </div>
+            </div>
+            <legend><i class="fas fa-list-alt"></i> {{Options}}</legend>
+            <div class="form-group">
                 <label class="col-lg-3 control-label">{{Rafraichir les valeurs à la sauvegarde}}
                     <sup><i class="fas fa-question-circle tooltips" title="{{Cochez cette option pour rafraîchir automatiquement les valeurs des commandes lors de la sauvegarde d'un équipement}}"></i></sup>
                 </label>
@@ -45,6 +45,6 @@ if (!isConnect()) {
                     <input type="checkbox" class="configKey" data-l1key="refreshOnSave" />
                 </div>
             </div>
-    </div>
-  </fieldset>
+        </div>
+    </fieldset>
 </form>
