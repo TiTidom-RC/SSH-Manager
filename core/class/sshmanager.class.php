@@ -294,7 +294,89 @@ class sshmanager extends eqLogic {
             $this->setConfiguration(self::CONFIG_AUTH_METHOD, self::DEFAULT_AUTH_METHOD);
         }
     }
+
+    public function postSave() {
+        $refresh = $this->getCmd(null, 'refresh');
+        if (!is_object($refresh)) {
+            $refresh = new sshmanagerCmd();
+            $refresh->setLogicalId('refresh');
+            $refresh->setIsVisible(1);
+            $refresh->setName(__('Rafraichir', __FILE__));
+            $refresh->setType('action');
+            $refresh->setSubType('other');
+            $refresh->setEqLogic_id($this->getId());
+            $refresh->save();
+        }
+    }
+
+    public function refreshAllInfo() {
+        /** @var sshmanagerCmd */
+        foreach ($this->getCmd('info') as $cmd) {
+            try {
+                $cmd->refreshInfo();
+            } catch (Exception $exc) {
+                log::add(__CLASS__, 'error', sprintf(__("Erreur pour %s: %s", __FILE__), $cmd->getHumanName(), $exc->getMessage()));
+            }
+        }
+    }
 }
 
 class sshmanagerCmd extends cmd {
+    public function dontRemoveCmd() {
+        return ($this->getLogicalId() == 'refresh');
+    }
+
+    public function refreshInfo() {
+        if ($this->getType() != 'info' || trim($this->getConfiguration('ssh-commands')) == '') {
+            return;
+        }
+        $this->getEqLogic()->checkAndUpdateCmd($this, $this->execute());
+    }
+
+    public function postSave() {
+        if ($this->getLogicalId() == 'refresh' || $this->getEqlogic()->getIsEnable() != 1) {
+            return;
+        }
+        $this->refreshInfo();
+    }
+
+    public function execute($_options = null) {
+        if ($this->getLogicalId() == 'refresh') {
+            /** @var sshmanager */
+            $eqLogic = $this->getEqLogic();
+            $eqLogic->refreshAllInfo();
+            return;
+        }
+
+        $commands = $this->getConfiguration('ssh-commands');
+
+        if ($_options != null) {
+            if ($this->getType() == 'action') {
+                switch ($this->getSubType()) {
+                    case 'slider':
+                        $commands = str_replace('#slider#', $_options['slider'], $commands);
+                        break;
+                    case 'color':
+                        $commands = str_replace('#color#', $_options['color'], $commands);
+                        break;
+                    case 'select':
+                        $commands = str_replace('#select#', $_options['select'], $commands);
+                        break;
+                    case 'message':
+                        $replace = array('#title#', '#message#');
+                        $replaceBy = array($_options['title'], $_options['message']);
+                        if ($_options['message'] == '' && $_options['title'] == '') {
+                            throw new Exception(__('Le message et le sujet ne peuvent pas être vide', __FILE__));
+                        }
+                        $commands = str_replace($replace, $replaceBy, $commands);
+                        break;
+                }
+            }
+        }
+        $ar_commands = explode('#command_sep#', $commands); // TODO: check if this is the correct separator
+        $results = sshmanager::executeCmds($this->getEqLogic_id(), $ar_commands);
+        if ($this->getType() == 'info') {
+            return $results[0][0]; //TODO: check if this is the correct separator
+        }
+    }
 }
