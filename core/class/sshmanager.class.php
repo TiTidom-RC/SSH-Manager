@@ -327,6 +327,9 @@ class sshmanager extends eqLogic {
             $refresh->setEqLogic_id($this->getId());
             $refresh->save();
         }
+        if ($this->getIsEnable() == 1) {
+            $this->refreshAllInfo();
+        }
     }
 
     public function refreshAllInfo() {
@@ -351,13 +354,6 @@ class sshmanagerCmd extends cmd {
             return;
         }
         $this->getEqLogic()->checkAndUpdateCmd($this, $this->execute());
-    }
-
-    public function postSave() {
-        if ($this->getLogicalId() == 'refresh' || $this->getEqlogic()->getIsEnable() != 1) {
-            return;
-        }
-        $this->refreshInfo();
     }
 
     public function execute($_options = null) {
