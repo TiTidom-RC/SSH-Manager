@@ -30,7 +30,7 @@ class sshmanager extends eqLogic {
     const AUTH_METHOD_AGENT = 'agent';
     const DEFAULT_AUTH_METHOD = 'password';
 
-    const DEFAULT_TIMEOUT = 10;
+    const DEFAULT_TIMEOUT = 30;
     const DEFAULT_PORT = 22;
 
     const CONST_TO_JS = [
