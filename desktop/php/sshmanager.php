@@ -173,7 +173,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{Description}}</label>
                                 <div class="col-sm-6">
-                                    <textarea class="form-control eqLogicAttr" rows="10" data-l1key="comment"></textarea>
+                                    <textarea class="form-control eqLogicAttr" rows="5" data-l1key="comment"></textarea>
                                 </div>
                             </div>
                         </div>
