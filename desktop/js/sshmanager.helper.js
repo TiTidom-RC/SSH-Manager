@@ -93,12 +93,15 @@ document.querySelector('.sshmanagerHelper[data-helper=add]').addEventListener('c
 
 function buildSelectHost(currentValue) {
     const selectHost = document.querySelector('.sshmanagerHelper[data-helper=list]');
+    if (selectHost === null) {
+        return;
+    }
     if (currentValue === undefined) {
         currentValue = selectHost.value;
     }
-    //TODO test if selectHost is null
+
     selectHost.innerHTML = '';
-    let option = document.createElement('option');
+    const option = document.createElement('option');
     option.text = '{{Sélectionner un hôte}}';
     option.value = '';
     selectHost.add(option);
@@ -110,7 +113,7 @@ function buildSelectHost(currentValue) {
             action: "getRemoteHosts",
         },
         dataType: 'json',
-        // async: true,
+        async: true,
         global: false,
         error: function (request, status, error) {
             handleAjaxError(request, status, error);
@@ -132,27 +135,4 @@ function buildSelectHost(currentValue) {
             }
         }
     });
-
-    /* return $.ajax({
-        type: "POST",
-        url: "plugins/sshmanager/core/ajax/sshmanager.ajax.php",
-        data: {
-            action: "getRemoteHosts",
-        },
-        dataType: 'json',
-        global: false,
-        error: function (request, status, error) {
-            handleAjaxError(request, status, error);
-        },
-        success: function (data) {
-            if (data.state != 'ok') {
-                $('#modal_alert').showAlert({ message: data.result, level: 'danger' });
-                return;
-            }
-            for (const id in data.result) {
-                selectHost.append(new Option(data.result[id], id));
-            }
-            selectHost.value = currentValue;
-        }
-    }); */
 }
