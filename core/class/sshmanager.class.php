@@ -250,38 +250,58 @@ class sshmanager extends eqLogic {
         return false;
     }
 
+    /** @var SSH2[] */
+    private static $_ssh2_client = [];
+
+    private function getSSH2Client() {
+        $eqLogicID = $this->getId();
+        $pid = getmypid();
+
+        if (!(isset(sshmanager::$_ssh2_client[$eqLogicID]))) {
+            [$host, $port, $timeout] = $this->getConnectionData();
+            [$username, $keyOrpassword] = $this->getAuthenticationData();
+            log::add(__CLASS__, 'debug', "[{$pid}] Creating SSH2 client for eqLogic {$eqLogicID} to {$host}");
+            $ssh2 = new SSH2($host, $port, $timeout);
+
+            try {
+                if (!$ssh2->login($username, $keyOrpassword)) {
+                    throw new SSHConnectException("[{$this->getName()}] Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.");
+                }
+
+                if (!$ssh2->isConnected()) {
+                    throw new SSHConnectException("[{$this->getName()}] Connexion failed:" . $ssh2->getLastError());
+                }
+
+                if (!$ssh2->isAuthenticated()) {
+                    throw new SSHConnectException("[{$this->getName()}] Authentication failed:" . $ssh2->getLastError());
+                }
+            } catch (SSHConnectException $ex) {
+                log::add(__CLASS__, 'error', $ex->getMessage());
+                throw $ex;
+            } catch (\Throwable $th) {
+                log::add(__CLASS__, 'error', "[{$this->getName()}] General exception during connection: " . $th->getMessage() . " - log: " . $ssh2->getLog());
+                log::add(__CLASS__, 'error', "[{$this->getName()}] log: " . $ssh2->getLog());
+                throw $th;
+            }
+
+            log::add(__CLASS__, 'debug', "[{$this->getName()}] Connected and authenticated");
+
+            sshmanager::$_ssh2_client[$eqLogicID] = $ssh2;
+        } else {
+            log::add(__CLASS__, 'debug', "[{$pid}] Existing SSH2 client for eqLogic {$eqLogicID}");
+        }
+        return sshmanager::$_ssh2_client[$eqLogicID];
+    }
+
     private function internalExecuteCmds(array $commands) {
-        [$host, $port, $timeout] = $this->getConnectionData();
         [$username, $keyOrpassword] = $this->getAuthenticationData();
 
-        $ssh = new SSH2($host, $port, $timeout);
-        try {
-            if (!$ssh->login($username, $keyOrpassword)) {
-                throw new SSHConnectException("[{$this->getName()}] Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.");
-            }
-
-            if (!$ssh->isConnected()) {
-                throw new SSHConnectException("[{$this->getName()}] Connexion failed:" . $ssh->getLastError());
-            }
-
-            if (!$ssh->isAuthenticated()) {
-                throw new SSHConnectException("[{$this->getName()}] Authentication failed:" . $ssh->getLastError());
-            }
-        } catch (SSHConnectException $ex) {
-            log::add(__CLASS__, 'error', $ex->getMessage());
-            throw $ex;
-        } catch (\Throwable $th) {
-            log::add(__CLASS__, 'error', "[{$this->getName()}] General exception during connection: " . $th->getMessage() . " - log: " . $ssh->getLog());
-            log::add(__CLASS__, 'error', "[{$this->getName()}] log: " . $ssh->getLog());
-            throw $th;
-        }
-
-        log::add(__CLASS__, 'debug', "[{$this->getName()}] Connected and authenticated");
+        $ssh2 = $this->getSSH2Client();
 
         $results = [];
         foreach ($commands as $cmd) {
             $cmd = str_replace("{user}", $username, $cmd);
-            $result = $ssh->exec($cmd);
+            $result = $ssh2->exec($cmd);
             log::add(__CLASS__, 'debug', "SSH exec:{$cmd} => {$result}");
             $results[] = explode("\n", $result);
         }
