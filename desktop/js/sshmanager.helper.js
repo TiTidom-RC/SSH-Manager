@@ -49,14 +49,14 @@ document.querySelector('.sshmanagerHelper[data-helper=add]').addEventListener('c
                                 isEnable: 1,
                                 isVisible: 0,
                                 configuration: {
-                                    CONFIG_HOST: new_host,
-                                    CONFIG_PORT: new_port,
-                                    CONFIG_TIMEOUT: new_timeout,
-                                    CONFIG_USERNAME: new_user,
-                                    CONFIG_PASSWORD: new_password,
-                                    CONFIG_SSH_KEY: new_key,
-                                    CONFIG_SSH_PASSPHRASE: new_passphrase,
-                                    CONFIG_AUTH_METHOD: new_auth_method
+                                    'host': new_host,
+                                    'port': new_port,
+                                    'timeout': new_timeout,
+                                    'username': new_user,
+                                    'password': new_password,
+                                    'ssh-key': new_key,
+                                    'ssh-passphrase': new_passphrase,
+                                    'auth-method': new_auth_method
                                 }
                             }],
                             error: function (error) {
