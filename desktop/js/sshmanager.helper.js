@@ -22,15 +22,25 @@ document.querySelector('.sshmanagerHelper[data-helper=add]').addEventListener('c
                     click: function (event) {
                         let response = jeeDialog.get('#mod_add_sshmanager', 'content')
 
-                        let new_name = response.querySelector('.eqLogicAttr[data-l1key="name"]').value
+                        /* let new_name = response.querySelector('.eqLogicAttr[data-l1key="name"]').value
+                        let new_auth_method = response.querySelector('.eqLogicAttr[data-l2key="auth-method"]').value
                         let new_host = response.querySelector('.eqLogicAttr[data-l2key="host"]').value
                         let new_port = response.querySelector('.eqLogicAttr[data-l2key="port"]').value
                         let new_timeout = response.querySelector('.eqLogicAttr[data-l2key="timeout"]').value
                         let new_user = response.querySelector('.eqLogicAttr[data-l2key="username"]').value
                         let new_password = response.querySelector('.eqLogicAttr[data-l2key="password"]').value
                         let new_key = response.querySelector('.eqLogicAttr[data-l2key="ssh-key"]').value
-                        let new_passphrase = response.querySelector('.eqLogicAttr[data-l2key="ssh-passphrase"]').value
+                        let new_passphrase = response.querySelector('.eqLogicAttr[data-l2key="ssh-passphrase"]').value */
+                        
+                        let new_name = response.querySelector('.eqLogicAttr[data-l1key="name"]').value
                         let new_auth_method = response.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_AUTH_METHOD + '"]').value
+                        let new_host = response.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_HOST + '"]').value
+                        let new_port = response.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_PORT + '"]').value
+                        let new_timeout = response.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_TIMEOUT + '"]').value
+                        let new_user = response.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_USERNAME + '"]').value
+                        let new_password = response.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_PASSWORD + '"]').value
+                        let new_key = response.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_SSH_KEY + '"]').value
+                        let new_passphrase = response.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_SSH_PASSPHRASE + '"]').value
 
                         jeedom.eqLogic.save({
                             type: 'sshmanager',
@@ -39,14 +49,14 @@ document.querySelector('.sshmanagerHelper[data-helper=add]').addEventListener('c
                                 isEnable: 1,
                                 isVisible: 0,
                                 configuration: {
-                                    'host': new_host,
-                                    'port': new_port,
-                                    'timeout': new_timeout,
-                                    'username': new_user,
-                                    'password': new_password,
-                                    'ssh-key': new_key,
-                                    'ssh-passphrase': new_passphrase,
-                                    'auth-method': new_auth_method
+                                    CONFIG_HOST: new_host,
+                                    CONFIG_PORT: new_port,
+                                    CONFIG_TIMEOUT: new_timeout,
+                                    CONFIG_USERNAME: new_user,
+                                    CONFIG_PASSWORD: new_password,
+                                    CONFIG_SSH_KEY: new_key,
+                                    CONFIG_SSH_PASSPHRASE: new_passphrase,
+                                    CONFIG_AUTH_METHOD: new_auth_method
                                 }
                             }],
                             error: function (error) {
