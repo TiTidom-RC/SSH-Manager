@@ -25,24 +25,24 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
 </div>
 <div class="form-group">
     <label class="col-md-4 control-label">{{Port SSH}}
-        <sup><i class="fas fa-question-circle tooltips" title="{{Port par défaut: 22}}"></i></sup>
+        <sup><i class="fas fa-question-circle tooltips" title="{{Laisser vide pour utiliser le port par défaut (recommandé)}}"></i></sup>
     </label>
     <div class="col-md-6">
-        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_PORT ?>" type="text" placeholder="{{Saisir le port SSH (par défaut: 22)}}" />
+        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_PORT ?>" type="text" placeholder="<?= sshmanager::DEFAULT_PORT ?>" />
     </div>
 </div>
 <div class="form-group">
     <label class="col-md-4 control-label">{{Timeout SSH}}
-        <sup><i class="fas fa-question-circle tooltips" title="{{Durée maximale (en secondes) avant expiration de la connexion SSH (par défaut : 10s)}}"></i></sup>
+        <sup><i class="fas fa-question-circle tooltips" title="{{Durée maximale (en secondes) avant expiration de la connexion SSH<br/>Laisser vide pour utiliser le timeout par défaut (recommandé)}}"></i></sup>
     </label>
     <div class="col-md-6">
-        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_TIMEOUT ?>" type="text" placeholder="{{Saisir le timeout SSH (par défaut : 10s)}}" />
+        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_TIMEOUT ?>" type="text" placeholder="<?= sshmanager::DEFAULT_TIMEOUT ?>" />
     </div>
 </div>
 <div class="form-group">
     <label class="col-md-4 control-label">{{Identifiant}}</label>
     <div class="col-md-6">
-        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_USERNAME ?>" type="text" autocomplete="ssh-user" placeholder="{{Saisir le login}}" />
+        <input class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_USERNAME ?>" type="text" autocomplete="ssh-user" placeholder="{{Saisir le nom d'utilisateur}}" />
     </div>
 </div>
 <div id="pwdorpassphrase">
