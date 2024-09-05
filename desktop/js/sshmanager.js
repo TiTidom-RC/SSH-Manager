@@ -85,28 +85,6 @@ function addCmdToTable(_cmd) {
 		jeedom.cmd.changeType(newRow, init(_cmd.subType))
 	  }
 	})
-
-	/* document.querySelector('#table_cmd tbody').insertAdjacentHTML('beforeend', tr);
-	const el_tr = document.querySelectorAll('#table_cmd tbody tr').last();
-	el_tr.setJeeValues(_cmd, '.cmdAttr')
-	jeedom.cmd.changeType(el_tr, init(_cmd.subType));
-
-	jeedom.eqLogic.buildSelectCmd({
-		id: document.querySelector('.eqLogicAttr[data-l1key=id]').value,
-		filter: { type: 'info' },
-		error: function (error) {
-			jeedomUtils.showAlert({
-				message: error.message,
-				level: 'danger',
-				emptyBefore: false
-			});
-		},
-		success: function (result) {
-			el_tr.querySelector('.cmdAttr[data-l1key=value]').insertAdjacentHTML('beforeend', result);
-			el_tr.setJeeValues(_cmd, '.cmdAttr')
-			jeedom.cmd.changeType(el_tr, init(_cmd.subType))
-		}
-	}) */
 }
 
 document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(function (element) {
