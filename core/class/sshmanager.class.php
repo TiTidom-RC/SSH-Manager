@@ -91,7 +91,7 @@ class sshmanager extends eqLogic {
             try {
                 $cron = new Cron\CronExpression($autorefresh, new Cron\FieldFactory);
                 if ($cron->isDue()) {
-                    // TODO: check if any info command with a custom ssh command to execute
+                    $sshmanager->refreshAllInfo();
                 }
             } catch (Exception $e) {
                 log::add(__CLASS__, 'error', __('Expression cron non valide pour ', __FILE__) . $sshmanager->getName() . ' : ' . $autorefresh);
