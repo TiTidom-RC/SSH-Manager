@@ -73,10 +73,14 @@ function addCmdToTable(_cmd) {
 	jeedom.cmd.changeType(el_tr, init(_cmd.subType));
 
 	jeedom.eqLogic.buildSelectCmd({
-		id: $('.eqLogicAttr[data-l1key=id]').value(),
+		id: document.querySelector('.eqLogicAttr[data-l1key=id]').value,
 		filter: { type: 'info' },
 		error: function (error) {
-			$('#div_alert').showAlert({ message: error.message, level: 'danger' })
+			jeedomUtils.showAlert({
+				message: error.message,
+				level: 'danger',
+				emptyBefore: false
+			});
 		},
 		success: function (result) {
 			el_tr.querySelector('.cmdAttr[data-l1key=value]').insertAdjacentHTML('beforeend', result);
