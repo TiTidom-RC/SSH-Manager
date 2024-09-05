@@ -10,10 +10,10 @@ This plugin can be easily use from your own plugin if you need to execute ssh co
 
 ### Installation
 
-Your plugin must depend on **sshmanager** plugin. You have several possibilities to achieve this:
+Your plugin must depend on **SSH Manager** plugin. You have several possibilities to achieve this:
 
-- Inform users that they shoudl install **sshmanager** before/together with your own plugin
-- make sure to check for **sshmanager** presence in your *dependancy_info()*
+- Inform users that they should install **SSH Manager** before/together with your own plugin
+- make sure to check for **SSH Manager** presence in your *dependancy_info()*
 - or, if you use *packages.json* to install you dependencies by the core, make sure to have following lines in it:
 
 ```JSON
@@ -26,7 +26,7 @@ Your plugin must depend on **sshmanager** plugin. You have several possibilities
 
 ### Configuration
 
-First part is probably to let user of your plugin (we will call it the *client plugin*, client of **SSHManager**) select a remote host, you will need it somewhere in your equipment or plugin configuration.
+First part is probably to let user of your plugin (we will call it the *client plugin*, client of **SSH Manager**) select a remote host, you will need it somewhere in your equipment or plugin configuration.
 
 #### HTML
 
