@@ -125,7 +125,7 @@ class sshmanager extends eqLogic {
      * @param int $hostId
      * @return bool $status
      */
-    public static function checkConnect($hostId) {
+    public static function checkConnection($hostId) {
         /** @var sshmanager */
         $sshmanager = eqLogic::byId($hostId);
         if (!is_object($sshmanager)) {
