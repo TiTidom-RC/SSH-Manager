@@ -275,15 +275,15 @@ class sshmanager extends eqLogic {
 
             try {
                 if (!$ssh2->login($username, $keyOrpassword)) {
-                    throw new SSHConnectException("[{$this->getName()}] Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.");
+                    throw new SSHConnectException("[{$this->getName()}] Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.", $ssh2->getLog());
                 }
 
                 if (!$ssh2->isConnected()) {
-                    throw new SSHConnectException("[{$this->getName()}] Connexion failed:" . $ssh2->getLastError());
+                    throw new SSHConnectException("[{$this->getName()}] Connexion failed:" . $ssh2->getLastError(), $ssh2->getLog());
                 }
 
                 if (!$ssh2->isAuthenticated()) {
-                    throw new SSHConnectException("[{$this->getName()}] Authentication failed:" . $ssh2->getLastError());
+                    throw new SSHConnectException("[{$this->getName()}] Authentication failed:" . $ssh2->getLastError(), $ssh2->getLog());
                 }
             } catch (SSHConnectException $ex) {
                 log::add(__CLASS__, 'error', $ex->getMessage());
