@@ -15,8 +15,8 @@ class SSHConnectException extends \RuntimeException {
     private $_log;  // log of the SSH2 object
     
     public function __construct($message, $log = '') {
-        $this->_log = $log;
         parent::__construct($message);
+        $this->_log = $log;
     }    
     
     public function getLog() {
