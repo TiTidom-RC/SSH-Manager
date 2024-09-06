@@ -132,7 +132,7 @@ class sshmanager extends eqLogic {
             throw new Exception('Invalid host Id');
         }
         log::add(__CLASS__, 'debug', "Check SSH Connection on {$sshmanager->getName()}");
-        return $sshmanager->internalCheckSSH();
+        return $sshmanager->internalCheckConnection();
     }
 
     /**
@@ -319,7 +319,7 @@ class sshmanager extends eqLogic {
         return sshmanager::$_ssh2_client[$eqLogicID];
     }
 
-    private function internalCheckSSH() {
+    private function internalCheckConnection() {
         try {
             $ssh2 = $this->getSSH2Client();
             return $ssh2->isConnected() && $ssh2->isAuthenticated();
