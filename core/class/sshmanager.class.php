@@ -341,7 +341,8 @@ class sshmanager extends eqLogic {
         switch (gettype($commands)) {
             case 'string':
                 $result = '';
-                $result = $ssh2->exec($commands);
+                $cmd = str_replace("{user}", $username, $commands);
+                $result = $ssh2->exec($cmd);
                 log::add(__CLASS__, 'debug', "SSH (String) exec:{$commands} => {$result}");
                 return $result;
                 break;
