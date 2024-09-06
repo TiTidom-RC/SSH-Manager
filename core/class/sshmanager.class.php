@@ -295,7 +295,7 @@ class sshmanager extends eqLogic {
                 }
 
                 if (!$ssh2->isConnected()) {
-                    throw new SSHConnectException("[{$this->getName()}] Connexion failed:" . $ssh2->getLastError(), $ssh2->getLog());
+                    throw new SSHConnectException("[{$this->getName()}] Connection failed:" . $ssh2->getLastError(), $ssh2->getLog());
                 }
 
                 if (!$ssh2->isAuthenticated()) {
