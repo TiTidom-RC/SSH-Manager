@@ -123,7 +123,7 @@ class sshmanager extends eqLogic {
      * check ssh connection on the remote host provided by hostId
      *
      * @param int $hostId
-     * @return boolean $status
+     * @return bool $status
      */
     public static function checkConnection($hostId) {
         /** @var sshmanager */
