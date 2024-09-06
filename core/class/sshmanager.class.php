@@ -120,12 +120,12 @@ class sshmanager extends eqLogic {
     }
 
     /**
-     * check ssh connectivity on the remote host provided by hostId
+     * check ssh connection on the remote host provided by hostId
      *
      * @param int $hostId
      * @return boolean $status
      */
-    public static function checkSSH($hostId) {
+    public static function checkConnection($hostId) {
         /** @var sshmanager */
         $sshmanager = eqLogic::byId($hostId);
         if (!is_object($sshmanager)) {
@@ -333,20 +333,30 @@ class sshmanager extends eqLogic {
         }
     }
 
-    private function internalExecuteCmds(array $commands) {
+    private function internalExecuteCmds(array|string $commands) {
         [$username, $keyOrpassword] = $this->getAuthenticationData();
 
         $ssh2 = $this->getSSH2Client();
 
         $results = [];
-        foreach ($commands as $cmd) {
-            $cmd = str_replace("{user}", $username, $cmd);
-            $result = $ssh2->exec($cmd);
-            log::add(__CLASS__, 'debug', "SSH exec:{$cmd} => {$result}");
-            $results[] = explode("\n", $result);
+        switch (gettype($commands)) {
+            case 'string':
+                $result = $ssh2->exec($commands);
+                log::add(__CLASS__, 'debug', "SSH exec:{$commands} => {$result}");
+                return $result;
+                break;
+            case 'array':
+                foreach ($commands as $cmd) {
+                    $cmd = str_replace("{user}", $username, $cmd);
+                    $result = $ssh2->exec($cmd);
+                    log::add(__CLASS__, 'debug', "SSH exec:{$cmd} => {$result}");
+                    $results[] = explode("\n", $result);
+                    return $results;
+                }
+                break;
+            default:
+                throw new Exception('Invalid type for commands');
         }
-
-        return $results;
     }
 
     public function preInsert() {
