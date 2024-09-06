@@ -34,14 +34,14 @@ In your `desktop/php/myclientplugin.php` you need to foresee input fields that w
 
 ```HTML
 <div class="form-group">
-    <label class="col-sm-4 control-label help" data-help="{{Choisissez un Hôte dans la liste ou créer un nouveau}}">{{Hôte}}</label>
+    <label class="col-sm-4 control-label help" data-help="{{Choisissez un hôte dans la liste ou créez un nouveau}}">{{Hôte}}</label>
     <div class="col-sm-3">
         <div class="input-group">
             <select class="eqLogicAttr form-control roundedLeft sshmanagerHelper" data-helper="list" data-l1key="configuration" data-l2key="host_id">
 
             </select>
             <span class="input-group-btn">
-                <a class="btn btn-default cursor roundedRight sshmanagerHelper" data-helper="add" title="{{Ajouter une nouvelle connexion}}">
+                <a class="btn btn-default cursor roundedRight sshmanagerHelper" data-helper="add" title="{{Ajouter un nouvel hôte}}">
                     <i class="fas fa-plus-circle"></i>
                 </a>
             </span>
