@@ -74,7 +74,7 @@ function printEqLogic(_eqLogic) {
 }
 ```
 
-### Result
+#### Result
 
 The dropdown list will be filled with available hosts create is **SSH Manager**
 
@@ -85,3 +85,53 @@ After clicking on the small "Add" button, a modal will open to let user create a
 ![add new host](docs/addnew.png)
 
 After clicking *save*, the new host will be directly available in the dropdown list
+
+### Usage
+
+#### Execute SSH commands
+
+Following function from *sshmanager* class is available. First argument is the host Id. It should match the one retrieve during configuration and second argument is an array of SSH commands. Each one will be executed one by one in the same session but different context, if you need to preserve the context, please provided severals commands in the same item separated by `;` (as you would do in a terminal)
+
+```PHP
+/**
+  * execute ssh cmd on the remote host provided by hostId
+  *
+  * @param int $hostId
+  * @param array $commands
+  * @return array $results
+  */
+public static function executeCmds($hostId, array $commands) {}
+```
+
+`$commands` must be an array, if you have only one, provide an array with a single item.
+
+Example:
+
+```PHP
+$commands = [
+  'mv -f /tmp/config.yaml /opt/my_app/config.yaml',
+  'cd /opt/my_app/; sudo make install'
+]
+$outputs = sshmanager::executeCmds($this->getConfiguration('host_id'), $commands);
+```
+
+return value, `$outputs` in the example, will be an array providing one item by commands, so:
+
+- $outputs[0] is the result of $commands[0]
+- $outputs[1] is the result of $commands[1]
+- ...
+
+Each output items are as well an array of lines because each commands can provide more than one line, so:
+
+- $outputs[0][0] is first line of the output of the first command
+- $outputs[0][1] is second line of the output of the first command
+- $outputs[0][2] is third line of the output of the first command
+- ...
+
+#### retrieve remote file
+
+tbd.
+
+#### send file to remote
+
+tbd.
