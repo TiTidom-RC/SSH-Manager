@@ -337,11 +337,12 @@ class sshmanager extends eqLogic {
         [$username, $keyOrpassword] = $this->getAuthenticationData();
         $ssh2 = $this->getSSH2Client();
 
+        log::add(__CLASS__, 'debug', "internalExecuteCmds Type :: " . gettype($commands));
         switch (gettype($commands)) {
             case 'string':
                 $result = '';
                 $result = $ssh2->exec($commands);
-                log::add(__CLASS__, 'debug', "SSH exec:{$commands} => {$result}");
+                log::add(__CLASS__, 'debug', "SSH (String) exec:{$commands} => {$result}");
                 return $result;
                 break;
             case 'array':
@@ -349,7 +350,7 @@ class sshmanager extends eqLogic {
                 foreach ($commands as $cmd) {
                     $cmd = str_replace("{user}", $username, $cmd);
                     $result = $ssh2->exec($cmd);
-                    log::add(__CLASS__, 'debug', "SSH exec:{$cmd} => {$result}");
+                    log::add(__CLASS__, 'debug', "SSH (Array) exec:{$cmd} => {$result}");
                     $results[] = explode("\n", $result);
                 }
                 return $results;
