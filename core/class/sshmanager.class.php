@@ -12,6 +12,16 @@ if (!defined('NET_SSH2_LOGGING')) {
 }
 
 class SSHConnectException extends \RuntimeException {
+    private $_log;  // log of the SSH2 object
+
+    public function __construct($message, $log = '') {
+        parent::__construct($message);
+        $this->_log = $log;
+    }
+
+    public function getLog() {
+        return $this->_log;
+    }
 }
 
 class sshmanager extends eqLogic {
@@ -110,20 +120,47 @@ class sshmanager extends eqLogic {
     }
 
     /**
-     * execute ssh cmd on the remote host provided by hostId
+     * check ssh connection on the remote host provided by hostId
      *
      * @param int $hostId
-     * @param array $commands
-     * @return array $results
+     * @return bool $status
      */
-    public static function executeCmds($hostId, array $commands) {
+    public static function checkConnection($hostId) {
         /** @var sshmanager */
         $sshmanager = eqLogic::byId($hostId);
         if (!is_object($sshmanager)) {
-            throw new Exception('Invalid host id');
+            throw new Exception('Invalid host Id');
+        }
+        log::add(__CLASS__, 'debug', "Check SSH Connection on {$sshmanager->getName()}");
+        return $sshmanager->internalCheckConnection();
+    }
+
+    /**
+     * execute ssh cmd on the remote host provided by hostId
+     *
+     * @param int $hostId
+     * @param array|string $commands
+     * @return array|string $results
+     */
+    public static function executeCmds($hostId, $commands) {
+        /** @var sshmanager */
+        $sshmanager = eqLogic::byId($hostId);
+        if (!is_object($sshmanager)) {
+            throw new Exception('Invalid host Id');
         }
         log::add(__CLASS__, 'debug', "executeCmds on {$sshmanager->getName()}");
-        return $sshmanager->internalExecuteCmds($commands);
+
+        if (is_array($commands)) {
+            $results = [];
+            foreach ($commands as $cmd) {
+                $results[] = $sshmanager->internalExecuteCmd($cmd);
+            }
+            return $results;
+        } elseif (is_string($commands)) {
+            return $sshmanager->internalExecuteCmd($commands);
+        } else {
+            throw new Exception('Invalid command type');
+        }
     }
 
     /**
@@ -265,15 +302,15 @@ class sshmanager extends eqLogic {
 
             try {
                 if (!$ssh2->login($username, $keyOrpassword)) {
-                    throw new SSHConnectException("[{$this->getName()}] Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.");
+                    throw new SSHConnectException("[{$this->getName()}] Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.", $ssh2->getLog());
                 }
 
                 if (!$ssh2->isConnected()) {
-                    throw new SSHConnectException("[{$this->getName()}] Connexion failed:" . $ssh2->getLastError());
+                    throw new SSHConnectException("[{$this->getName()}] Connection failed:" . $ssh2->getLastError(), $ssh2->getLog());
                 }
 
                 if (!$ssh2->isAuthenticated()) {
-                    throw new SSHConnectException("[{$this->getName()}] Authentication failed:" . $ssh2->getLastError());
+                    throw new SSHConnectException("[{$this->getName()}] Authentication failed:" . $ssh2->getLastError(), $ssh2->getLog());
                 }
             } catch (SSHConnectException $ex) {
                 log::add(__CLASS__, 'error', $ex->getMessage());
@@ -293,20 +330,25 @@ class sshmanager extends eqLogic {
         return sshmanager::$_ssh2_client[$eqLogicID];
     }
 
-    private function internalExecuteCmds(array $commands) {
-        [$username, $keyOrpassword] = $this->getAuthenticationData();
-
-        $ssh2 = $this->getSSH2Client();
-
-        $results = [];
-        foreach ($commands as $cmd) {
-            $cmd = str_replace("{user}", $username, $cmd);
-            $result = $ssh2->exec($cmd);
-            log::add(__CLASS__, 'debug', "SSH exec:{$cmd} => {$result}");
-            $results[] = explode("\n", $result);
+    private function internalCheckConnection() {
+        try {
+            $ssh2 = $this->getSSH2Client();
+            return $ssh2->isConnected() && $ssh2->isAuthenticated();
+        } catch (SSHConnectException $ex) {
+            log::add(__CLASS__, 'error', "[{$this->getName()}] Exception :: {$ex->getMessage()}");
+            log::add(__CLASS__, 'debug', "[{$this->getName()}] Exception Log :: {$ex->getLog()}");
+            return false;
+        } catch (\Throwable $th) {
+            log::add(__CLASS__, 'error', $th->getMessage());
+            return false;
         }
+    }
 
-        return $results;
+    private function internalExecuteCmd(string $command) {
+        $ssh2 = $this->getSSH2Client();
+        $result = $ssh2->exec($command);
+        log::add(__CLASS__, 'debug', "SSH exec:{$command} => {$result}");
+        return $result;
     }
 
     public function preInsert() {
