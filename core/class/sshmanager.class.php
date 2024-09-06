@@ -120,17 +120,33 @@ class sshmanager extends eqLogic {
     }
 
     /**
-     * execute ssh cmd on the remote host provided by hostId
+     * check ssh connectivity on the remote host provided by hostId
      *
      * @param int $hostId
-     * @param array $commands
-     * @return array $results
+     * @return boolean $status
      */
-    public static function executeCmds($hostId, array $commands) {
+    public static function checkSSH($hostId) {
         /** @var sshmanager */
         $sshmanager = eqLogic::byId($hostId);
         if (!is_object($sshmanager)) {
-            throw new Exception('Invalid host id');
+            throw new Exception('Invalid host Id');
+        }
+        log::add(__CLASS__, 'debug', "Check SSH Connection on {$sshmanager->getName()}");
+        return $sshmanager->internalCheckSSH();
+    }
+
+    /**
+     * execute ssh cmd on the remote host provided by hostId
+     *
+     * @param int $hostId
+     * @param array|string $commands
+     * @return array|string $results
+     */
+    public static function executeCmds($hostId, array|string $commands) {
+        /** @var sshmanager */
+        $sshmanager = eqLogic::byId($hostId);
+        if (!is_object($sshmanager)) {
+            throw new Exception('Invalid host Id');
         }
         log::add(__CLASS__, 'debug', "executeCmds on {$sshmanager->getName()}");
         return $sshmanager->internalExecuteCmds($commands);
@@ -301,6 +317,20 @@ class sshmanager extends eqLogic {
             log::add(__CLASS__, 'debug', "[{$pid}] Existing SSH2 client for eqLogic {$eqLogicID}");
         }
         return sshmanager::$_ssh2_client[$eqLogicID];
+    }
+
+    private function internalCheckSSH() {
+        try {
+            $ssh2 = $this->getSSH2Client();
+            return $ssh2->isConnected() && $ssh2->isAuthenticated();
+        } catch (SSHConnectException $ex) {
+            log::add(__CLASS__, 'error', "[{$this->getName()}] Exception :: {$ex->getMessage()}");
+            log::add(__CLASS__, 'debug', "[{$this->getName()}] Exception Log :: {$ex->getLog()}");
+            return false;
+        } catch (\Throwable $th) {
+            log::add(__CLASS__, 'error', $th->getMessage());
+            return false;
+        }
     }
 
     private function internalExecuteCmds(array $commands) {
