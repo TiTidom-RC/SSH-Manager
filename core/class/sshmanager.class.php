@@ -142,7 +142,7 @@ class sshmanager extends eqLogic {
      * @param array|string $commands
      * @return array|string $results
      */
-    public static function executeCmds($hostId, array|string $commands) {
+    public static function executeCmds($hostId, $commands) {
         /** @var sshmanager */
         $sshmanager = eqLogic::byId($hostId);
         if (!is_object($sshmanager)) {
@@ -333,7 +333,7 @@ class sshmanager extends eqLogic {
         }
     }
 
-    private function internalExecuteCmds(array|string $commands) {
+    private function internalExecuteCmds($commands) {
         [$username, $keyOrpassword] = $this->getAuthenticationData();
         $ssh2 = $this->getSSH2Client();
 
