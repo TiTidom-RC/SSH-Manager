@@ -12,6 +12,16 @@ if (!defined('NET_SSH2_LOGGING')) {
 }
 
 class SSHConnectException extends \RuntimeException {
+    private $_log;  // log of the SSH2 object
+    
+    public function __construct($message, $log = '') {
+        $this->_log = $log;
+        parent::__construct($message);
+    }    
+    
+    public function getLog() {
+        return $this->_log;
+    }
 }
 
 class sshmanager extends eqLogic {
