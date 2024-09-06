@@ -351,8 +351,8 @@ class sshmanager extends eqLogic {
                     $result = $ssh2->exec($cmd);
                     log::add(__CLASS__, 'debug', "SSH exec:{$cmd} => {$result}");
                     $results[] = explode("\n", $result);
-                    return $results;
                 }
+                return $results;
                 break;
             default:
                 throw new Exception('Invalid type for commands');
