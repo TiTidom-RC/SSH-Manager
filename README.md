@@ -59,7 +59,7 @@ We recommande as well to keep a button (`a` tag) with `sshmanagerHelper` class a
 In the same file, you need to include our helper js file. Do this at the same place than other js include:
 
 ```PHP
-<?php include_file('desktop', 'sshmanager.helper', 'js', 'sshmanager'); /// do not change anything on this line ?>
+<?php include_file('desktop', 'sshmanager.helper', 'js', 'sshmanager'); // do not change anything on this line ?>
 <?php include_file('desktop', 'myclientplugin', 'js', 'myclientplugin'); ?>
 <?php include_file('core', 'plugin.template', 'js'); ?>
 ```
