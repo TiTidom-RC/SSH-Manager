@@ -13,12 +13,12 @@ if (!defined('NET_SSH2_LOGGING')) {
 
 class SSHConnectException extends \RuntimeException {
     private $_log;  // log of the SSH2 object
-    
+
     public function __construct($message, $log = '') {
         parent::__construct($message);
         $this->_log = $log;
-    }    
-    
+    }
+
     public function getLog() {
         return $this->_log;
     }
@@ -149,7 +149,18 @@ class sshmanager extends eqLogic {
             throw new Exception('Invalid host Id');
         }
         log::add(__CLASS__, 'debug', "executeCmds on {$sshmanager->getName()}");
-        return $sshmanager->internalExecuteCmds($commands);
+
+        if (is_array($commands)) {
+            $results = [];
+            foreach ($commands as $cmd) {
+                $results[] = $sshmanager->internalExecuteCmd($cmd);
+            }
+            return $results;
+        } elseif (is_string($commands)) {
+            return $sshmanager->internalExecuteCmd($commands);
+        } else {
+            throw new Exception('Invalid command type');
+        }
     }
 
     /**
@@ -333,32 +344,11 @@ class sshmanager extends eqLogic {
         }
     }
 
-    private function internalExecuteCmds($commands) {
-        [$username, $keyOrpassword] = $this->getAuthenticationData();
+    private function internalExecuteCmd(string $command) {
         $ssh2 = $this->getSSH2Client();
-
-        log::add(__CLASS__, 'debug', "internalExecuteCmds Type :: " . gettype($commands));
-        switch (gettype($commands)) {
-            case 'string':
-                $result = '';
-                $cmd = str_replace("{user}", $username, $commands);
-                $result = $ssh2->exec($cmd);
-                log::add(__CLASS__, 'debug', "SSH (String) exec:{$commands} => {$result}");
-                return $result;
-                break;
-            case 'array':
-                $results = [];
-                foreach ($commands as $cmd) {
-                    $cmd = str_replace("{user}", $username, $cmd);
-                    $result = $ssh2->exec($cmd);
-                    log::add(__CLASS__, 'debug', "SSH (Array) exec:{$cmd} => {$result}");
-                    $results[] = explode("\n", $result);
-                }
-                return $results;
-                break;
-            default:
-                throw new Exception('Invalid type for commands');
-        }
+        $result = $ssh2->exec($command);
+        log::add(__CLASS__, 'debug', "SSH exec:{$command} => {$result}");
+        return $result;
     }
 
     public function preInsert() {
@@ -448,5 +438,3 @@ class sshmanagerCmd extends cmd {
         }
     }
 }
-
-?>
