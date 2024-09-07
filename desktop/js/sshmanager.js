@@ -23,10 +23,22 @@ function addCmdToTable(_cmd) {
 	if (!isset(_cmd.configuration)) {
 		_cmd.configuration = {}
 	}
+
+	var selCmdType = '<select style="width : 90px;" class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="cmdType">'
+	selCmdType += '<option value="command">{{Commande}}</option>'
+	selCmdType += '<option value="refresh">{{Refresh}}</option>'
+	selCmdType += '<option value="service">{{Service}}</option>'
+	selCmdType += '<option value="checkupdates">{{Check Updates}}</option>'
+	selCmdType += '</select>'
+
 	let tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">'
+	
+	// ID
 	tr += '<td class="hidden-xs">'
 	tr += '<span class="cmdAttr" data-l1key="id"></span>'
 	tr += '</td>'
+	
+	// Nom de la commande
 	tr += '<td>'
 	tr += '<div class="input-group">'
 	tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="name" placeholder="{{Nom de la commande}}">'
@@ -37,10 +49,34 @@ function addCmdToTable(_cmd) {
 	tr += '<option value="">{{Aucune}}</option>'
 	tr += '</select>'
 	tr += '</td>'
+	
+	// Type Cmd
+	tr += '</td>'
+  	tr += '<td class="requestType" type="' + init(_cmd.configuration.requestType) + '" >' + selRequestType
+  	tr += '</td>'
+
+	// Type
 	tr += '<td>'
 	tr += '<span class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>'
 	tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>'
 	tr += '</td>'
+
+	// Request
+	tr += '<td>'
+	if (_cmd.logicalId != 'refresh' && (init(_cmd.type) != 'action' || init(_cmd.subType) != 'other')) {
+		tr += '<textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="ssh-command"></textarea>'
+	}
+	tr += '</td>'
+
+	// Paramètres
+	tr += '<td class="tdService">'
+	tr += '<div classe="serviceConfig" data-type="service">'
+	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="serviceName" placeholder="{{Nom du Service}}">'
+	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="serviceAction" placeholder="{{Action du Service}}">'
+	tr += '</div>'
+	tr += '</td>'
+
+	// Options
 	tr += '<td>'
 	tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="isVisible" checked/>{{Afficher}}</label> '
 	tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="isHistorized" checked/>{{Historiser}}</label> '
@@ -51,20 +87,20 @@ function addCmdToTable(_cmd) {
 	tr += '<input class="tooltips cmdAttr form-control input-sm" data-l1key="unite" placeholder="Unité" title="{{Unité}}" style="width:30%;max-width:80px;display:inline-block;margin-right:2px;">'
 	tr += '</div>'
 	tr += '</td>'
-	tr += '<td>'
-	if (_cmd.logicalId != 'refresh' && (init(_cmd.type) != 'action' || init(_cmd.subType) != 'other')) {
-		tr += '<textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="ssh-command"></textarea>'
-	}
-	tr += '</td>'
+	
+	// Etat (State)
 	tr += '<td>'
 	tr += '<span class="cmdAttr" data-l1key="htmlstate"></span>'
 	tr += '</td>'
+
+	// Actions
 	tr += '<td>'
 	if (is_numeric(_cmd.id)) {
 		tr += '<a class="btn btn-default btn-xs cmdAction" data-action="configure"><i class="fas fa-cogs"></i></a> '
 		tr += '<a class="btn btn-default btn-xs cmdAction" data-action="test"><i class="fas fa-rss"></i> {{Tester}}</a>'
 	}
 	tr += '<i class="fas fa-minus-circle pull-right cmdAction cursor" data-action="remove" title="{{Supprimer la commande}}"></i></td>'
+
 	tr += '</tr>'
 
 	let newRow = document.createElement('tr')
