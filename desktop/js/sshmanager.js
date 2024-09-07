@@ -148,15 +148,17 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(fun
 document.querySelector("#table_cmd tbody").addEventListener("change", function(event) {
 	if (event.target.classList.contains("cmdAttr") && event.target.getAttribute("data-l1key") === "configuration" && event.target.getAttribute("data-l2key") === "cmdType") {
 		var tr = event.target.closest("tr");
-		
+
 		tr.querySelectorAll(".cmdTypeConfig").forEach(config => config.style.display = "none");
 
 		/* console.log(event.target.value); */
 		if (event.target.value === "refresh" ) {
+			tr.querySelector('.type').value = 'action';
 			tr.querySelector(".cmdOptionRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "block";
 		} else if (event.target.value === "command") {
+			tr.querySelector('.type').value = 'info';
 			tr.querySelector(".cmdOptionRefresh").style.display = "block";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "block";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
