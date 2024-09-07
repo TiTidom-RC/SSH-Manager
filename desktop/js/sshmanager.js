@@ -131,7 +131,7 @@ function addCmdToTable(_cmd) {
 			jeedomUtils.showAlert({ message: error.message, level: 'danger' })
 		},
 		success: function (result) {
-			newRow.querySelector('.cmdAttr[data-l1key="value"]').insertAdjacentHTML('beforeend', result)
+			/* newRow.querySelector('.cmdAttr[data-l1key="value"]').insertAdjacentHTML('beforeend', result) */
 			newRow.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').insertAdjacentHTML('beforeend', result)
 			newRow.setJeeValues(_cmd, '.cmdAttr')
 			jeedom.cmd.changeType(newRow, init(_cmd.subType))
