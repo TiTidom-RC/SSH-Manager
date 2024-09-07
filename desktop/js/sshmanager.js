@@ -53,7 +53,7 @@ function addCmdToTable(_cmd) {
 	tr += '</td>'
 	tr += '<td>'
 	if (_cmd.logicalId != 'refresh') {
-		tr += '<textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="ssh-commands"></textarea>'
+		tr += '<textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="ssh-command"></textarea>'
 	}
 	tr += '</td>'
 	tr += '<td>'
@@ -74,16 +74,16 @@ function addCmdToTable(_cmd) {
 	document.getElementById('table_cmd').querySelector('tbody').appendChild(newRow)
 
 	jeedom.eqLogic.buildSelectCmd({
-	  id: document.querySelector('.eqLogicAttr[data-l1key="id"]').jeeValue(),
-	  filter: { type: 'info' },
-	  error: function(error) {
-		jeedomUtils.showAlert({ message: error.message, level: 'danger' })
-	  },
-	  success: function(result) {
-		newRow.querySelector('.cmdAttr[data-l1key="value"]').insertAdjacentHTML('beforeend', result)
-		newRow.setJeeValues(_cmd, '.cmdAttr')
-		jeedom.cmd.changeType(newRow, init(_cmd.subType))
-	  }
+		id: document.querySelector('.eqLogicAttr[data-l1key="id"]').jeeValue(),
+		filter: { type: 'info' },
+		error: function (error) {
+			jeedomUtils.showAlert({ message: error.message, level: 'danger' })
+		},
+		success: function (result) {
+			newRow.querySelector('.cmdAttr[data-l1key="value"]').insertAdjacentHTML('beforeend', result)
+			newRow.setJeeValues(_cmd, '.cmdAttr')
+			jeedom.cmd.changeType(newRow, init(_cmd.subType))
+		}
 	})
 }
 
