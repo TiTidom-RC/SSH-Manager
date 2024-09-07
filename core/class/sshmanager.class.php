@@ -414,15 +414,12 @@ class sshmanagerCmd extends cmd {
             $eqLogic = $this->getEqLogic();
             $eqLogic->refreshAllInfo();
             return;
-        }
-
-        if ($this->gettype() == 'action' && $this->getSubType() == 'other') {
+        } elseif ($this->getConfiguration('cmdType') == 'refresh') {
             if ($this->getValue() != '') {
                 $cmd = sshmanagerCmd::byId($this->getValue());
                 if (is_object($cmd)) {
                     $cmd->refreshInfo();
-                    // $cmd->getEqLogic()->checkAndUpdateCmd($cmd, $cmd->execute());
-                    log::add(__CLASS__, 'info', __('Refresh de la commande : ', __FILE__) . $cmd->getName());
+                    log::add(__CLASS__, 'info', '[' + $this->getEqLogic()->getName() + ']' + __('Refresh de la commande : ', __FILE__) . $cmd->getName());
                     return;
                 }   
             }   
