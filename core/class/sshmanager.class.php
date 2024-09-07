@@ -347,6 +347,7 @@ class sshmanager extends eqLogic {
     private function internalExecuteCmd(string $command) {
         $ssh2 = $this->getSSH2Client();
         $result = $ssh2->exec($command);
+        //TODO: '\n' should be escaped from $result before logging
         log::add(__CLASS__, 'debug', "SSH exec:{$command} => {$result}");
         return $result;
     }
@@ -441,7 +442,7 @@ class sshmanagerCmd extends cmd {
         }
         $result = sshmanager::executeCmds($this->getEqLogic_id(), $command);
         if ($this->getType() == 'info') {
-            return $result;
+            return $result; //TODO: what to do with '\n' in result?
         }
     }
 }

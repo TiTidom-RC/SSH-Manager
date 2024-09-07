@@ -97,13 +97,13 @@ Following function from *sshmanager* class is available. First argument is the h
   * execute ssh cmd on the remote host provided by hostId
   *
   * @param int $hostId
-  * @param array $commands
-  * @return array $results
+  * @param array|string $commands
+  * @return array|string $results
   */
 public static function executeCmds($hostId, array $commands) {}
 ```
 
-`$commands` must be an array, if you have only one, provide an array with a single item.
+`$commands` can be an array of command or a string with a single command.
 
 Example:
 
@@ -121,12 +121,9 @@ return value, `$outputs` in the example, will be an array providing one item by 
 - $outputs[1] is the result of $commands[1]
 - ...
 
-Each output items are as well an array of lines because each commands can provide more than one line, so:
+if you provide a string with a single command then the output will be a string as well.
 
-- $outputs[0][0] is first line of the output of the first command
-- $outputs[0][1] is second line of the output of the first command
-- $outputs[0][2] is third line of the output of the first command
-- ...
+If your command produce several lines, you will receive line feed `\n` in the output, don't forget to take them into account in your code.
 
 #### retrieve remote file
 
