@@ -379,6 +379,9 @@ class sshmanager extends eqLogic {
     public function refreshAllInfo() {
         /** @var sshmanagerCmd */
         foreach ($this->getCmd('info') as $cmd) {
+            if ($cmd->getConfiguration('autorefresh', 1) != 1) {
+                return;
+            }
             try {
                 $cmd->refreshInfo();
             } catch (Exception $exc) {
@@ -394,7 +397,7 @@ class sshmanagerCmd extends cmd {
     }
 
     public function refreshInfo() {
-        if ($this->getType() != 'info' || trim($this->getConfiguration('ssh-command')) == '' || $this->getConfiguration('autorefresh', 1) != 1) {
+        if ($this->getType() != 'info' || trim($this->getConfiguration('ssh-command')) == '') {
             return;
         }
         $this->getEqLogic()->checkAndUpdateCmd($this, $this->execute());
