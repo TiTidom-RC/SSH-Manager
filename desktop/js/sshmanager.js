@@ -52,7 +52,7 @@ function addCmdToTable(_cmd) {
 	
 	// Type Cmd
 	tr += '<td>'
-	var displayRefresh = (_cmd.logicalId != 'refresh' ? 'block' : 'none')
+	var displayRefresh = init(_cmd.logicalId) != 'refresh' ? 'block' : 'none'
   	tr += '<span class="cmdType" style="display: ' + displayRefresh + ';" type="' + init(_cmd.configuration.cmdType) + '" >' + selCmdType	
   	tr += '</td>'
 
@@ -120,9 +120,9 @@ function addCmdToTable(_cmd) {
 	newRow.setAttribute('data-cmd_id', init(_cmd.id))
 	document.getElementById('table_cmd').querySelector('tbody').appendChild(newRow)
 
-	/* if (isset(_cmd.configuration.cmdType)) {
-		document.querySelector('#table_cmd tbody tr:last .cmdAttr[data-l1key="configuration"][data-l2key="cmdType"]').dispatchEvent(new Event('change'));
-	} */
+	if (isset(_cmd.configuration.cmdType)) {
+		document.querySelector('#table_cmd tbody tr:last-child .cmdAttr[data-l1key="configuration"][data-l2key="cmdType"]').dispatchEvent(new Event('change'));
+	}
 
 	jeedom.eqLogic.buildSelectCmd({
 		id: document.querySelector('.eqLogicAttr[data-l1key="id"]').jeeValue(),
