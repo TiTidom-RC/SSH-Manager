@@ -415,6 +415,15 @@ class sshmanagerCmd extends cmd {
             return;
         }
 
+        if ($this->gettype() == 'action') {
+            if ($this->getValue() != '') {
+                $cmd = sshmanagerCmd::byId($this->getValue());
+                if (is_object($cmd)) {
+                    $cmd->getEqLogic()->checkAndUpdateCmd($cmd, $cmd->execute());
+                }   
+            }   
+        }
+
         $command = $this->getConfiguration('ssh-command');
 
         if ($_options != null) {
