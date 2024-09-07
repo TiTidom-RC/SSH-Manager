@@ -72,7 +72,7 @@ function addCmdToTable(_cmd) {
 
 	// Paramètres->Auto-Refresh
 	tr += '<div class="cmdOptionRefresh">'
-	tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="autoRefresh" checked />{{Auto-Refresh}}</label>'
+	tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="autorefresh" checked />{{Auto-Refresh}}</label>'
 	tr += '</div>'
 	
 	// Paramètres->RefreshCmdSelect

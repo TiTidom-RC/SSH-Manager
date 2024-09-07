@@ -394,7 +394,7 @@ class sshmanagerCmd extends cmd {
     }
 
     public function refreshInfo() {
-        if ($this->getType() != 'info' || trim($this->getConfiguration('ssh-command')) == '') {
+        if ($this->getType() != 'info' || trim($this->getConfiguration('ssh-command')) == '' || $this->getConfiguration('autorefresh', 1) != 1) {
             return;
         }
         $this->getEqLogic()->checkAndUpdateCmd($this, $this->execute());
