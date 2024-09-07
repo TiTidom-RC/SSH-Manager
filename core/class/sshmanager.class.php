@@ -415,7 +415,7 @@ class sshmanagerCmd extends cmd {
             return;
         }
 
-        if ($this->gettype() == 'action') {
+        if ($this->gettype() == 'action' && $this->getSubType() == 'other') {
             if ($this->getValue() != '') {
                 $cmd = sshmanagerCmd::byId($this->getValue());
                 if (is_object($cmd)) {
