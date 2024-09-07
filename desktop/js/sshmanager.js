@@ -58,7 +58,7 @@ function addCmdToTable(_cmd) {
 
 	// Type
 	tr += '<td>'
-	tr += '<span class="type" style="display:"' + displayRefresh + ';" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>'
+	tr += '<span class="type" style="display: ' + displayRefresh + ';" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>'
 	tr += '<span class="subType" style="display: ' + displayRefresh + '" subType="' + init(_cmd.subType) + '"></span>'
 	tr += '</td>'
 
