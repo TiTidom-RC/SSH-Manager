@@ -193,11 +193,11 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 <th style="min-width:220px;width:250px;">{{Nom}}</th>
                                 <th style="min-width:120px;width:150px;">{{Type Cmd}}</th>
                                 <th style="min-width:120px;width:150px;">{{Type}}</th>
-                                <th style="width: 400px;">{{Commande SSH}}</th>
-                                <th style="width: 150px;">{{Paramètres Cmd}}</th>
-                                <th style="min-width:260px;width:280px;">{{Options}}</th>
-                                <th style="width: 250px;">{{Etat}}</th>
-                                <th style="min-width:80px;width:100px;">{{Actions}}</th>
+                                <th style="min-width:200px;width:400px;">{{Commande SSH}}</th>
+                                <th style="min-width:100px;width:150px;">{{Paramètres Cmd}}</th>
+                                <th style="min-width:200px;width:220px;">{{Options}}</th>
+                                <th style="min-width:150px;width:250px;">{{Etat}}</th>
+                                <th style="min-width:130px;width:130px;">{{Actions}}</th>
                             </tr>
                         </thead>
                         <tbody>
