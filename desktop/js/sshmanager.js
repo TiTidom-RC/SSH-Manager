@@ -151,7 +151,7 @@ document.querySelector("#table_cmd tbody").addEventListener("change", function(e
 		
 		tr.querySelectorAll(".cmdTypeConfig").forEach(config => config.style.display = "none");
 
-		console.log(event.target.value);
+		/* console.log(event.target.value); */
 		if (event.target.value === "refresh" ) {
 			tr.querySelector(".cmdOptionRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
