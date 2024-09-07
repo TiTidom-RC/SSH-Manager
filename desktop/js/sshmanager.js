@@ -51,8 +51,8 @@ function addCmdToTable(_cmd) {
 	tr += '</td>'
 	
 	// Type Cmd
-	tr += '</td>'
-  	tr += '<td class="cmdType" type="' + init(_cmd.configuration.cmdType) + '" >' + selCmdType
+	tr += '<td>'
+  	tr += '<span class="cmdType" type="' + init(_cmd.configuration.cmdType) + '" >' + selCmdType
   	tr += '</td>'
 
 	// Type
