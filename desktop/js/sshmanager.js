@@ -69,8 +69,14 @@ function addCmdToTable(_cmd) {
 	tr += '</td>'
 
 	// Paramètres
-	tr += '<td class="tdService">'
-	tr += '<div classe="serviceConfig" data-type="service">'
+	tr += '<td class="tdOptions">'
+	tr += '<div classe="cmdTypeConfig" data-type="command">'
+	tr += '<center>'
+	tr += '<input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="noCron" />{{Auto-Actualisation}}'
+	tr += '</center>'
+	tr += '</div>'
+	
+	tr += '<div classe="cmdTypeConfig" data-type="service" style="display : none;">'
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="serviceName" placeholder="{{Nom du Service}}">'
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="serviceAction" placeholder="{{Action du Service}}">'
 	tr += '</div>'
