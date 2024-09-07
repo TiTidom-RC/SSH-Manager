@@ -153,12 +153,12 @@ document.querySelector("#table_cmd tbody").addEventListener("change", function(e
 
 		/* console.log(event.target.value); */
 		if (event.target.value === "refresh" ) {
-			tr.querySelector('.cmdAttr[data-l1key="type"]').setJeeValues("action");
+			tr.querySelector('.cmdAttr[data-l1key="type"]').setJeeValues({ value: "info" });
 			tr.querySelector(".cmdOptionRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "block";
 		} else if (event.target.value === "command") {
-			tr.querySelector('.cmdAttr[data-l1key="type"]').setJeeValues("info");
+			tr.querySelector('.cmdAttr[data-l1key="type"]').setJeeValues({ value: "info" });
 			tr.querySelector(".cmdOptionRefresh").style.display = "block";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "block";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
