@@ -52,7 +52,7 @@ function addCmdToTable(_cmd) {
 	
 	// Type Cmd
 	tr += '</td>'
-  	tr += '<td class="requestType" type="' + init(_cmd.configuration.requestType) + '" >' + selCmdType
+  	tr += '<td class="cmdType" type="' + init(_cmd.configuration.cmdType) + '" >' + selCmdType
   	tr += '</td>'
 
 	// Type
