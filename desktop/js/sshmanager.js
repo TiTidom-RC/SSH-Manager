@@ -52,7 +52,7 @@ function addCmdToTable(_cmd) {
 	tr += '</div>'
 	tr += '</td>'
 	tr += '<td>'
-	if (_cmd.logicalId != 'refresh') {
+	if (_cmd.logicalId != 'refresh' && init(_cmd.type) != 'action') {
 		tr += '<textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="ssh-command"></textarea>'
 	}
 	tr += '</td>'
