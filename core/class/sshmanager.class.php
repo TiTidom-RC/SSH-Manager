@@ -416,7 +416,7 @@ class sshmanagerCmd extends cmd {
             return;
         } elseif ($this->getConfiguration('cmdType') == 'refresh') {
             if ($this->getValue() != '') {
-                $cmd = sshmanagerCmd::byId($this->getValue());
+                $cmd = cmd::byId($this->getValue());
                 if (is_object($cmd)) {
                     $eqLogic = $this->getEqLogic();
                     $cmd->refreshInfo();
