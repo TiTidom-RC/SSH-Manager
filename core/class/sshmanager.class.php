@@ -406,19 +406,19 @@ class sshmanagerCmd extends cmd {
             return;
         }
 
-        $commands = $this->getConfiguration('ssh-commands');
+        $command = $this->getConfiguration('ssh-commands');
 
         if ($_options != null) {
             if ($this->getType() == 'action') {
                 switch ($this->getSubType()) {
                     case 'slider':
-                        $commands = str_replace('#slider#', $_options['slider'], $commands);
+                        $command = str_replace('#slider#', $_options['slider'], $command);
                         break;
                     case 'color':
-                        $commands = str_replace('#color#', $_options['color'], $commands);
+                        $command = str_replace('#color#', $_options['color'], $command);
                         break;
                     case 'select':
-                        $commands = str_replace('#select#', $_options['select'], $commands);
+                        $command = str_replace('#select#', $_options['select'], $command);
                         break;
                     case 'message':
                         $replace = array('#title#', '#message#');
@@ -426,15 +426,14 @@ class sshmanagerCmd extends cmd {
                         if ($_options['message'] == '' && $_options['title'] == '') {
                             throw new Exception(__('Le message et le sujet ne peuvent pas être vide', __FILE__));
                         }
-                        $commands = str_replace($replace, $replaceBy, $commands);
+                        $command = str_replace($replace, $replaceBy, $command);
                         break;
                 }
             }
         }
-        $ar_commands = explode('#command_sep#', $commands); // TODO: check if this is the correct separator
-        $results = sshmanager::executeCmds($this->getEqLogic_id(), $ar_commands);
+        $result = sshmanager::executeCmds($this->getEqLogic_id(), $command);
         if ($this->getType() == 'info') {
-            return $results[0][0]; //TODO: check if this is the correct separator
+            return $result;
         }
     }
 }
