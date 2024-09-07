@@ -120,9 +120,9 @@ function addCmdToTable(_cmd) {
 	newRow.setAttribute('data-cmd_id', init(_cmd.id))
 	document.getElementById('table_cmd').querySelector('tbody').appendChild(newRow)
 
-	if (isset(_cmd.configuration.requestType)) {
+	/* if (isset(_cmd.configuration.cmdType)) {
 		document.querySelector('#table_cmd tbody tr:last .cmdAttr[data-l1key="configuration"][data-l2key="cmdType"]').dispatchEvent(new Event('change'));
-	}
+	} */
 
 	jeedom.eqLogic.buildSelectCmd({
 		id: document.querySelector('.eqLogicAttr[data-l1key="id"]').jeeValue(),
@@ -153,12 +153,12 @@ document.querySelector("#table_cmd tbody").addEventListener("change", function(e
 
 		/* console.log(event.target.value); */
 		if (event.target.value === "refresh" ) {
-			tr.querySelector('.cmdAttr[datal1key="type"]').value = "action";
+			tr.querySelector('.cmdAttr[data-l1key="type"]').value = "action";
 			tr.querySelector(".cmdOptionRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "block";
 		} else if (event.target.value === "command") {
-			tr.querySelector('.cmdAttr[datal1key="type"]').value = "info";
+			tr.querySelector('.cmdAttr[data-l1key="type"]').value = "info";
 			tr.querySelector(".cmdOptionRefresh").style.display = "block";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "block";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
