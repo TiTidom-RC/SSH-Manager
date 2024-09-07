@@ -52,17 +52,14 @@ function addCmdToTable(_cmd) {
 	
 	// Type Cmd
 	tr += '<td>'
-	if (_cmd.logicalId == 'refresh') {
-  		tr += '<span class="cmdType" style="display: none;" type="' + init(_cmd.configuration.cmdType) + '" >' + selCmdType
-	} else {
-		tr += '<span class="cmdType" type="' + init(_cmd.configuration.cmdType) + '" >' + selCmdType
-	}
+	var displayRefresh = (_cmd.logicalId != 'refresh' ? 'block' : 'none')
+  	tr += '<span class="cmdType" style="display: "' + displayRefresh + ';" type="' + init(_cmd.configuration.cmdType) + '" >' + selCmdType	
   	tr += '</td>'
 
 	// Type
 	tr += '<td>'
-	tr += '<span class="type" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>'
-	tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>'
+	tr += '<span class="type" style="display:"' + displayRefresh + ';" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>'
+	tr += '<span class="subType" style="display: "' + displayRefresh + '" subType="' + init(_cmd.subType) + '"></span>'
 	tr += '</td>'
 
 	// Request
