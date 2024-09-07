@@ -348,7 +348,7 @@ class sshmanager extends eqLogic {
         $ssh2 = $this->getSSH2Client();
         $result = $ssh2->exec($command);
         //TODO: '\n' should be escaped from $result before logging
-        log::add(__CLASS__, 'debug', "SSH exec:{$command} => {$result}");
+        log::add(__CLASS__, 'debug', '['  . $this->getName() .  "] SSH exec :: {$command} => {$result}");
         return $result;
     }
 
