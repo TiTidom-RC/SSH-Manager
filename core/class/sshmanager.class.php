@@ -418,8 +418,8 @@ class sshmanagerCmd extends cmd {
             $eqLogic->refreshAllInfo();
             return;
         } elseif ($this->getConfiguration('cmdType') == 'refresh') {
-            if ($this->getValue() != '') {
-                $cmd = cmd::byId($this->getValue());
+            if ($this->getConfiguration('cmdToRefresh') != '') {
+                $cmd = cmd::byId($this->getConfiguration('cmdToRefresh'));
                 if (is_object($cmd)) {
                     $eqLogic = $this->getEqLogic();
                     $cmd->refreshInfo();
