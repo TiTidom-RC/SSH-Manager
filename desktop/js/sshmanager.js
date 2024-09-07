@@ -24,7 +24,7 @@ function addCmdToTable(_cmd) {
 		_cmd.configuration = {}
 	}
 
-	var selCmdType = '<select style="width : 90px;" class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="cmdType">'
+	var selCmdType = '<select style="width : 120px;" class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="cmdType">'
 	selCmdType += '<option value="command">{{Commande}}</option>'
 	selCmdType += '<option value="refresh">{{Refresh}}</option>'
 	selCmdType += '<option value="service">{{Service}}</option>'
