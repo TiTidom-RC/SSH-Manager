@@ -70,13 +70,16 @@ function addCmdToTable(_cmd) {
 
 	// Paramètres
 	tr += '<td class="tdOptions">'
-	tr += '<div classe="cmdTypeConfig" data-type="command">'
+
+	// Paramètres->Auto-Refresh
+	tr += '<div class="cmdTypeConfig" data-type="command">'
 	tr += '<center>'
-	tr += '<input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="noCron" />{{Auto-Actualisation}}'
+	tr += '<input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="autoRefresh" checked />{{Auto-Refresh}}'
 	tr += '</center>'
 	tr += '</div>'
 	
-	tr += '<div classe="cmdTypeConfig" data-type="service" style="display : none;">'
+	// Paramètres->Service
+	tr += '<div class="cmdTypeConfig" data-type="service" style="display : none;">'
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="serviceName" placeholder="{{Nom du Service}}">'
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="serviceAction" placeholder="{{Action du Service}}">'
 	tr += '</div>'
@@ -115,6 +118,10 @@ function addCmdToTable(_cmd) {
 	newRow.setAttribute('data-cmd_id', init(_cmd.id))
 	document.getElementById('table_cmd').querySelector('tbody').appendChild(newRow)
 
+	if (isset(_cmd.configuration.requestType)) {
+		document.querySelector('#table_cmd tbody tr:last .cmdAttr[data-l1key="configuration"][data-l2key="cmdType"]').dispatchEvent(new Event('change'));
+	}
+
 	jeedom.eqLogic.buildSelectCmd({
 		id: document.querySelector('.eqLogicAttr[data-l1key="id"]').jeeValue(),
 		filter: { type: 'info' },
@@ -133,4 +140,23 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(fun
 	element.addEventListener('click', function () {
 		window.open(this.getAttribute("data-location"), "_blank", null);
 	});
+});
+
+document.querySelector("#table_cmd tbody").addEventListener("change", function(event) {
+	if (event.target.classList.contains("cmdAttr") && event.target.getAttribute("data-l1key") === "configuration" && event.target.getAttribute("data-l2key") === "cmdType") {
+		var tr = event.target.closest("tr");
+		var cmdTypeConfigs = tr.querySelectorAll(".cmdTypeConfig");
+		for (var i = 0; i < cmdTypeConfigs.length; i++) {
+			cmdTypeConfigs[i].style.display = "none";
+		}
+		var selectedCmdTypeConfig = tr.querySelector(".cmdTypeConfig[data-type='" + event.target.value + "']");
+		if (selectedCmdTypeConfig) {
+			selectedCmdTypeConfig.style.display = "block";
+		}
+		if (event.target.value === "command") {
+			tr.querySelector(".tdOptions").style.display = "block";
+		} else {
+			tr.querySelector(".tdOptions").style.display = "none";
+		}
+	}
 });
