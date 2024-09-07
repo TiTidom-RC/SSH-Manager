@@ -75,6 +75,11 @@ function addCmdToTable(_cmd) {
 	tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="autoRefresh" checked />{{Auto-Refresh}}</label>'
 	tr += '</div>'
 	
+	// Paramètres->RefreshCmdSelect
+	tr += '<select class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="cmdToRefresh" style="display:none;margin-top:5px;" title="{{Commande à rafraîchir}}">'
+	tr += '<option value="">{{Aucune}}</option>'
+	tr += '</select>'
+
 	// Paramètres->Service
 	tr += '<div class="cmdTypeConfig" data-type="service" style="display: none;">'
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="serviceName" placeholder="{{Nom du Service}}">'
@@ -127,6 +132,7 @@ function addCmdToTable(_cmd) {
 		},
 		success: function (result) {
 			newRow.querySelector('.cmdAttr[data-l1key="value"]').insertAdjacentHTML('beforeend', result)
+			newRow.querySelector('.cmdAttr[data-l1key="configuration][data-l2key="cmdToRefresh"]').insertAdjacentHTML('beforeend', result)
 			newRow.setJeeValues(_cmd, '.cmdAttr')
 			jeedom.cmd.changeType(newRow, init(_cmd.subType))
 		}
