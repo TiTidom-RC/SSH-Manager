@@ -196,7 +196,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 <th style="width: 400px;">{{Commande SSH}}</th>
                                 <th style="width: 150px;">{{Paramètres Cmd}}</th>
                                 <th style="min-width:260px;width:280px;">{{Options}}</th>
-                                <th style="width: 150px;">{{Etat}}</th>
+                                <th style="width: 250px;">{{Etat}}</th>
                                 <th style="min-width:80px;width:100px;">{{Actions}}</th>
                             </tr>
                         </thead>
