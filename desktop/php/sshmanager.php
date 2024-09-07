@@ -188,11 +188,11 @@ $eqLogics = eqLogic::byType($plugin->getId());
                 <div class="table-responsive">
                     <table id="table_cmd" class="table table-bordered table-condensed">
                         <thead>
-                            <tr>
+                        <tr>
                                 <th class="hidden-xs" style="min-width:50px;width:70px;">Id</th>
                                 <th style="min-width:220px;width:250px;">{{Nom}}</th>
-                                <th style="min-width:100px;width:150px;">{{Type Cmd}}</th>
-                                <th style="min-width:100px;width:150px;">{{Type}}</th>
+                                <th style="min-width:120px;width:150px;">{{Type Cmd}}</th>
+                                <th style="min-width:120px;width:150px;">{{Type}}</th>
                                 <th style="width: 400px;">{{Commande SSH}}</th>
                                 <th style="width: 150px;">{{Paramètres Cmd}}</th>
                                 <th style="min-width:260px;width:280px;">{{Options}}</th>

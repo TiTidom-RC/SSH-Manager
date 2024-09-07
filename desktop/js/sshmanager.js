@@ -63,23 +63,19 @@ function addCmdToTable(_cmd) {
 
 	// Request
 	tr += '<td>'
-	if (_cmd.logicalId != 'refresh' && (init(_cmd.type) != 'action' || init(_cmd.subType) != 'other')) {
-		tr += '<textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="ssh-command"></textarea>'
-	}
+	tr += '<textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="ssh-command"></textarea>'
 	tr += '</td>'
 
 	// Paramètres
 	tr += '<td class="tdOptions">'
 
 	// Paramètres->Auto-Refresh
-	tr += '<div class="cmdTypeConfig" data-type="command">'
-	tr += '<center>'
-	tr += '<input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="autoRefresh" checked />{{Auto-Refresh}}'
-	tr += '</center>'
+	tr += '<div class="cmdOptionRefresh">'
+	tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="autoRefresh" checked />{{Auto-Refresh}}</label>'
 	tr += '</div>'
 	
 	// Paramètres->Service
-	tr += '<div class="cmdTypeConfig" data-type="service" style="display : none;">'
+	tr += '<div class="cmdTypeConfig" data-type="service" style="display: none;">'
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="serviceName" placeholder="{{Nom du Service}}">'
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="serviceAction" placeholder="{{Action du Service}}">'
 	tr += '</div>'
@@ -145,18 +141,26 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(fun
 document.querySelector("#table_cmd tbody").addEventListener("change", function(event) {
 	if (event.target.classList.contains("cmdAttr") && event.target.getAttribute("data-l1key") === "configuration" && event.target.getAttribute("data-l2key") === "cmdType") {
 		var tr = event.target.closest("tr");
-		var cmdTypeConfigs = tr.querySelectorAll(".cmdTypeConfig");
-		for (var i = 0; i < cmdTypeConfigs.length; i++) {
-			cmdTypeConfigs[i].style.display = "none";
-		}
-		var selectedCmdTypeConfig = tr.querySelector(".cmdTypeConfig[data-type='" + event.target.value + "']");
-		if (selectedCmdTypeConfig) {
-			selectedCmdTypeConfig.style.display = "block";
-		}
-		if (event.target.value === "command") {
-			tr.querySelector(".tdOptions").style.display = "block";
+		
+		tr.querySelectorAll(".cmdTypeConfig").forEach(config => config.style.display = "none");
+
+		console.log(event.target.value);
+		if (event.target.value === "refresh" ) {
+			tr.querySelector(".cmdOptionRefresh").style.display = "none";
+			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
+		} else if (event.target.value === "command") {
+			tr.querySelector(".cmdOptionRefresh").style.display = "block";
+			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "block";
+			
+		} else if (event.target.value === "service") {
+			tr.querySelector(".cmdTypeConfig[data-type='" + event.target.value + "']").style.display = "block";
+			tr.querySelector(".cmdOptionRefresh").style.display = "block";
+			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
+			
 		} else {
-			tr.querySelector(".tdOptions").style.display = "none";
+			tr.querySelector(".cmdOptionRefresh").style.display = "block";
+			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
+			
 		}
 	}
 });
