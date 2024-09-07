@@ -420,6 +420,8 @@ class sshmanagerCmd extends cmd {
                 $cmd = sshmanagerCmd::byId($this->getValue());
                 if (is_object($cmd)) {
                     $cmd->getEqLogic()->checkAndUpdateCmd($cmd, $cmd->execute());
+                    log::add(__CLASS__, 'info', __('Refresh de la commande : ', __FILE__) . $cmd->getName());
+                    return;
                 }   
             }   
         }
