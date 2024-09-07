@@ -366,7 +366,7 @@ class sshmanager extends eqLogic {
             $refresh->setLogicalId('refresh');
             $refresh->setIsVisible(1);
             $refresh->setName(__('Rafraichir', __FILE__));
-            $refresh->setConfiguration('cmdType', 'refresh');
+            $refresh->setConfiguration('cmdType', 'refreshAll');
             $refresh->setType('action');
             $refresh->setSubType('other');
             $refresh->setEqLogic_id($this->getId());

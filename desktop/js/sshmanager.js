@@ -27,6 +27,7 @@ function addCmdToTable(_cmd) {
 	var selCmdType = '<select style="width : 120px;" class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="cmdType">'
 	selCmdType += '<option value="command">{{Commande}}</option>'
 	selCmdType += '<option value="refresh">{{Refresh}}</option>'
+	selCmdType += '<option hidden value="refreshAll">{{Refresh All}}</option>'
 	/* selCmdType += '<option value="service">{{Service}}</option>'
 	selCmdType += '<option value="checkupdates">{{Check Updates}}</option>' */
 	selCmdType += '</select>'
@@ -120,9 +121,9 @@ function addCmdToTable(_cmd) {
 	newRow.setAttribute('data-cmd_id', init(_cmd.id))
 	document.getElementById('table_cmd').querySelector('tbody').appendChild(newRow)
 
-	if (isset(_cmd.configuration.cmdType)) {
+	/* if (isset(_cmd.configuration.cmdType)) {
 		document.querySelector('#table_cmd tbody tr:last-child .cmdAttr[data-l1key="configuration"][data-l2key="cmdType"]').dispatchEvent(new Event('change'));
-	}
+	} */
 
 	jeedom.eqLogic.buildSelectCmd({
 		id: document.querySelector('.eqLogicAttr[data-l1key="id"]').jeeValue(),
@@ -168,7 +169,7 @@ document.querySelector("#table_cmd tbody").addEventListener("change", function(e
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
 			 */
 		} else {
-			tr.querySelector(".cmdOptionRefresh").style.display = "block";
+			tr.querySelector(".cmdOptionRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
 			
