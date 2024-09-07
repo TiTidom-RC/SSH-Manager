@@ -380,7 +380,7 @@ class sshmanager extends eqLogic {
         /** @var sshmanagerCmd */
         foreach ($this->getCmd('info') as $cmd) {
             if ($cmd->getConfiguration('autorefresh', 1) != 1) {
-                return;
+                continue;
             }
             try {
                 $cmd->refreshInfo();
