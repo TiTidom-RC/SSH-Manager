@@ -30,6 +30,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 ?>
 
 <div id="mod_add_sshmanager"></div>
+<div id="mod_commands"></div>
 
 <div class="row row-overflow">
     <!-- Page d'accueil du plugin -->

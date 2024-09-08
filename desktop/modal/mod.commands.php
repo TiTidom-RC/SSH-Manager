@@ -22,7 +22,7 @@ if (!isConnect('admin')) {
 
 sendVarToJS(sshmanager::CONST_TO_JS);
 
-$commandsJson = __DIR__ . '../../data/commands/commands.json';
+$commandsJson = __DIR__ . '/../../data/commands/commands.json';
 if (file_exists($commandsJson)) {
     $commandsJson = file_get_contents($commandsJson, true);
 } else {
@@ -34,7 +34,7 @@ $commands = json_decode($commandsJson, true);
 
 <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
     <div role="tabpanel" class="tab-pane active">
-        <legend><i class="fas fa-list-alt"></i> {{Commandes SSH :}}</legend>
+        <legend><i class="fas fa-list-alt"></i> {{Commandes SSH}} :</legend>
         <br />
         <div class="col-sm-12">
             <form class="form-horizontal">
@@ -42,9 +42,9 @@ $commands = json_decode($commandsJson, true);
                     <div class="form-group">
                         <label class="col-md-4 control-label">{{Commande}}</label>
                         <div class="col-md-6">
-                            <select class="form-control" id="cmdName">
+                            <select class="form-control cmdTemplate" data-l1key="cmds">
                                 <?php foreach ($commands as $command): ?>
-                                    <option value="<?php echo $command['command']; ?>"><?php echo $command['name']; ?></option>
+                                    <option value="<?php echo $command['command']; ?>"><?php echo $command['description']; ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
