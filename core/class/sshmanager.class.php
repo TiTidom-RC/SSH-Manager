@@ -314,7 +314,7 @@ class sshmanager extends eqLogic {
         if (!(isset(sshmanager::$_ssh2_client[$eqLogicID]))) {
             [$host, $port, $timeout] = $this->getConnectionData();
             [$username, $keyOrpassword] = $this->getAuthenticationData();
-            log::add(__CLASS__, 'debug', "[{$eqLogicName}][{$pid}] Creating SSH2 client for eqLogic {$eqLogicID} to {$host}");
+            log::add(__CLASS__, 'debug', "[{$eqLogicName}] Creating SSH2 client (pid: {$pid}) for eqLogic {$eqLogicID} to {$host}");
             $ssh2 = new SSH2($host, $port, $timeout);
 
             try {
@@ -327,14 +327,14 @@ class sshmanager extends eqLogic {
                 }
 
                 if (!$ssh2->isAuthenticated()) {
-                    throw new SSHConnectException("[{$eqLogicName}] Authentication failed:" . $ssh2->getLastError(), $ssh2->getLog());
+                    throw new SSHConnectException("[{$eqLogicName}] Authentication failed :: " . $ssh2->getLastError(), $ssh2->getLog());
                 }
             } catch (SSHConnectException $ex) {
-                log::add(__CLASS__, 'error', $ex->getMessage());
+                log::add(__CLASS__, 'error', '[' . $eqLogicName . '] ' . $ex->getMessage());
                 throw $ex;
             } catch (\Throwable $th) {
-                log::add(__CLASS__, 'error', "[{$eqLogicName}] General exception during connection: " . $th->getMessage() . " - log: " . $ssh2->getLog());
-                log::add(__CLASS__, 'error', "[{$eqLogicName}] log: " . $ssh2->getLog());
+                log::add(__CLASS__, 'error', "[{$eqLogicName}] General exception during connection :: " . $th->getMessage());
+                log::add(__CLASS__, 'debug', "[{$eqLogicName}] General exception log :: " . $ssh2->getLog());
                 throw $th;
             }
 
@@ -342,7 +342,7 @@ class sshmanager extends eqLogic {
 
             sshmanager::$_ssh2_client[$eqLogicID] = $ssh2;
         } else {
-            log::add(__CLASS__, 'debug', "[" . $eqLogicName . "][{$pid}] Existing SSH2 client for eqLogic {$eqLogicID}");
+            log::add(__CLASS__, 'debug', "[" . $eqLogicName . "] Existing SSH2 client (pid: {$pid}) for eqLogic {$eqLogicID}");
         }
         return sshmanager::$_ssh2_client[$eqLogicID];
     }
