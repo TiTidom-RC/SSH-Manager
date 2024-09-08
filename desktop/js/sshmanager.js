@@ -25,11 +25,9 @@ function addCmdToTable(_cmd) {
 	}
 
 	var selCmdType = '<select style="width : 120px;" class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="cmdType">'
-	selCmdType += '<option value="command">{{Commande}}</option>'
+	selCmdType += '<option value="command">{{SSH}}</option>'
 	selCmdType += '<option value="refresh">{{Refresh}}</option>'
 	selCmdType += '<option hidden value="refreshAll">{{Refresh All}}</option>'
-	/* selCmdType += '<option value="service">{{Service}}</option>'
-	selCmdType += '<option value="checkupdates">{{Check Updates}}</option>' */
 	selCmdType += '</select>'
 
 	let tr = '<tr class="cmd" data-cmd_id="' + init(_cmd.id) + '">'
@@ -46,22 +44,24 @@ function addCmdToTable(_cmd) {
 	tr += '<span class="input-group-btn"><a class="cmdAction btn btn-sm btn-default" data-l1key="chooseIcon" title="{{Choisir une icône}}"><i class="fas fa-icons"></i></a></span>'
 	tr += '<span class="cmdAttr input-group-addon roundedRight" data-l1key="display" data-l2key="icon" style="font-size:19px;padding:0 5px 0 0!important;"></span>'
 	tr += '</div>'
-	/* tr += '<select class="cmdAttr form-control input-sm" data-l1key="value" style="display:none !important;margin-top:5px;" title="{{Commande info liée}}">'
-	tr += '<option value="">{{Aucune}}</option>'
-	tr += '</select>' */
+	if (init(_cmd.logicalId) != 'refresh') {
+		tr += '<select class="cmdAttr form-control input-sm" data-l1key="value" style="display:none;margin-top:5px;" title="{{Commande info liée}}">'
+		tr += '<option value="">{{Aucune}}</option>'
+		tr += '</select>'
+	}
 	tr += '</td>'
 	
 	var displayRefresh = init(_cmd.logicalId) != 'refresh' ? 'block' : 'none'
 
 	// Type Cmd
 	tr += '<td>'
-  	tr += '<span class="cmdType" style="display: ' + displayRefresh + ';" type="' + init(_cmd.configuration.cmdType) + '" >' + selCmdType
+  	tr += '<span class="cmdType" style="display:' + displayRefresh + ';" type="' + init(_cmd.configuration.cmdType) + '" >' + selCmdType
   	tr += '</td>'
 
 	// Type
 	tr += '<td>'
-	tr += '<span class="type" style="display: none;" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>'
-	tr += '<span class="subType" style="display: ' + displayRefresh + '" subType="' + init(_cmd.subType) + '"></span>'
+	tr += '<span class="type" style="display:' + displayRefresh + ';" type="' + init(_cmd.type) + '">' + jeedom.cmd.availableType() + '</span>'
+	tr += '<span class="subType" style="display:' + displayRefresh + ';" subType="' + init(_cmd.subType) + '"></span>'
 	tr += '</td>'
 
 	// Request
@@ -73,7 +73,7 @@ function addCmdToTable(_cmd) {
 	tr += '<td class="tdOptions">'
 
 	// Paramètres->Auto-Refresh
-	tr += '<div class="cmdOptionRefresh">'
+	tr += '<div class="cmdOptionAutoRefresh">'
 	tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="autorefresh" checked />{{Auto-Refresh}}</label>'
 	tr += '</div>'
 	
@@ -123,7 +123,7 @@ function addCmdToTable(_cmd) {
 	document.getElementById('table_cmd').querySelector('tbody').appendChild(newRow)
 
 	if (isset(_cmd.configuration.cmdType)) {
-		document.querySelector('#table_cmd tbody tr:last-child .cmdAttr[data-l1key="configuration"][data-l2key="cmdType"]').dispatchEvent(new Event('change'));
+		newRow.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdType"]').dispatchEvent(new Event('change'));
 	}
 
 	jeedom.eqLogic.buildSelectCmd({
@@ -133,8 +133,8 @@ function addCmdToTable(_cmd) {
 			jeedomUtils.showAlert({ message: error.message, level: 'danger' })
 		},
 		success: function (result) {
-			/* newRow.querySelector('.cmdAttr[data-l1key="value"]').insertAdjacentHTML('beforeend', result) */
-			newRow.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').insertAdjacentHTML('beforeend', result)
+			newRow.querySelector('.cmdAttr[data-l1key="value"]')?.insertAdjacentHTML('beforeend', result)
+			newRow.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]')?.insertAdjacentHTML('beforeend', result)
 			newRow.setJeeValues(_cmd, '.cmdAttr')
 			jeedom.cmd.changeType(newRow, init(_cmd.subType))
 		}
@@ -148,39 +148,48 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(fun
 });
 
 document.getElementById('div_pageContainer').addEventListener("change", function(event) {
+	if (event.target.classList.contains("cmdAttr") && event.target.getAttribute("data-l1key") === "type") {
+		var tr = event.target.closest("tr");
+		var type = event.target.value;
+
+		if (type === "info") {
+			tr.querySelector(".cmdOptionAutoRefresh").style.display = "block";
+		} else {
+			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
+		}
+	}
+
 	if (event.target.classList.contains("cmdAttr") && event.target.getAttribute("data-l1key") === "configuration" && event.target.getAttribute("data-l2key") === "cmdType") {
 		var tr = event.target.closest("tr");
 
 		tr.querySelectorAll(".cmdTypeConfig").forEach(config => config.style.display = "none");
 
 		/* console.log(event.target.value); */
-		if (event.target.value === "refresh" ) {
+		if (event.target.value === "refreshAll") {
+			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
+			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
+			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
+		
+		} else if (event.target.value === "refresh" ) {
 			tr.querySelector(".cmdAttr[data-l1key='type']").value = "action";
 			tr.querySelector(".cmdAttr[data-l1key='type']").triggerEvent("change");
+			tr.querySelector(".type").style.display = "none";	
 			tr.querySelector(".subType").style.display = "none";
 
-			tr.querySelector(".cmdOptionRefresh").style.display = "none";
+			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "block";
 		
 		} else if (event.target.value === "command") {
-			tr.querySelector(".cmdAttr[data-l1key='type']").value = "info";
-			tr.querySelector(".cmdAttr[data-l1key='type']").triggerEvent("change");
+			tr.querySelector(".type").style.display = "block";
 			tr.querySelector(".subType").style.display = "block";
 
-			tr.querySelector(".cmdOptionRefresh").style.display = "block";
+			/* tr.querySelector(".cmdOptionAutoRefresh").style.display = "block"; */
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "block";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
 			
-		/* } else if (event.target.value === "service") {
-			tr.querySelector(".cmdTypeConfig[data-type='" + event.target.value + "']").style.display = "block";
-			tr.querySelector(".cmdOptionRefresh").style.display = "block";
-			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
-			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
-			 */
-			
 		} else {
-			tr.querySelector(".cmdOptionRefresh").style.display = "none";
+			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
 			
