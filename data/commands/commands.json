@@ -1,62 +1,32 @@
 {
-    "ls": {
-        "name": "ls",
-        "short_description": "Lists files and directories",
-        "description": "List files and directories",
-        "command": "ls"
+    "list_services": {
+        "name": "List Running Services",
+        "short_description": "List Running Services",
+        "description": "Retourne la liste des services dont l'état est 'running'",
+        "command": "sudo systemctl list-units --type=service --state=running --plain --no-legend | awk '{ print $1 }' | awk 'BEGIN {RS=\"\"}{gsub(/\n/,\",\",$0); print $0}'"
     },
-    "cd": {
-        "name": "cd",
-        "short_description": "Changes the current directory",
-        "description": "Change directory",
-        "command": "cd"
+    "nb_sys_updates": {
+        "name": "Sys Updates Number",
+        "short_description": "Number of System Updates",
+        "description": "Retourne le nombre de mises à jour en attente sur le système distant",
+        "command": "sudo apt update -qq 2>/dev/null | cut -d'.' -f1"
     },
-    "mkdir": {
-        "name": "mkdir",
-        "short_description": "Creates a new directory",
-        "description": "Create a new directory",
-        "command": "mkdir"
+    "list_sys_updates": {
+        "name": "List System Updates",
+        "short_description": "List Packages to update",
+        "description": "Retourne la liste des paquets systèmes en attente de mise à jour sur le système distant",
+        "command": "sudo apt-get -qq update; sudo apt list --upgradable -qq 2>/dev/null | cut -d'/' -f1 | awk 'BEGIN {RS=\"\"}{gsub(/\n/,\",\",$0); print $0}'"
     },
-    "rm": {
-        "name": "rm",
-        "short_description": "Removes files or directories",
-        "description": "Remove files or directories",
-        "command": "rm"
+    "restart_service": {
+        "name": "Restart Service",
+        "short_description": "Restart Service",
+        "description": "Redémarre un service sur le système distant. remplacer #service_name# par le nom du service à redémarrer",
+        "command": "sudo systemctl restart #service_name#"
     },
-    "cp": {
-        "name": "cp",
-        "short_description": "Copies files and directories",
-        "description": "Copy files and directories",
-        "command": "cp"
-    },
-    "mv": {
-        "name": "mv",
-        "short_description": "Moves or renames files and directories",
-        "description": "Move or rename files and directories",
-        "command": "mv"
-    },
-    "grep": {
-        "name": "grep",
-        "short_description": "Searches for patterns in files",
-        "description": "Search for patterns in files",
-        "command": "grep"
-    },
-    "chmod": {
-        "name": "chmod",
-        "short_description": "Changes file permissions",
-        "description": "Change file permissions",
-        "command": "chmod"
-    },
-    "chown": {
-        "name": "chown",
-        "short_description": "Changes file ownership",
-        "description": "Change file ownership",
-        "command": "chown"
-    },
-    "ssh": {
-        "name": "ssh",
-        "short_description": "Establishes a secure remote login",
-        "description": "Secure Shell remote login",
-        "command": "ssh"
+    "update_sys_no_confirm": {
+        "name": "Update System",
+        "short_description": "Update System without confirmation",
+        "description": "Met à jour le système distant sans confirmation",
+        "command": "sudo apt-get -qq update; sudo apt-get -qq upgrade -y"
     }
 }

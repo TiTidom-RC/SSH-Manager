@@ -207,8 +207,8 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 document.getElementById('div_pageContainer').addEventListener("click", function(event) {
 	if (event.target.classList.contains("btnTemplateCmds")) {
 		let tr = event.target.closest("tr");
-		let cmd = tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="ssh-command"]').value;
 		let cmdTemplate = tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="ssh-command"]');
+		let nameTemplate = tr.querySelector('.cmdAttr[data-l1key="name"]');
 
 		jeeDialog.dialog({
 			id: 'mod_commands',
@@ -226,11 +226,11 @@ document.getElementById('div_pageContainer').addEventListener("click", function(
 					callback: {
 						click: function (event) {
 							let response = jeeDialog.get('#mod_commands', 'content')
-							
 							let new_name = response.querySelector('.cmdAttr[data-l1key="name"]').value;
 							let new_cmd = response.querySelector('.cmdAttr[data-l1key="ssh-command"]').value;
 							
-							cmdTemplate.value = new_cmd;	
+							cmdTemplate.value = new_cmd;
+							nameTemplate.value = new_name;
 
 							jeedomUtils.showAlert({
 								title: "SSH Manager	- Commands",
