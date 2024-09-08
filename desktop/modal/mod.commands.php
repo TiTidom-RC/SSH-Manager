@@ -48,8 +48,8 @@ sendVarToJS('commands', $commands);
                         <div class="col-md-6">
                             <select class="form-control selectCmdTemplate" data-l1key="ssh-select">
                                 <option value="">{{Sélectionner une commande}}</option>
-                                <?php foreach ($commands as $command): ?>
-                                    <option value="<?php echo $command['name']; ?>"><?php echo $command['short_description']; ?></option>
+                                <?php foreach ($commands as $id => $command): ?>
+                                    <option value="<?php echo $id; ?>"><?php echo $command['shor_description']; ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
