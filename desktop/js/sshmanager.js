@@ -66,14 +66,14 @@ function addCmdToTable(_cmd) {
 
 	// Request
 	tr += '<td>'
-	tr += '<textarea rows="2" class="cmdAttr form-control input-sm roundedleft" data-l1key="configuration" data-l2key="ssh-command"></textarea>'
+	tr += '<textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="ssh-command"></textarea>'
 	tr += '</td>'
 
 	// Paramètres
 	tr += '<td class="tdOptions">'
 
 	// Paramètres->Templates
-    tr += '<a class="btn btn-default cursor" title="Templates de Commandes">'
+    tr += '<a style="width: 30px;" class="btn btn-default btn-xs tippied" title="Templates de Commandes">'
     tr += '<i class="fas fa-question-circle"></i>'
     tr += '</a>'
 
