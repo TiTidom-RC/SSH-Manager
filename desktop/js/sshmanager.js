@@ -213,8 +213,8 @@ document.getElementById('div_pageContainer').addEventListener("click", function(
 		jeeDialog.dialog({
 			id: 'mod_commands',
 			title: '{{Commandes SSH (SSH Manager)}}',
-			width: 800,
-			height: 550,
+			width: 850,
+			height: 600,
 			top: '10vh',
 			contentUrl: 'index.php?v=d&plugin=sshmanager&modal=mod.commands',
 			callback: function () {
