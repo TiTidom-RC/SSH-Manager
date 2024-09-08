@@ -73,9 +73,9 @@ function addCmdToTable(_cmd) {
 	tr += '<td class="tdOptions">'
 
 	// Paramètres->Templates
-    tr += '<a style="width: 30px;" class="btn btn-default btn-xs tippied" title="Templates de Commandes">'
-    tr += '<i class="fas fa-question-circle"></i>'
-    tr += '</a>'
+    tr += '<div class="cmdOptionTemplates">'
+	tr += '<a style="width: 30px;" class="btn btn-default btn-xs tippied" title="Templates de Commandes"><i class="fas fa-question-circle"></i> {{Templates}}</a>'
+	tr += '</div>'
 
 	// Paramètres->Auto-Refresh
 	tr += '<div class="cmdOptionAutoRefresh">'
@@ -174,12 +174,14 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector(".requestSSH").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
+			tr.querySelector(".cmdOptionTemplates").style.display = "none";
 		
 		} else if (event.target.value === "refresh" ) {
 			tr.querySelector(".cmdAttr[data-l1key='type']").value = "action";
 			tr.querySelector(".cmdAttr[data-l1key='type']").triggerEvent("change");
 			tr.querySelector(".type").style.display = "none";	
 			tr.querySelector(".subType").style.display = "none";
+			tr.querySelector(".cmdOptionTemplates").style.display = "none";
 
 			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
@@ -191,11 +193,13 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "block";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
+			tr.querySelector(".cmdOptionTemplates").style.display = "block";
 			
 		} else {
 			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
+			tr.querySelector(".cmdOptionTemplates").style.display = "none";
 			
 		}
 	}
