@@ -172,7 +172,6 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 		/* console.log(event.target.value); */
 		if (event.target.value === "refreshAll") {
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
-			tr.querySelector(".requestSSH").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
 			tr.querySelector('.cmdOptionTemplates').style.display = "none";
 		
