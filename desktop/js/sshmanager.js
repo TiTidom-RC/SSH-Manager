@@ -74,7 +74,7 @@ function addCmdToTable(_cmd) {
 
 	// Paramètres->Templates
     tr += '<div class="cmdOptionTemplates">'
-	tr += '<a style="width: 30px;" class="btn btn-default btn-xs tippied" title="Templates de Commandes"><i class="fas fa-question-circle"></i> {{Templates}}</a>'
+	tr += '<a class="btn btn-info btn-xs" title="Templates de Commandes"><i class="fas fa-question-circle"></i> {{Templates}}</a>'
 	tr += '</div>'
 
 	// Paramètres->Auto-Refresh
