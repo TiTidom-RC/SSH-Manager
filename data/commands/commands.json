@@ -15,7 +15,7 @@
         "name": "List System Updates",
         "short_description": "List Packages to update",
         "description": "Retourne la liste des paquets systèmes en attente de mise à jour sur le système distant",
-        "command": "sudo apt-get -qq update; sudo apt list --upgradable -qq 2>/dev/null | cut -d'/' -f1 | awk 'BEGIN {RS=\"\"}{gsub(/\n/,\",\",$0); print $0}'"
+        "command": "sudo apt-get -qq update; sudo apt list --upgradable -qq 2>/dev/null | cut -d'/' -f1 | awk 'BEGIN {RS=\"\"}{gsub(/\\n/,\",\",$0); print $0}'"
     },
     "restart_service": {
         "name": "Restart Service",
