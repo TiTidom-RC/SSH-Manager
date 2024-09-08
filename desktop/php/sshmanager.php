@@ -1,4 +1,21 @@
 <?php
+
+/* This file is part of Jeedom.
+ *
+ * Jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jeedom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
@@ -188,14 +205,16 @@ $eqLogics = eqLogic::byType($plugin->getId());
                 <div class="table-responsive">
                     <table id="table_cmd" class="table table-bordered table-condensed">
                         <thead>
-                            <tr>
-                                <th class="hidden-xs" style="min-width:50px;width:70px;">ID</th>
-                                <th style="min-width:200px;width:350px;">{{Nom}}</th>
-                                <th style="min-width:100px;width:150px;">{{Type}}</th>
-                                <th style="min-width:260px;width:280px;">{{Options}}</th>
-                                <th>{{Commande SSH}}</th>
-                                <th>{{Etat}}</th>
-                                <th style="min-width:80px;width:200px;">{{Actions}}</th>
+                        <tr>
+                                <th class="hidden-xs" style="min-width:50px;width:70px;">Id</th>
+                                <th style="min-width:220px;width:250px;">{{Nom}}</th>
+                                <th style="min-width:120px;width:150px;">{{Type}}</th>
+                                <th style="min-width:120px;width:150px;">{{Type Résultat}}</th>
+                                <th style="min-width:200px;width:400px;">{{Commande SSH}}</th>
+                                <th style="min-width:100px;width:150px;">{{Paramètres}}</th>
+                                <th style="min-width:200px;width:220px;">{{Options}}</th>
+                                <th style="min-width:150px;width:250px;">{{Etat}}</th>
+                                <th style="min-width:80px;width:100px;">{{Actions}}</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -1,5 +1,21 @@
 <?php
 
+/* This file is part of Jeedom.
+ *
+ * Jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jeedom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
@@ -131,7 +147,7 @@ class sshmanager extends eqLogic {
         if (!is_object($sshmanager)) {
             throw new Exception('Invalid host Id');
         }
-        log::add(__CLASS__, 'debug', "Check SSH Connection on {$sshmanager->getName()}");
+        log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Check SSH Connection");
         return $sshmanager->internalCheckConnection();
     }
 
@@ -148,7 +164,7 @@ class sshmanager extends eqLogic {
         if (!is_object($sshmanager)) {
             throw new Exception('Invalid host Id');
         }
-        log::add(__CLASS__, 'debug', "executeCmds on {$sshmanager->getName()}");
+        log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] executeCmds");
 
         if (is_array($commands)) {
             $results = [];
@@ -208,7 +224,7 @@ class sshmanager extends eqLogic {
         $timeout = $this->getConfiguration(self::CONFIG_TIMEOUT, self::DEFAULT_TIMEOUT);
 
         if ($host == "") {
-            log::add(__CLASS__, 'error', 'Host name or IP not defined');
+            log::add(__CLASS__, 'error', '[' . $this->getName() .  '] Host name or IP not defined');
             throw new RuntimeException(__('Adresse IP ou nom d\'hôte non configuré', __FILE__));
         }
 
@@ -220,7 +236,7 @@ class sshmanager extends eqLogic {
         /** @var string */
         $username = $this->getConfiguration(self::CONFIG_USERNAME);
         if ($username == "") {
-            log::add(__CLASS__, 'error', 'username not defined');
+            log::add(__CLASS__, 'error', '[' . $this->getName() .  '] Username not defined');
             throw new RuntimeException(__('Nom d\'utilisateur non configuré', __FILE__));
         }
 
@@ -231,7 +247,7 @@ class sshmanager extends eqLogic {
             case self::CONFIG_PASSWORD:
                 $keyOrpassword = $this->getConfiguration(self::CONFIG_PASSWORD);
                 if ($keyOrpassword == "") {
-                    log::add(__CLASS__, 'error', 'Password not defined');
+                    log::add(__CLASS__, 'error', '[' . $this->getName() .  '] Password not defined');
                     throw new RuntimeException(__('Mot de passe non configuré', __FILE__));
                 }
                 break;
@@ -239,13 +255,13 @@ class sshmanager extends eqLogic {
                 $sshkey = $this->getConfiguration(self::CONFIG_SSH_KEY);
                 $sshpassphrase = $this->getConfiguration(self::CONFIG_SSH_PASSPHRASE);
                 if ($sshkey == "") {
-                    log::add(__CLASS__, 'error', 'SSH key not defined');
+                    log::add(__CLASS__, 'error', '[' . $this->getName() .  '] SSH Key not defined');
                     throw new RuntimeException(__('Clé SSH non configurée', __FILE__));
                 }
                 try {
                     $keyOrpassword = PublicKeyLoader::load($sshkey, $sshpassphrase);
                 } catch (\phpseclib3\Exception\NoKeyLoadedException $ex) {
-                    log::add(__CLASS__, 'error', $ex->getMessage());
+                    log::add(__CLASS__, 'error', '[' . $this->getName() .  '] ' . $ex->getMessage());
                     throw $ex;
                 }
 
@@ -267,10 +283,10 @@ class sshmanager extends eqLogic {
 
         $sftp = new SFTP($host, $port, $timeout);
         if ($sftp->login($username, $keyOrpassword)) {
-            log::add(__CLASS__, 'debug', "send file to {$host}");
+            log::add(__CLASS__, 'debug', "[{$this->getName()}] Send file to {$host}");
             return $sftp->put($remoteFile, $localFile, SFTP::SOURCE_LOCAL_FILE);
         }
-        log::add(__CLASS__, 'debug', "login failed, could not put file {$remoteFile}");
+        log::add(__CLASS__, 'debug', "[{$this->getName()}] login failed, could not put file {$remoteFile}");
         return false;
     }
 
@@ -280,10 +296,10 @@ class sshmanager extends eqLogic {
 
         $sftp = new SFTP($host, $port, $timeout);
         if ($sftp->login($username, $keyOrpassword)) {
-            log::add(__CLASS__, 'debug', "get file from {$host}");
+            log::add(__CLASS__, 'debug', "[{$this->getName()}] Get file from {$host}");
             return $sftp->get($remoteFile, $localFile);
         }
-        log::add(__CLASS__, 'debug', "login failed, could not get file {$remoteFile}");
+        log::add(__CLASS__, 'debug', "[{$this->getName()}] Login failed, could not get file {$remoteFile}");
         return false;
     }
 
@@ -292,40 +308,41 @@ class sshmanager extends eqLogic {
 
     private function getSSH2Client() {
         $eqLogicID = $this->getId();
+        $eqLogicName = $this->getName();
         $pid = getmypid();
 
         if (!(isset(sshmanager::$_ssh2_client[$eqLogicID]))) {
             [$host, $port, $timeout] = $this->getConnectionData();
             [$username, $keyOrpassword] = $this->getAuthenticationData();
-            log::add(__CLASS__, 'debug', "[{$pid}] Creating SSH2 client for eqLogic {$eqLogicID} to {$host}");
+            log::add(__CLASS__, 'debug', "[{$eqLogicName}][{$pid}] Creating SSH2 client for eqLogic {$eqLogicID} to {$host}");
             $ssh2 = new SSH2($host, $port, $timeout);
 
             try {
                 if (!$ssh2->login($username, $keyOrpassword)) {
-                    throw new SSHConnectException("[{$this->getName()}] Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.", $ssh2->getLog());
+                    throw new SSHConnectException("[{$eqLogicName}] Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.", $ssh2->getLog());
                 }
 
                 if (!$ssh2->isConnected()) {
-                    throw new SSHConnectException("[{$this->getName()}] Connection failed:" . $ssh2->getLastError(), $ssh2->getLog());
+                    throw new SSHConnectException("[{$eqLogicName}] Connection failed:" . $ssh2->getLastError(), $ssh2->getLog());
                 }
 
                 if (!$ssh2->isAuthenticated()) {
-                    throw new SSHConnectException("[{$this->getName()}] Authentication failed:" . $ssh2->getLastError(), $ssh2->getLog());
+                    throw new SSHConnectException("[{$eqLogicName}] Authentication failed:" . $ssh2->getLastError(), $ssh2->getLog());
                 }
             } catch (SSHConnectException $ex) {
                 log::add(__CLASS__, 'error', $ex->getMessage());
                 throw $ex;
             } catch (\Throwable $th) {
-                log::add(__CLASS__, 'error', "[{$this->getName()}] General exception during connection: " . $th->getMessage() . " - log: " . $ssh2->getLog());
-                log::add(__CLASS__, 'error', "[{$this->getName()}] log: " . $ssh2->getLog());
+                log::add(__CLASS__, 'error', "[{$eqLogicName}] General exception during connection: " . $th->getMessage() . " - log: " . $ssh2->getLog());
+                log::add(__CLASS__, 'error', "[{$eqLogicName}] log: " . $ssh2->getLog());
                 throw $th;
             }
 
-            log::add(__CLASS__, 'debug', "[{$this->getName()}] Connected and authenticated");
+            log::add(__CLASS__, 'debug', "[{$eqLogicName}] Connected and authenticated");
 
             sshmanager::$_ssh2_client[$eqLogicID] = $ssh2;
         } else {
-            log::add(__CLASS__, 'debug', "[{$pid}] Existing SSH2 client for eqLogic {$eqLogicID}");
+            log::add(__CLASS__, 'debug', "[" . $eqLogicName . "][{$pid}] Existing SSH2 client for eqLogic {$eqLogicID}");
         }
         return sshmanager::$_ssh2_client[$eqLogicID];
     }
@@ -348,7 +365,7 @@ class sshmanager extends eqLogic {
         $ssh2 = $this->getSSH2Client();
         $result = $ssh2->exec($command);
         //TODO: '\n' should be escaped from $result before logging
-        log::add(__CLASS__, 'debug', "SSH exec:{$command} => {$result}");
+        log::add(__CLASS__, 'debug', '['  . $this->getName() .  "] SSH exec :: {$command} => {$result}");
         return $result;
     }
 
@@ -365,6 +382,7 @@ class sshmanager extends eqLogic {
             $refresh->setLogicalId('refresh');
             $refresh->setIsVisible(1);
             $refresh->setName(__('Rafraichir', __FILE__));
+            $refresh->setConfiguration('cmdType', 'refreshAll');
             $refresh->setType('action');
             $refresh->setSubType('other');
             $refresh->setEqLogic_id($this->getId());
@@ -378,10 +396,13 @@ class sshmanager extends eqLogic {
     public function refreshAllInfo() {
         /** @var sshmanagerCmd */
         foreach ($this->getCmd('info') as $cmd) {
+            if ($cmd->getConfiguration('autorefresh', 1) != 1) {
+                continue;
+            }
             try {
                 $cmd->refreshInfo();
             } catch (Exception $exc) {
-                log::add(__CLASS__, 'error', sprintf(__("Erreur pour %s: %s", __FILE__), $cmd->getHumanName(), $exc->getMessage()));
+                log::add(__CLASS__, 'error', sprintf(__("[%s] Erreur :: %s", __FILE__), $cmd->getHumanName(), $exc->getMessage()));
             }
         }
     }
@@ -413,6 +434,16 @@ class sshmanagerCmd extends cmd {
             $eqLogic = $this->getEqLogic();
             $eqLogic->refreshAllInfo();
             return;
+        } elseif ($this->getConfiguration('cmdType') == 'refresh') {
+            if ($this->getConfiguration('cmdToRefresh') != '') {
+                $cmd = cmd::byId($this->getConfiguration('cmdToRefresh'));
+                if (is_object($cmd)) {
+                    $eqLogic = $this->getEqLogic();
+                    $cmd->refreshInfo();
+                    log::add(get_class($eqLogic), 'info', '[' . $eqLogic->getName() . '] ' . __('Refresh de la commande : ', __FILE__) . $cmd->getName());
+                    return;
+                }   
+            }   
         }
 
         $command = $this->getConfiguration('ssh-command');
