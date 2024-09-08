@@ -30,8 +30,8 @@ if (file_exists($commandsJson)) {
     log::add('sshmanager', 'error', '[TemplateCmds] Error :: json file not found');
     throw new Exception('Error :: json file not found');
 }
-$commands = json_decode($commandsJson, true);
 
+$commands = json_decode($commandsJson, true);
 sendVarToJS('commands', $commands);
 
 ?>
@@ -44,8 +44,8 @@ sendVarToJS('commands', $commands);
             <form class="form-horizontal">
                 <fieldset>
                     <div class="form-group">
-                        <label class="col-md-2 control-label">{{Liste des commandes}}</label>
-                        <div class="col-md-4">
+                        <label class="col-md-3 control-label">{{Liste des commandes}}</label>
+                        <div class="col-md-6">
                             <select class="form-control selectCmdTemplate" data-l1key="ssh-select">
                                 <option value="">{{Sélectionner une commande}}</option>
                                 <?php foreach ($commands as $command): ?>
@@ -56,20 +56,20 @@ sendVarToJS('commands', $commands);
                     </div>
                     <br />
                     <div class="form-group">
-                        <label class="col-md-2 control-label">{{Nom}}</label>
+                        <label class="col-md-3 control-label">{{Nom}}</label>
                         <div class="col-md-4">
                             <input type="text" class="cmdAttr form-control" data-l1key="name" placeholder="{{Nom}}" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-2 control-label">{{Description}}</label>
+                        <label class="col-md-3 control-label">{{Description}}</label>
                         <div class="col-md-8">
                             <textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="description" placeholder="{{Description}}"></textarea>
                         </div>
                     </div>
                     <br />
                     <div class="form-group">
-                        <label class="col-md-2 control-label">{{Commande}}</label>
+                        <label class="col-md-3 control-label">{{Commande}}</label>
                         <div class="col-md-8">
                             <textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="ssh-command" placeholder="{{Commande SSH}}"></textarea>
                         </div>
