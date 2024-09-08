@@ -44,32 +44,33 @@ sendVarToJS('commands', $commands);
             <form class="form-horizontal">
                 <fieldset>
                     <div class="form-group">
-                        <label class="col-md-4 control-label">{{Commande}}</label>
-                        <div class="col-md-6">
+                        <label class="col-md-2 control-label">{{Liste des commandes}}</label>
+                        <div class="col-md-4">
                             <select class="form-control selectCmdTemplate" data-l1key="ssh-select">
                                 <option value="">{{Sélectionner une commande}}</option>
                                 <?php foreach ($commands as $command): ?>
-                                    <option value="<?php echo $command['command']; ?>"><?php echo $command['description']; ?></option>
+                                    <option value="<?php echo $command['name']; ?>"><?php echo $command['short_description']; ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
                     <br />
                     <div class="form-group">
-                        <label class="col-md-4 control-label">{{Nom}}</label>
-                        <div class="col-md-6">
+                        <label class="col-md-2 control-label">{{Nom}}</label>
+                        <div class="col-md-4">
                             <input type="text" class="cmdAttr form-control" data-l1key="name" placeholder="{{Nom}}" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4 control-label">{{Description}}</label>
+                        <label class="col-md-2 control-label">{{Description}}</label>
                         <div class="col-md-8">
                             <textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="description" placeholder="{{Description}}"></textarea>
                         </div>
                     </div>
+                    <br />
                     <div class="form-group">
-                        <label class="col-md-4 control-label">{{Commande}}</label>
-                        <div class="col-md-10">
+                        <label class="col-md-2 control-label">{{Commande}}</label>
+                        <div class="col-md-8">
                             <textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="ssh-command" placeholder="{{Commande SSH}}"></textarea>
                         </div>
                     </div>

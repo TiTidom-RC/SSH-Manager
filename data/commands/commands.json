@@ -1,51 +1,61 @@
 {
     "ls": {
         "name": "ls",
+        "short_description": "Lists files and directories",
         "description": "List files and directories",
         "command": "ls"
     },
     "cd": {
         "name": "cd",
+        "short_description": "Changes the current directory",
         "description": "Change directory",
         "command": "cd"
     },
     "mkdir": {
         "name": "mkdir",
+        "short_description": "Creates a new directory",
         "description": "Create a new directory",
         "command": "mkdir"
     },
     "rm": {
         "name": "rm",
+        "short_description": "Removes files or directories",
         "description": "Remove files or directories",
         "command": "rm"
     },
     "cp": {
         "name": "cp",
+        "short_description": "Copies files and directories",
         "description": "Copy files and directories",
         "command": "cp"
     },
     "mv": {
         "name": "mv",
+        "short_description": "Moves or renames files and directories",
         "description": "Move or rename files and directories",
         "command": "mv"
     },
     "grep": {
         "name": "grep",
+        "short_description": "Searches for patterns in files",
         "description": "Search for patterns in files",
         "command": "grep"
     },
     "chmod": {
         "name": "chmod",
+        "short_description": "Changes file permissions",
         "description": "Change file permissions",
         "command": "chmod"
     },
     "chown": {
         "name": "chown",
+        "short_description": "Changes file ownership",
         "description": "Change file ownership",
         "command": "chown"
     },
     "ssh": {
         "name": "ssh",
+        "short_description": "Establishes a secure remote login",
         "description": "Secure Shell remote login",
         "command": "ssh"
     }

@@ -228,14 +228,13 @@ document.getElementById('div_pageContainer').addEventListener("click", function(
 							let response = jeeDialog.get('#mod_commands', 'content')
 							
 							let new_name = response.querySelector('.cmdAttr[data-l1key="name"]').value;
-							let new_description = response.querySelector('.cmdAttr[data-l1key="description"]').value;
 							let new_cmd = response.querySelector('.cmdAttr[data-l1key="ssh-command"]').value;
 							
 							cmdTemplate.value = new_cmd;	
 
 							jeedomUtils.showAlert({
 								title: "SSH Manager	- Commands",
-								message: "OK (Name :: Description :: Command) :: " + new_name + " :: " + new_description + " :: " + new_cmd,
+								message: "Selected Command (Name, Command) :: " + new_name + " :: " + new_cmd,
 								level: 'success',
 								emptyBefore: false
 							});
