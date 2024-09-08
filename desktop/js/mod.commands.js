@@ -16,14 +16,15 @@
 
 document.querySelector('.selectCmdTemplate[data-l1key="ssh-select"').addEventListener("change", function(event) {
     var tr = event.target.closest("#mod_commands");
-          var value = event.target.value;
+    var value = event.target.value;
   
-      console.log(value);
-      console.log(commands[value]);
-      console.log(commands[value]["name"]);
-      console.log(commands[value]["description"]);
-      console.log(commands[value]["command"]);
-      tr.querySelector('.cmdAttr[data-l1key="name"]').value = commands[value]["name"];
-      tr.querySelector('.cmdAttr[data-l1key="description"]').value = commands[value]["description"];
-      tr.querySelector('.cmdAttr[data-l1key="ssh-command"]').value = commands[value]["command"];
+    /* console.log(value);
+    console.log(commands[value]);
+    console.log(commands[value]["name"]);
+    console.log(commands[value]["description"]);
+    console.log(commands[value]["command"]); */
+
+    tr.querySelector('.cmdAttr[data-l1key="name"]').value = commands[value]["name"];
+    tr.querySelector('.cmdAttr[data-l1key="description"]').value = commands[value]["description"];
+    tr.querySelector('.cmdAttr[data-l1key="ssh-command"]').value = commands[value]["command"];
   });

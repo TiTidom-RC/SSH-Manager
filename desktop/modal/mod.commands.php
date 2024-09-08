@@ -40,7 +40,7 @@ sendVarToJS('commands', $commands);
     <div role="tabpanel" class="tab-pane active">
         <legend><i class="fas fa-list-alt"></i> {{Commandes SSH}} :</legend>
         <br />
-        <div class="col-sm-12">
+        <div class="col-sm-14">
             <form class="form-horizontal">
                 <fieldset>
                     <div class="form-group">
@@ -64,15 +64,15 @@ sendVarToJS('commands', $commands);
                     <br />
                     <div class="form-group">
                         <label class="col-md-3 control-label">{{Description}}</label>
-                        <div class="col-md-8">
+                        <div class="col-md-10">
                             <textarea rows="4" class="cmdAttr form-control input-sm" data-l1key="description" placeholder="{{Description}}"></textarea>
                         </div>
                     </div>
                     <br />
                     <div class="form-group">
                         <label class="col-md-3 control-label">{{Commande}}</label>
-                        <div class="col-md-8">
-                            <textarea rows="4" class="cmdAttr form-control input-sm" data-l1key="ssh-command" placeholder="{{Commande SSH}}"></textarea>
+                        <div class="col-md-10">
+                            <textarea rows="6" class="cmdAttr form-control input-sm" data-l1key="ssh-command" placeholder="{{Commande SSH}}"></textarea>
                         </div>
                     </div>
                 </fieldset>
