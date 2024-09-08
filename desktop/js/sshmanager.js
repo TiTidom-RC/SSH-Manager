@@ -66,7 +66,15 @@ function addCmdToTable(_cmd) {
 
 	// Request
 	tr += '<td>'
-	tr += '<textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="ssh-command"></textarea>'
+	tr += '<div class="input-group requestSSH">'
+	tr += '<textarea rows="2" class="cmdAttr form-control input-sm roundedleft" data-l1key="configuration" data-l2key="ssh-command"></textarea>'
+	tr += '<span class="input-group-btn">'
+    tr += '<a class="btn btn-default cursor roundedRight" title="Assistant de Commandes">'
+    tr += '<i class="fas fa-question-circle"></i>'
+    tr += '</a>'
+    tr += '</span>'
+	tr += '</div>'
+	
 	tr += '</td>'
 
 	// Paramètres
@@ -167,7 +175,8 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 		/* console.log(event.target.value); */
 		if (event.target.value === "refreshAll") {
 			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
-			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
+			// tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
+			tr.querySelector(".requestSSH").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
 		
 		} else if (event.target.value === "refresh" ) {
@@ -177,7 +186,8 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 			tr.querySelector(".subType").style.display = "none";
 
 			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
-			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
+			// tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
+			tr.querySelector(".requestSSH").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "block";
 		
 		} else if (event.target.value === "command") {
@@ -185,12 +195,14 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 			tr.querySelector(".subType").style.display = "block";
 
 			/* tr.querySelector(".cmdOptionAutoRefresh").style.display = "block"; */
-			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "block";
+			// tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "block";
+			tr.querySelector(".requestSSH").style.display = "block";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
 			
 		} else {
 			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
-			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
+			// tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
+			tr.querySelector(".requestSSH").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
 			
 		}
