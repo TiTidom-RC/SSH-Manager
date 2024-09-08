@@ -45,7 +45,7 @@ sendVarToJS('commands', $commands);
                 <fieldset>
                     <div class="form-group">
                         <label class="col-md-3 control-label">{{Liste des commandes}}</label>
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <select class="form-control selectCmdTemplate" data-l1key="ssh-select">
                                 <option value="">{{Sélectionner une commande}}</option>
                                 <?php foreach ($commands as $id => $command): ?>
@@ -64,14 +64,14 @@ sendVarToJS('commands', $commands);
                     <br />
                     <div class="form-group">
                         <label class="col-md-3 control-label">{{Description}}</label>
-                        <div class="col-md-10">
+                        <div class="col-md-9">
                             <textarea rows="4" class="cmdAttr form-control input-sm" data-l1key="description" placeholder="{{Description}}"></textarea>
                         </div>
                     </div>
                     <br />
                     <div class="form-group">
                         <label class="col-md-3 control-label">{{Commande}}</label>
-                        <div class="col-md-10">
+                        <div class="col-md-9">
                             <textarea rows="6" class="cmdAttr form-control input-sm" data-l1key="ssh-command" placeholder="{{Commande SSH}}"></textarea>
                         </div>
                     </div>
