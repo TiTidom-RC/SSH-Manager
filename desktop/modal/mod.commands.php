@@ -32,6 +32,8 @@ if (file_exists($commandsJson)) {
 }
 $commands = json_decode($commandsJson, true);
 
+sendVarToJS('commands', $commands);
+
 ?>
 
 <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
@@ -61,7 +63,7 @@ $commands = json_decode($commandsJson, true);
                     <div class="form-group">
                         <label class="col-md-4 control-label">{{Description}}</label>
                         <div class="col-md-6">
-                            <textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="description" placeholder="{{Description}}></textarea>
+                            <textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="description" placeholder="{{Description}}"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
