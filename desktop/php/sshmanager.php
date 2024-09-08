@@ -1,27 +1,35 @@
 <?php
+
+/* This file is part of Jeedom.
+ *
+ * Jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jeedom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
 
 $plugin = plugin::byId('sshmanager');
 sendVarToJS([
-    'eqType' => $plugin->getId(),
-    'CONFIG_HOST' => sshmanager::CONFIG_HOST,
-    'CONFIG_PORT' => sshmanager::CONFIG_PORT,
-    'CONFIG_TIMEOUT' => sshmanager::CONFIG_TIMEOUT,
-    'CONFIG_USERNAME' => sshmanager::CONFIG_USERNAME,
-    'CONFIG_PASSWORD' => sshmanager::CONFIG_PASSWORD,
-    'CONFIG_SSH_KEY' => sshmanager::CONFIG_SSH_KEY,
-    'CONFIG_SSH_PASSPHRASE' => sshmanager::CONFIG_SSH_PASSPHRASE,
-    'CONFIG_AUTH_METHOD' => sshmanager::CONFIG_AUTH_METHOD,
-    'AUTH_METHOD_PASSWORD' => sshmanager::AUTH_METHOD_PASSWORD,
-    'AUTH_METHOD_SSH_KEY' => sshmanager::AUTH_METHOD_SSH_KEY,
-    'AUTH_METHOD_AGENT' => sshmanager::AUTH_METHOD_AGENT
+    'eqType' => $plugin->getId()
 ]);
+sendVarToJS(sshmanager::CONST_TO_JS);
+
 $eqLogics = eqLogic::byType($plugin->getId());
 ?>
 
-<div id="mod_add_sshmanager" ></div>
+<div id="mod_add_sshmanager"></div>
 
 <div class="row row-overflow">
     <!-- Page d'accueil du plugin -->
@@ -182,7 +190,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
                             <div class="form-group">
                                 <label class="col-sm-4 control-label">{{Description}}</label>
                                 <div class="col-sm-6">
-                                    <textarea class="form-control eqLogicAttr" rows="10" data-l1key="comment"></textarea>
+                                    <textarea class="form-control eqLogicAttr" rows="5" data-l1key="comment"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -192,17 +200,21 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
             <!-- Onglet des commandes de l'équipement -->
             <div role="tabpanel" class="tab-pane" id="commandtab">
+                <a class="btn btn-default btn-sm pull-right cmdAction" data-action="add" style="margin-top:5px;"><i class="fas fa-plus-circle"></i> {{Ajouter une commande}}</a>
                 <br><br>
                 <div class="table-responsive">
                     <table id="table_cmd" class="table table-bordered table-condensed">
                         <thead>
-                            <tr>
-                                <th class="hidden-xs" style="min-width:50px;width:70px;">{{Id}}</th>
+                        <tr>
+                                <th class="hidden-xs" style="min-width:50px;width:70px;">Id</th>
                                 <th style="min-width:220px;width:250px;">{{Nom}}</th>
-                                <th style="min-width:100px;">{{Options}}</th>
-                                <th style="min-width:100px;width:150px;">{{Type}}</th>
-                                <th style="min-width:250px;">{{Etat}}</th>
-                                <th style="min-width:130px;width:150px;">{{Actions}}</th>
+                                <th style="min-width:120px;width:150px;">{{Type}}</th>
+                                <th style="min-width:120px;width:150px;">{{Type Résultat}}</th>
+                                <th style="min-width:200px;width:400px;">{{Commande SSH}}</th>
+                                <th style="min-width:100px;width:150px;">{{Paramètres}}</th>
+                                <th style="min-width:200px;width:220px;">{{Options}}</th>
+                                <th style="min-width:150px;width:250px;">{{Etat}}</th>
+                                <th style="min-width:80px;width:100px;">{{Actions}}</th>
                             </tr>
                         </thead>
                         <tbody>

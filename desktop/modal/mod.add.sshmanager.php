@@ -1,21 +1,26 @@
 <?php
+
+/* This file is part of Jeedom.
+ *
+ * Jeedom is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Jeedom is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 if (!isConnect('admin')) {
     throw new Exception('{{401 - Accès non autorisé}}');
 }
 
-sendVarToJS([
-    'CONFIG_HOST' => sshmanager::CONFIG_HOST,
-    'CONFIG_PORT' => sshmanager::CONFIG_PORT,
-    'CONFIG_TIMEOUT' => sshmanager::CONFIG_TIMEOUT,
-    'CONFIG_USERNAME' => sshmanager::CONFIG_USERNAME,
-    'CONFIG_PASSWORD' => sshmanager::CONFIG_PASSWORD,
-    'CONFIG_SSH_KEY' => sshmanager::CONFIG_SSH_KEY,
-    'CONFIG_SSH_PASSPHRASE' => sshmanager::CONFIG_SSH_PASSPHRASE,
-    'CONFIG_AUTH_METHOD' => sshmanager::CONFIG_AUTH_METHOD,
-    'AUTH_METHOD_PASSWORD' => sshmanager::AUTH_METHOD_PASSWORD,
-    'AUTH_METHOD_SSH_KEY' => sshmanager::AUTH_METHOD_SSH_KEY,
-    'AUTH_METHOD_AGENT' => sshmanager::AUTH_METHOD_AGENT
-]);
+sendVarToJS(sshmanager::CONST_TO_JS);
 
 ?>
 
@@ -36,18 +41,10 @@ sendVarToJS([
                     <br />
                     <?php include_file('desktop', 'params.sshmanager.inc', 'php', 'sshmanager'); ?>
                     <br />
-                    <!-- <div class='form-group'>
-                        <label class="col-md-4 control-label">{{Sauvegarder}}
-                            <sup><i class="fas fa-question-circle tooltips" title="{{Sauvegarder les informations de connexion SSH}}"></i></sup>
-                        </label>
-                        <div class="col-lg-4">
-                            <a class="btn btn-success btn-xm" onclick="saveNewSSH()"><i id="btnSaveNewSSH" class="fas fa-save"></i> {{Sauvegarder Hôte SSH}}</a>
-                        </div>
-                    </div> -->
                 </fieldset>
             </form>
         </div>
-        
+
     </div>
 </div>
 
