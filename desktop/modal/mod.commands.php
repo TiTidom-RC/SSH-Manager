@@ -63,13 +63,13 @@ sendVarToJS('commands', $commands);
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">{{Description}}</label>
-                        <div class="col-md-6">
+                        <div class="col-md-8">
                             <textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="description" placeholder="{{Description}}"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label">{{Commande}}</label>
-                        <div class="col-md-6">
+                        <div class="col-md-10">
                             <textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="ssh-command" placeholder="{{Commande SSH}}"></textarea>
                         </div>
                     </div>
