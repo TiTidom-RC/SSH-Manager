@@ -3,7 +3,7 @@
         "name": "List Running Services",
         "short_description": "List Running Services",
         "description": "Retourne la liste des services dont l'état est 'running'",
-        "command": "sudo systemctl list-units --type=service --state=running --plain --no-legend | awk '{ print $1 }' | awk 'BEGIN {RS=\"\"}{gsub(/\n/,\",\",$0); print $0}'"
+        "command": "sudo systemctl list-units --type=service --state=running --plain --no-legend | awk '{ print $1 }' | awk 'BEGIN {RS=\"\"}{gsub(/\\n/,\",\",$0); print $0}'"
     },
     "nb_sys_updates": {
         "name": "Sys Updates Number",
