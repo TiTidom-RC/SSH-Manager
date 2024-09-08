@@ -231,6 +231,8 @@ document.getElementById('div_pageContainer').addEventListener("click", function(
 							let new_description = response.querySelector('.cmdAttr[data-l1key="description"]').value;
 							let new_cmd = response.querySelector('.cmdAttr[data-l1key="ssh-command"]').value;
 							
+							cmdTemplate.value = new_cmd;	
+
 							jeedomUtils.showAlert({
 								title: "SSH Manager	- Commands",
 								message: "OK (Name :: Description :: Command) :: " + new_name + " :: " + new_description + " :: " + new_cmd,
