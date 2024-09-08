@@ -1,0 +1,54 @@
+{
+    "commands": [
+        {
+            "name": "ls",
+            "description": "List files and directories",
+            "command": "ls"
+        },
+        {
+            "name": "cd",
+            "description": "Change directory",
+            "command": "cd"
+        },
+        {
+            "name": "mkdir",
+            "description": "Create a new directory",
+            "command": "mkdir"
+        },
+        {
+            "name": "rm",
+            "description": "Remove files or directories",
+            "command": "rm"
+        },
+        {
+            "name": "cp",
+            "description": "Copy files and directories",
+            "command": "cp"
+        },
+        {
+            "name": "mv",
+            "description": "Move or rename files and directories",
+            "command": "mv"
+        },
+        {
+            "name": "grep",
+            "description": "Search for patterns in files",
+            "command": "grep"
+        },
+        {
+            "name": "chmod",
+            "description": "Change file permissions",
+            "command": "chmod"
+        },
+        {
+            "name": "chown",
+            "description": "Change file ownership",
+            "command": "chown"
+        },
+        {
+            "name": "ssh",
+            "description": "Secure Shell remote login",
+            "command": "ssh"
+        }
+    ]
+}

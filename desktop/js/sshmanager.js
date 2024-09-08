@@ -74,7 +74,7 @@ function addCmdToTable(_cmd) {
 
 	// Paramètres->Templates
     tr += '<div class="cmdOptionTemplates">'
-	tr += '<a class="btn btn-info btn-xs" title="Templates de Commandes"><i class="fas fa-question-circle"></i> {{Commandes}}</a>'
+	tr += '<a class="btn btn-info btn-xs btnTemplateCmds" title="Templates de Commandes"><i class="fas fa-question-circle"></i> {{Commandes}}</a>'
 	tr += '</div>'
 
 	// Paramètres->Auto-Refresh
@@ -202,4 +202,54 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 			
 		}
 	}
+});
+
+document.querySelector('.btnTemplateCmds').addEventListener('click', function () {
+    jeeDialog.dialog({
+        id: 'mod_commands',
+        title: '{{Commandes SSH (SSH Manager)}}',
+        width: 750,
+        height: 650,
+        top: '10vh',
+        contentUrl: 'index.php?v=d&plugin=sshmanager&modal=mod.commands',
+        callback: function () {
+        },
+        buttons: {
+            confirm: {
+                label: '{{OK}}',
+                className: 'success',
+                callback: {
+                    click: function (event) {
+                        let response = jeeDialog.get('#mod_commands', 'content')
+                        
+                        let new_name = response.querySelector('.eqLogicAttr[data-l1key="name"]').value
+                        let new_command = response.querySelector('.eqLogicAttr[data-l1key="command"]').value
+						
+						jeedomUtils.showAlert({
+                            title: "SSH Manager	- Commands",
+                            message: "OK :: Name=" + new_name + " :: Command= " + new_command,
+                            level: 'success',
+                            emptyBefore: false
+                        });
+						jeeDialog.get('#mod_commands').destroy()
+                    }
+                }
+            },
+            cancel: {
+                label: '{{Annuler}}',
+                className: 'warning',
+                callback: {
+                    click: function (event) {
+                        jeedomUtils.showAlert({
+                            title: "SSH Manager	- Commands",
+                            message: "Cancel :: Action annulée",
+                            level: 'warning',
+                            emptyBefore: false
+                        });
+                        jeeDialog.get('#mod_commands').destroy()
+                    }
+                }
+            }
+        }
+    })
 });
