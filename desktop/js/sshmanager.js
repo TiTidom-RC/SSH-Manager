@@ -210,53 +210,53 @@ document.getElementById('div_pageContainer').addEventListener("click", function(
 		let cmd = tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="ssh-command"]').value;
 		let cmdTemplate = tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="ssh-command"]');
 
-		if (cmdTemplate.value === "") {
-			jeeDialog.dialog({
-				id: 'mod_commands',
-				title: '{{Commandes SSH (SSH Manager)}}',
-				width: 750,
-				height: 650,
-				top: '10vh',
-				contentUrl: 'index.php?v=d&plugin=sshmanager&modal=mod.commands',
-				callback: function () {
-				},
-				buttons: {
-					confirm: {
-						label: '{{OK}}',
-						className: 'success',
-						callback: {
-							click: function (event) {
-								let response = jeeDialog.get('#mod_commands', 'content')
-								
-								let new_name = response.querySelector('.cmdTemplate[data-l1key="cmds"]').value
-								
-								jeedomUtils.showAlert({
-									title: "SSH Manager	- Commands",
-									message: "OK :: Command=" + new_name,
-									level: 'success',
-									emptyBefore: false
-								});
-								jeeDialog.get('#mod_commands').destroy()
-							}
+		jeeDialog.dialog({
+			id: 'mod_commands',
+			title: '{{Commandes SSH (SSH Manager)}}',
+			width: 750,
+			height: 650,
+			top: '10vh',
+			contentUrl: 'index.php?v=d&plugin=sshmanager&modal=mod.commands',
+			callback: function () {
+			},
+			buttons: {
+				confirm: {
+					label: '{{OK}}',
+					className: 'success',
+					callback: {
+						click: function (event) {
+							let response = jeeDialog.get('#mod_commands', 'content')
+							
+							let new_name = response.querySelector('.cmdAttr[data-l1key="name"]').value;
+							let new_description = response.querySelector('.cmdAttr[data-l1key="description"]').value;
+							let new_cmd = response.querySelector('.cmdAttr[data-l1key="ssh-command"]').value;
+							
+							jeedomUtils.showAlert({
+								title: "SSH Manager	- Commands",
+								message: "OK (Name :: Description :: Command) :: " + new_name + " :: " + new_description + " :: " + new_cmd,
+								level: 'success',
+								emptyBefore: false
+							});
+							jeeDialog.get('#mod_commands').destroy()
 						}
-					},
-					cancel: {
-						label: '{{Annuler}}',
-						className: 'warning',
-						callback: {
-							click: function (event) {
-								jeedomUtils.showAlert({
-									title: "SSH Manager	- Commands",
-									message: "Cancel :: Action annulée",
-									level: 'warning',
-									emptyBefore: false
-								});
-								jeeDialog.get('#mod_commands').destroy()
-							}
+					}
+				},
+				cancel: {
+					label: '{{Annuler}}',
+					className: 'warning',
+					callback: {
+						click: function (event) {
+							jeedomUtils.showAlert({
+								title: "SSH Manager	- Commands",
+								message: "Cancel :: Action annulée",
+								level: 'warning',
+								emptyBefore: false
+							});
+							jeeDialog.get('#mod_commands').destroy()
 						}
 					}
 				}
-			})
-		}
+			}
+		});
 	}
 });

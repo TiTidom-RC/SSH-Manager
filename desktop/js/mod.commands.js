@@ -13,3 +13,10 @@
  * You should have received a copy of the GNU General Public License
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
+
+document.querySelector('.selectCmdTemplate[data-l1key="ssh-select"').addEventListener("change", function(event) {
+    var tr = event.target.closest("tr");
+		var value = event.target.value;
+
+        tr.querySelector('.cmdAttr[data-l1key="name"]').value = value;
+});
