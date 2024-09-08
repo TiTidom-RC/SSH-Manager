@@ -146,7 +146,7 @@ document.querySelectorAll('.pluginAction[data-action=openLocation]').forEach(fun
 	});
 });
 
-document.querySelector("#table_cmd tbody").addEventListener("change", function(event) {
+document.getElementById('div_pageContainer').addEventListener("change", function(event) {
 	if (event.target.classList.contains("cmdAttr") && event.target.getAttribute("data-l1key") === "configuration" && event.target.getAttribute("data-l2key") === "cmdType") {
 		var tr = event.target.closest("tr");
 
@@ -155,7 +155,8 @@ document.querySelector("#table_cmd tbody").addEventListener("change", function(e
 		/* console.log(event.target.value); */
 		if (event.target.value === "refresh" ) {
 			tr.querySelector(".cmdAttr[data-l1key='type']").value = "action";
-			tr.querySelector(".cmdAttr[data-l1key='type']").dispatchEvent(new Event("change"));
+			tr.querySelector(".cmdAttr[data-l1key='type']").triggerEvent("change");
+			// tr.querySelector(".cmdAttr[data-l1key='type']").dispatchEvent(new Event("change"));
 
 			tr.querySelector(".cmdOptionRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
@@ -163,7 +164,8 @@ document.querySelector("#table_cmd tbody").addEventListener("change", function(e
 		
 		} else if (event.target.value === "command") {
 			tr.querySelector(".cmdAttr[data-l1key='type']").value = "info";
-			tr.querySelector(".cmdAttr[data-l1key='type']").dispatchEvent(new Event("change"));
+			tr.querySelector(".cmdAttr[data-l1key='type']").triggerEvent("change");
+			// tr.querySelector(".cmdAttr[data-l1key='type']").dispatchEvent(new Event("change"));
 
 			tr.querySelector(".cmdOptionRefresh").style.display = "block";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "block";
