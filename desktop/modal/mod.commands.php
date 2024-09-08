@@ -58,21 +58,21 @@ sendVarToJS('commands', $commands);
                     <div class="form-group">
                         <label class="col-md-3 control-label">{{Nom}}</label>
                         <div class="col-md-5">
-                            <input type="text" class="cmdAttr control-control" data-l1key="name" placeholder="{{Nom}}" />
+                            <input type="text" class="cmdAttr form-control" data-l1key="name" placeholder="{{Nom}}" />
                         </div>
                     </div>
                     <br />
                     <div class="form-group">
                         <label class="col-md-3 control-label">{{Description}}</label>
                         <div class="col-md-9">
-                            <textarea readonly rows="4" class="cmdAttr control-control input-sm" data-l1key="description" placeholder="{{Description}}"></textarea>
+                            <textarea readonly rows="4" class="cmdAttr form-control" data-l1key="description" placeholder="{{Description}}"></textarea>
                         </div>
                     </div>
                     <br />
                     <div class="form-group">
                         <label class="col-md-3 control-label">{{Commande}}</label>
                         <div class="col-md-9">
-                            <textarea rows="4" class="cmdAttr control-control input-sm" data-l1key="ssh-command" placeholder="{{Commande SSH}}"></textarea>
+                            <textarea rows="4" class="cmdAttr form-control" data-l1key="ssh-command" placeholder="{{Commande SSH}}"></textarea>
                         </div>
                     </div>
                 </fieldset>
