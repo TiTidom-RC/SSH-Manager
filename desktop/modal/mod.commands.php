@@ -22,11 +22,13 @@ if (!isConnect('admin')) {
 
 sendVarToJS(sshmanager::CONST_TO_JS);
 
-$commandsJson = __DIR__ . '/../../data/commands/commands.json';
+$commandsJson = sshmanager::COMMANDS_FILEPATH;
+
 if (file_exists($commandsJson)) {
     $commandsJson = file_get_contents($commandsJson, true);
 } else {
-    throw new Exception('Commands file not found');
+    log::add('sshmanager', 'error', '[TemplateCmds] Error :: json file not found');
+    throw new Exception('Error :: json file not found');
 }
 $commands = json_decode($commandsJson, true);
 
@@ -49,6 +51,25 @@ $commands = json_decode($commandsJson, true);
                             </select>
                         </div>
                     </div>
+                    <br />
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{Nom}}</label>
+                        <div class="col-md-6">
+                            <input type="text" class="cmdAttr form-control" data-l1key="name" placeholder="{{Nom}}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{Description}}</label>
+                        <div class="col-md-6">
+                            <textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="description" placeholder="{{Description}}></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">{{Commande}}</label>
+                        <div class="col-md-6">
+                            <textarea rows="2" class="cmdAttr form-control input-sm" data-l1key="ssh-command" placeholder="{{Commande SSH}}"></textarea>
+                        </div>
+                    </div>
                 </fieldset>
             </form>
         </div>
@@ -56,5 +77,5 @@ $commands = json_decode($commandsJson, true);
 </div>
 
 <?php
-include_file('desktop', 'mod.add.sshmanager', 'js', 'sshmanager');
+include_file('desktop', 'mod.commands', 'js', 'sshmanager');
 ?>

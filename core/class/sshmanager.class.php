@@ -42,6 +42,8 @@ class SSHConnectException extends \RuntimeException {
 
 class sshmanager extends eqLogic {
 
+    const COMMANDS_FILEPATH = __DIR__ . '/../../data/commands/commands.json';
+
     const CONFIG_USERNAME = 'username';
     const CONFIG_PASSWORD = 'password';
     const CONFIG_SSH_KEY = 'ssh-key';
