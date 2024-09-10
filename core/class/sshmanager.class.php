@@ -490,7 +490,7 @@ class sshmanagerCmd extends cmd {
         }
     }
 
-    public function postRemove() {
+    public function preRemove() {
         $cron = cron::byClassAndFunction(get_class($this->getEqLogic()), 'cronCmd', array('cmd_id' => $this->getId()));
         if (is_object($cron)) {
             $cron->remove();
