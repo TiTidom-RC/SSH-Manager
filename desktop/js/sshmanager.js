@@ -72,6 +72,11 @@ function addCmdToTable(_cmd) {
 	// Paramètres
 	tr += '<td class="tdOptions">'
 
+	// Paramètres->Templates
+    tr += '<div class="cmdOptionTemplates">'
+	tr += '<a class="btn btn-info btn-xs btnTemplateCmds" title="Templates de Commandes"><i class="fas fa-question-circle"></i> {{Commandes}}</a>'
+	tr += '</div>'
+
 	// Paramètres->Auto-Refresh
 	tr += '<div class="cmdOptionAutoRefresh">'
 	tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="autorefresh" checked />{{Auto-Refresh}}</label>'
@@ -81,6 +86,12 @@ function addCmdToTable(_cmd) {
 	tr += '<select class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="cmdToRefresh" style="display:none;margin-top:5px;" title="{{Commande à rafraîchir}}">'
 	tr += '<option value="">{{Aucune}}</option>'
 	tr += '</select>'
+
+	// Paramètres->cmdCronRefresh
+	tr += '<div class="input-group divCmdCronRefresh" style="display:none;margin-top:5px;">'
+	tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="configuration" data-l2key="cmdCronRefresh" placeholder="{{Cron (? = Assistant)}}">'
+	tr += '<span class="input-group-btn"><a class="btn btn-sm btn-default cursor jeeHelper roundedRight" data-helper="cron" title="{{Assistant Cron}}"><i class="fas fa-question-circle"></i></a></span>'
+	tr += '</div>'
 
 	// Paramètres->Service
 	tr += '<div class="cmdTypeConfig" data-type="service" style="display: none;">'
@@ -166,33 +177,97 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 
 		/* console.log(event.target.value); */
 		if (event.target.value === "refreshAll") {
-			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
+			tr.querySelector('.divCmdCronRefresh').style.display = "none";
+			tr.querySelector('.cmdOptionTemplates').style.display = "none";
 		
 		} else if (event.target.value === "refresh" ) {
 			tr.querySelector(".cmdAttr[data-l1key='type']").value = "action";
 			tr.querySelector(".cmdAttr[data-l1key='type']").triggerEvent("change");
 			tr.querySelector(".type").style.display = "none";	
 			tr.querySelector(".subType").style.display = "none";
+			tr.querySelector('.cmdOptionTemplates').style.display = "none";
 
 			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "block";
+			tr.querySelector('.divCmdCronRefresh').style.display = "table";
 		
 		} else if (event.target.value === "command") {
 			tr.querySelector(".type").style.display = "block";
 			tr.querySelector(".subType").style.display = "block";
 
-			/* tr.querySelector(".cmdOptionAutoRefresh").style.display = "block"; */
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "block";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
+			tr.querySelector('.divCmdCronRefresh').style.display = "none";
+			tr.querySelector('.cmdOptionTemplates').style.display = "block";
 			
 		} else {
 			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
+			tr.querySelector('.divCmdCronRefresh').style.display = "none";
+			tr.querySelector('.cmdOptionTemplates').style.display = "none";
 			
 		}
+	}
+});
+
+document.getElementById('div_pageContainer').addEventListener("click", function(event) {
+	if (event.target.classList.contains("btnTemplateCmds")) {
+		let tr = event.target.closest("tr");
+		let cmdTemplate = tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="ssh-command"]');
+		let nameTemplate = tr.querySelector('.cmdAttr[data-l1key="name"]');
+
+		jeeDialog.dialog({
+			id: 'mod_commands',
+			title: '{{Commandes SSH (SSH Manager)}}',
+			width: 850,
+			height: 600,
+			top: '10vh',
+			contentUrl: 'index.php?v=d&plugin=sshmanager&modal=mod.commands',
+			callback: function () {
+			},
+			buttons: {
+				confirm: {
+					label: '{{OK}}',
+					className: 'success',
+					callback: {
+						click: function (event) {
+							let response = jeeDialog.get('#mod_commands', 'content')
+							let new_name = response.querySelector('.cmdAttr[data-l1key="name"]').value;
+							let new_cmd = response.querySelector('.cmdAttr[data-l1key="ssh-command"]').value;
+							
+							cmdTemplate.value = new_cmd;
+							nameTemplate.value = new_name;
+
+							jeedomUtils.showAlert({
+								title: "SSH Manager	- Commands",
+								message: "Selected Command (Name, Command) :: " + new_name + " :: " + new_cmd,
+								level: 'success',
+								emptyBefore: false
+							});
+							jeeDialog.get('#mod_commands').destroy()
+						}
+					}
+				},
+				cancel: {
+					label: '{{Annuler}}',
+					className: 'warning',
+					callback: {
+						click: function (event) {
+							jeedomUtils.showAlert({
+								title: "SSH Manager	- Commands",
+								message: "Cancel :: Action annulée",
+								level: 'warning',
+								emptyBefore: false
+							});
+							jeeDialog.get('#mod_commands').destroy()
+						}
+					}
+				}
+			}
+		});
 	}
 });

@@ -29,7 +29,7 @@ sendVarToJS(sshmanager::CONST_TO_JS);
 $eqLogics = eqLogic::byType($plugin->getId());
 ?>
 
-<div id="mod_add_sshmanager"></div>
+<div id="mod_commands"></div>
 
 <div class="row row-overflow">
     <!-- Page d'accueil du plugin -->
@@ -43,11 +43,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
                         <i class="fas fa-plus-circle"></i>
                         <br />
                         <span style="color:var(--txt-color)">{{Ajouter}}</span>
-                    </div>
-                    <div class="cursor eqLogicAction logoPrimary sshmanagerHelper" data-helper="add">
-                        <i class="fas fa-plus-circle"></i>
-                        <br />
-                        <span style="color:var(--txt-color)">{{Ajouter Hôte SSH}}</span>
                     </div>
                     <div class="cursor eqLogicAction logoSecondary" data-action="gotoPluginConf">
                         <i class="fas fa-wrench"></i>
@@ -228,6 +223,5 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
 <!-- Inclusion du fichier javascript du plugin (dossier, nom_du_fichier, extension_du_fichier, id_du_plugin) -->
 <?php include_file('desktop', 'sshmanager', 'js', 'sshmanager'); ?>
-<?php include_file('desktop', 'sshmanager.helper', 'js', 'sshmanager'); ?>
 <!-- Inclusion du fichier javascript du core - NE PAS MODIFIER NI SUPPRIMER -->
 <?php include_file('core', 'plugin.template', 'js'); ?>

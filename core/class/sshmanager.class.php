@@ -42,6 +42,8 @@ class SSHConnectException extends \RuntimeException {
 
 class sshmanager extends eqLogic {
 
+    const COMMANDS_FILEPATH = __DIR__ . '/../../data/commands/commands.json';
+
     const CONFIG_USERNAME = 'username';
     const CONFIG_PASSWORD = 'password';
     const CONFIG_SSH_KEY = 'ssh-key';
@@ -107,22 +109,6 @@ class sshmanager extends eqLogic {
         }
         log::add(__CLASS__, 'info', '[VERSION] PluginVersion :: ' . $pluginVersion);
         return $pluginVersion;
-    }
-
-    public static function cron() {
-        /** @var sshmanager */
-        foreach (self::byType(__CLASS__, true) as $sshmanager) {
-            $autorefresh = $sshmanager->getConfiguration('autorefresh');
-            if ($autorefresh == '')  continue;
-            try {
-                $cron = new Cron\CronExpression($autorefresh, new Cron\FieldFactory);
-                if ($cron->isDue()) {
-                    $sshmanager->refreshAllInfo();
-                }
-            } catch (Exception $e) {
-                log::add(__CLASS__, 'error', __('Expression cron non valide pour ', __FILE__) . $sshmanager->getName() . ' : ' . $autorefresh);
-            }
-        }
     }
 
     // Methods used by client plugins
@@ -388,8 +374,55 @@ class sshmanager extends eqLogic {
             $refresh->setEqLogic_id($this->getId());
             $refresh->save();
         }
+
+        if (trim($this->getConfiguration('autorefresh')) != '') {
+            log::add(__CLASS__, 'debug', '[' . $this->getName() . '] cronEqLogic (AutoRefresh) :: ' . $this->getConfiguration('autorefresh'));
+
+            $cron = cron::byClassAndFunction(__CLASS__, 'cronEqLogic', array('SSHManager_Id' => intval($this->getId())));
+            if (!is_object($cron)) {
+                $cron = new cron();
+                $cron->setClass(__CLASS__);
+                $cron->setFunction('cronEqLogic');
+                $cron->setOption(array('SSHManager_Id' => intval($this->getId())));
+                $cron->setDeamon(0);
+            }
+            if ($this->getIsEnable()) {
+                $cron->setEnable(1);
+            } else {
+                $cron->setEnable(0);
+            }
+
+            $_cronPattern = $this->getConfiguration('autorefresh');
+            $cron->setSchedule($_cronPattern);
+
+            if ($_cronPattern == '* * * * *') {
+                $cron->setTimeout(1);
+                log::add(__CLASS__, 'debug', '[' . $this->getName() . '] cronEqLogic Timeout :: 1min');
+            } else {
+                $_ExpMatch = array();
+                $_ExpResult = preg_match('/^([0-9,]+|\*)\/([0-9]+)/', $_cronPattern, $_ExpMatch);
+                if ($_ExpResult === 1) {
+                    $cron->setTimeout(intval($_ExpMatch[2]));
+                    log::add(__CLASS__, 'debug', '[' . $this->getName() . '] cronEqLogic Timeout :: '. $_ExpMatch[2] .'min');
+                } else {
+                    $cron->setTimeout(15);
+                    log::add(__CLASS__, 'debug', '[' . $this->getName() . '] cronEqLogic Timeout :: Default 15min');
+                }
+            }
+            $cron->save();
+        } else {
+            $cron = cron::byClassAndFunction(__CLASS__, 'cronEqLogic', array('SSHManager_Id' => intval($this->getId())));
+            if (is_object($cron)) {
+                $cron->remove();
+                log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Remove cronEqLogic');
+            }
+        }
+
         if ($this->getIsEnable() == 1 && config::byKey('refreshOnSave', 'sshmanager', '1') == '1') {
+            log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . __('Refresh (postSave) de l\'équipement', __FILE__));
             $this->refreshAllInfo();
+        } else {
+            /* log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . __('Pas de Refresh (postSave) de l\'équipement', __FILE__)); */
         }
     }
 
@@ -402,8 +435,37 @@ class sshmanager extends eqLogic {
             try {
                 $cmd->refreshInfo();
             } catch (Exception $exc) {
-                log::add(__CLASS__, 'error', sprintf(__("[%s] Erreur :: %s", __FILE__), $cmd->getHumanName(), $exc->getMessage()));
+                log::add(__CLASS__, 'error', sprintf(__("[%s] refreshAllInfo Exception :: %s", __FILE__), $cmd->getHumanName(), $exc->getMessage()));
             }
+        }
+    }
+
+    public function cronCmd($_options) {
+        $cmd = cmd::byId($_options['cmd_id']);
+        if (is_object($cmd)) {
+            try {
+                $cmd->execute();
+            } catch (Exception $exc) {
+                log::add(__CLASS__, 'error', sprintf(__("[%s] cronCmd Exception :: %s", __FILE__), $cmd->getHumanName(), $exc->getMessage()));
+            }
+        }
+    }
+
+    public function cronEqLogic($_options) {
+        $eqLogic = eqLogic::byId($_options['SSHManager_Id']);
+        if (is_object($eqLogic)) {
+            try {
+                $eqLogic->refreshAllInfo();
+            } catch (Exception $exc) {
+                log::add(__CLASS__, 'error', sprintf(__("[%s] cronEqLogic Exception :: %s", __FILE__), $eqLogic->getName(), $exc->getMessage()));
+            }
+        }
+    }
+
+    public function preRemove() {
+        $cron = cron::byClassAndFunction(__CLASS__, 'cronEqLogic', array('SSHManager_Id' => intval($this->getId())));
+        if (is_object($cron)) {
+            $cron->remove();
         }
     }
 }
@@ -428,6 +490,69 @@ class sshmanagerCmd extends cmd {
         }
     }
 
+    public function postSave() {
+        if ($this->getConfiguration('cmdType') == 'refresh') {
+            if (trim($this->getConfiguration('cmdCronRefresh')) != '') {
+                log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] cmdCronRefresh :: ' . $this->getConfiguration('cmdCronRefresh'));
+                
+                $cron = cron::byClassAndFunction(get_class($this->getEqLogic()), 'cronCmd', array('cmd_id' => intval($this->getId())));
+                if (!is_object($cron)) {
+                    $cron = new cron();
+                    $cron->setClass(get_class($this->getEqLogic()));
+                    $cron->setFunction('cronCmd');
+                    $cron->setOption(array('cmd_id' => intval($this->getId())));
+                    $cron->setDeamon(0);
+                }
+                if ($this->getEqLogic()->getIsEnable()) {
+                    $cron->setEnable(1);
+                } else {
+                    $cron->setEnable(0);
+                }
+    
+                $_cronPattern = $this->getConfiguration('cmdCronRefresh');
+                $cron->setSchedule($_cronPattern);
+    
+                if ($_cronPattern == '* * * * *') {
+                    $cron->setTimeout(1);
+                    log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] cmdCronRefresh Timeout :: 1min');
+                } else {
+                    $_ExpMatch = array();
+                    $_ExpResult = preg_match('/^([0-9,]+|\*)\/([0-9]+)/', $_cronPattern, $_ExpMatch);
+                    if ($_ExpResult === 1) {
+                        $cron->setTimeout(intval($_ExpMatch[2]));
+                        log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] cmdCronRefresh Timeout :: '. $_ExpMatch[2] .'min');
+                    } else {
+                        $cron->setTimeout(15);
+                        log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] cmdCronRefresh Timeout :: Default 15min');
+                    }
+                }
+                $cron->save();
+            } else {
+                $cron = cron::byClassAndFunction(get_class($this->getEqLogic()), 'cronCmd', array('cmd_id' => intval($this->getId())));
+                if (is_object($cron)) {
+                    $cron->remove();
+                    log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] Remove cronCmd');
+                }
+            }
+        } else {
+            $cron = cron::byClassAndFunction(get_class($this->getEqLogic()), 'cronCmd', array('cmd_id' => intval($this->getId())));
+            if (is_object($cron)) {
+                $cron->remove();
+                log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] Not Refresh Type :: Remove cronCmd');
+            }
+        }
+        
+        
+    }
+
+    public function preRemove() {
+        $cron = cron::byClassAndFunction(get_class($this->getEqLogic()), 'cronCmd', array('cmd_id' => intval($this->getId())));
+        if (is_object($cron)) {
+            $cron->remove();
+            log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] preRemove cronCmd');
+        }
+    }
+
     public function execute($_options = null) {
         if ($this->getLogicalId() == 'refresh') {
             /** @var sshmanager */
@@ -438,9 +563,8 @@ class sshmanagerCmd extends cmd {
             if ($this->getConfiguration('cmdToRefresh') != '') {
                 $cmd = cmd::byId($this->getConfiguration('cmdToRefresh'));
                 if (is_object($cmd)) {
-                    $eqLogic = $this->getEqLogic();
+                    log::add(get_class($this->getEqLogic()), 'info', '[' . $this->getEqLogic()->getName() . '][' . $cmd->getName() . '] ' . __('Refresh de la commande', __FILE__));
                     $cmd->refreshInfo();
-                    log::add(get_class($eqLogic), 'info', '[' . $eqLogic->getName() . '] ' . __('Refresh de la commande : ', __FILE__) . $cmd->getName());
                     return;
                 }   
             }   
