@@ -72,7 +72,7 @@ function sshmanager_update() {
 
 function sshmanager_remove() {
     foreach (eqLogic::byType('sshmanager', false) as $sshmanager) {
-        $cron = cron::byClassAndFunction('sshmanager', 'pullCustom', array('SSHManager_Id' => intval($sshmanager->getId())));
+        $cron = cron::byClassAndFunction('sshmanager', 'cronEqLogic', array('SSHManager_Id' => intval($sshmanager->getId())));
         if (is_object($cron)) {
             $cron->remove();
         }
