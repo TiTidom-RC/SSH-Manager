@@ -391,10 +391,10 @@ class sshmanager extends eqLogic {
             $refresh->save();
         }
         if ($this->getIsEnable() == 1 && config::byKey('refreshOnSave', 'sshmanager', '1') == '1') {
-            log::add(__CLASS__, 'info', '[' . $this->getName() . '] ' . __('Refresh à la sauvegarde de l\'équipement', __FILE__));
+            log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . __('Refresh (postSave) de l\'équipement', __FILE__));
             $this->refreshAllInfo();
         } else {
-            log::add(__CLASS__, 'info', '[' . $this->getName() . '] ' . __('Pas de Refresh à la sauvegarde de l\'équipement', __FILE__));
+            /* log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . __('Pas de Refresh (postSave) de l\'équipement', __FILE__)); */
         }
     }
 
