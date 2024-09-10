@@ -192,7 +192,7 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "block";
-			tr.querySelector('.divCmdCronRefresh').style.display = "inline-block";
+			tr.querySelector('.divCmdCronRefresh').style.display = "table";
 		
 		} else if (event.target.value === "command") {
 			tr.querySelector(".type").style.display = "block";
