@@ -446,7 +446,7 @@ class sshmanagerCmd extends cmd {
 
     public function postSave() {
         if (trim($this->getConfiguration('cmdCronRefresh')) != '') {
-            log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][CmdCron] cmdCronRefresh (' . $this->getName() . ') :: ' . $this->getConfiguration('cmdCronRefresh'));
+            log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] cmdCronRefresh :: ' . $this->getConfiguration('cmdCronRefresh'));
             
             $cron = cron::byClassAndFunction(get_class($this->getEqLogic()), 'cronCmd', array('cmd_id' => $this->getId()));
             if (!is_object($cron)) {
@@ -468,16 +468,16 @@ class sshmanagerCmd extends cmd {
 
             if ($_cronPattern == '* * * * *') {
                 $cron->setTimeout(1);
-                log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] Timeout 1min');
+                log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] cmdCronRefresh Timeout :: 1min');
             } else {
                 $_ExpMatch = array();
 		        $_ExpResult = preg_match('/^([0-9,]+|\*)\/([0-9]+)/', $_cronPattern, $_ExpMatch);
 		        if ($_ExpResult === 1) {
 			        $cron->setTimeout(intval($_ExpMatch[2]));
-			        log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] Timeout '. $_ExpMatch[2] .'min');
+			        log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] cmdCronRefresh Timeout :: '. $_ExpMatch[2] .'min');
 		        } else {
 			        $cron->setTimeout(15);
-			        log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] Default Timeout 15min');
+			        log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] cmdCronRefresh Timeout :: Default 15min');
 		        }
             }
             $cron->save();
