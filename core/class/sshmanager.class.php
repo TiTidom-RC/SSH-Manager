@@ -440,7 +440,7 @@ class sshmanager extends eqLogic {
         }
     }
 
-    public function cronCmd($_options) {
+    public static function cronCmd($_options) {
         $cmd = cmd::byId($_options['cmd_id']);
         if (is_object($cmd)) {
             try {
@@ -451,7 +451,7 @@ class sshmanager extends eqLogic {
         }
     }
 
-    public function cronEqLogic($_options) {
+    public static function cronEqLogic($_options) {
         $eqLogic = eqLogic::byId($_options['SSHManager_Id']);
         if (is_object($eqLogic)) {
             try {
