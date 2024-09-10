@@ -403,10 +403,10 @@ class sshmanager extends eqLogic {
                 $_ExpResult = preg_match('/^([0-9,]+|\*)\/([0-9]+)/', $_cronPattern, $_ExpMatch);
                 if ($_ExpResult === 1) {
                     $cron->setTimeout(intval($_ExpMatch[2]));
-                    log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Timeout :: '. $_ExpMatch[2] .'min');
+                    log::add(__CLASS__, 'debug', '[' . $this->getName() . '] cronEqLogic Timeout :: '. $_ExpMatch[2] .'min');
                 } else {
                     $cron->setTimeout(15);
-                    log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Timeout :: Default 15min');
+                    log::add(__CLASS__, 'debug', '[' . $this->getName() . '] cronEqLogic Timeout :: Default 15min');
                 }
             }
             $cron->save();
