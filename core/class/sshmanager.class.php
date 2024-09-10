@@ -474,10 +474,10 @@ class sshmanagerCmd extends cmd {
 		        $_ExpResult = preg_match('/^([0-9,]+|\*)\/([0-9]+)/', $_cronPattern, $_ExpMatch);
 		        if ($_ExpResult === 1) {
 			        $cron->setTimeout(intval($_ExpMatch[2]));
-			        log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] CustomPull :: Timeout '. $_ExpMatch[2] .'min');
+			        log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] Timeout '. $_ExpMatch[2] .'min');
 		        } else {
 			        $cron->setTimeout(15);
-			        log::add('Monitoring', 'debug', '['. $this->getName() .'][POSTSAVE] CustomPull :: Timeout 15min');
+			        log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] Default Timeout 15min');
 		        }
             }
             $cron->save();
@@ -485,6 +485,7 @@ class sshmanagerCmd extends cmd {
             $cron = cron::byClassAndFunction(get_class($this->getEqLogic()), 'cronCmd', array('cmd_id' => $this->getId()));
             if (is_object($cron)) {
                 $cron->remove();
+                log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] Remove cronCmd');
             }
         }
     }
@@ -493,6 +494,7 @@ class sshmanagerCmd extends cmd {
         $cron = cron::byClassAndFunction(get_class($this->getEqLogic()), 'cronCmd', array('cmd_id' => $this->getId()));
         if (is_object($cron)) {
             $cron->remove();
+            log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] postRemove cronCmd');
         }
     }
 
