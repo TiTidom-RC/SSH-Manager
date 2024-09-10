@@ -518,9 +518,8 @@ class sshmanagerCmd extends cmd {
             if ($this->getConfiguration('cmdToRefresh') != '') {
                 $cmd = cmd::byId($this->getConfiguration('cmdToRefresh'));
                 if (is_object($cmd)) {
-                    $eqLogic = $this->getEqLogic();
+                    log::add(get_class($this->getEqLogic()), 'info', '[' . $this->getEqLogic()->getName() . '][' . $cmd->getName() . '] ' . __('Refresh de la commande', __FILE__));
                     $cmd->refreshInfo();
-                    log::add(get_class($eqLogic), 'info', '[' . $eqLogic->getName() . '] ' . __('Refresh de la commande : ', __FILE__) . $cmd->getName());
                     return;
                 }   
             }   
