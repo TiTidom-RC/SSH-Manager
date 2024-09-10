@@ -87,6 +87,12 @@ function addCmdToTable(_cmd) {
 	tr += '<option value="">{{Aucune}}</option>'
 	tr += '</select>'
 
+	// Paramètres->CronCmdRefresh
+	tr += '<div class="input-group">'
+	tr += '<input class="cmdAttr form-control input-sm roundedLeft" style="display:none;margin-top:5px;" data-l1key="configuration" data-l2key="cmdCronRefresh" placeholder="{{Cliquer sur ? pour afficher l\'assistant cron}}">'
+	tr += '<span class="input-group-btn"><a class="btn btn-default cursor jeeHelper roundedright" data-helper="cron" title="{{Assistant Cron}}"><i class="fas fa-question-circle"></i></a></span>'
+	tr += '</div>'
+
 	// Paramètres->Service
 	tr += '<div class="cmdTypeConfig" data-type="service" style="display: none;">'
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="serviceName" placeholder="{{Nom du Service}}">'
@@ -173,6 +179,7 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 		if (event.target.value === "refreshAll") {
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
+			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdCronRefresh"]').style.display = "none";
 			tr.querySelector('.cmdOptionTemplates').style.display = "none";
 		
 		} else if (event.target.value === "refresh" ) {
@@ -185,6 +192,7 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "block";
+			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdCronRefresh"]').style.display = "block";
 		
 		} else if (event.target.value === "command") {
 			tr.querySelector(".type").style.display = "block";
@@ -192,12 +200,14 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "block";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
+			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdCronRefresh"]').style.display = "none";
 			tr.querySelector('.cmdOptionTemplates').style.display = "block";
 			
 		} else {
 			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
+			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdCronRefresh"]').style.display = "none";
 			tr.querySelector('.cmdOptionTemplates').style.display = "none";
 			
 		}
