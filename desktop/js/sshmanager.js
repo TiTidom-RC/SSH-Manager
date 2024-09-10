@@ -89,7 +89,7 @@ function addCmdToTable(_cmd) {
 
 	// Paramètres->CronCmdRefresh
 	tr += '<div class="input-group divCmdCronRefresh" style="display:none;margin-top:5px;">'
-	tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="configuration" data-l2key="cmdCronRefresh" placeholder="{{Cliquer sur ? pour afficher l\'assistant cron}}">'
+	tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="configuration" data-l2key="cmdCronRefresh" placeholder="{{Cron (? = Assistant)}}">'
 	tr += '<span class="input-group-btn"><a class="btn btn-sm btn-default cursor jeeHelper roundedright" data-helper="cron" title="{{Assistant Cron}}"><i class="fas fa-question-circle"></i></a></span>'
 	tr += '</div>'
 
