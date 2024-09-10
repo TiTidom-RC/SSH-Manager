@@ -87,10 +87,10 @@ function addCmdToTable(_cmd) {
 	tr += '<option value="">{{Aucune}}</option>'
 	tr += '</select>'
 
-	// Paramètres->CronCmdRefresh
+	// Paramètres->cmdCronRefresh
 	tr += '<div class="input-group divCmdCronRefresh" style="display:none;margin-top:5px;">'
 	tr += '<input class="cmdAttr form-control input-sm roundedLeft" data-l1key="configuration" data-l2key="cmdCronRefresh" placeholder="{{Cron (? = Assistant)}}">'
-	tr += '<span class="input-group-btn"><a class="btn btn-sm btn-default cursor jeeHelper roundedright" data-helper="cron" title="{{Assistant Cron}}"><i class="fas fa-question-circle"></i></a></span>'
+	tr += '<span class="input-group-btn"><a class="btn btn-sm btn-default cursor jeeHelper roundedRight" data-helper="cron" title="{{Assistant Cron}}"><i class="fas fa-question-circle"></i></a></span>'
 	tr += '</div>'
 
 	// Paramètres->Service
@@ -192,7 +192,7 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "block";
-			tr.querySelector('.divCmdCronRefresh').style.display = "block";
+			tr.querySelector('.divCmdCronRefresh').style.display = "block-inline";
 		
 		} else if (event.target.value === "command") {
 			tr.querySelector(".type").style.display = "block";
