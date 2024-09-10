@@ -445,49 +445,59 @@ class sshmanagerCmd extends cmd {
     }
 
     public function postSave() {
-        if (trim($this->getConfiguration('cmdCronRefresh')) != '') {
-            log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] cmdCronRefresh :: ' . $this->getConfiguration('cmdCronRefresh'));
-            
-            $cron = cron::byClassAndFunction(get_class($this->getEqLogic()), 'cronCmd', array('cmd_id' => $this->getId()));
-            if (!is_object($cron)) {
-                $cron = new cron();
-                $cron->setClass(get_class($this->getEqLogic()));
-                $cron->setFunction('cronCmd');
-                $cron->setOption(array('cmd_id' => $this->getId()));
-                $cron->setDeamon(0);
-                // $cron->setSchedule($this->getConfiguration('cmdCronRefresh'));
-            }
-            if ($this->getEqLogic()->getIsEnable()) {
-                $cron->setEnable(1);
+        if ($this->getConfiguration('cmdType') == 'refresh') {
+            if (trim($this->getConfiguration('cmdCronRefresh')) != '') {
+                log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] cmdCronRefresh :: ' . $this->getConfiguration('cmdCronRefresh'));
+                
+                $cron = cron::byClassAndFunction(get_class($this->getEqLogic()), 'cronCmd', array('cmd_id' => $this->getId()));
+                if (!is_object($cron)) {
+                    $cron = new cron();
+                    $cron->setClass(get_class($this->getEqLogic()));
+                    $cron->setFunction('cronCmd');
+                    $cron->setOption(array('cmd_id' => $this->getId()));
+                    $cron->setDeamon(0);
+                    // $cron->setSchedule($this->getConfiguration('cmdCronRefresh'));
+                }
+                if ($this->getEqLogic()->getIsEnable()) {
+                    $cron->setEnable(1);
+                } else {
+                    $cron->setEnable(0);
+                }
+    
+                $_cronPattern = $this->getConfiguration('cmdCronRefresh');
+                $cron->setSchedule($_cronPattern);
+    
+                if ($_cronPattern == '* * * * *') {
+                    $cron->setTimeout(1);
+                    log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] cmdCronRefresh Timeout :: 1min');
+                } else {
+                    $_ExpMatch = array();
+                    $_ExpResult = preg_match('/^([0-9,]+|\*)\/([0-9]+)/', $_cronPattern, $_ExpMatch);
+                    if ($_ExpResult === 1) {
+                        $cron->setTimeout(intval($_ExpMatch[2]));
+                        log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] cmdCronRefresh Timeout :: '. $_ExpMatch[2] .'min');
+                    } else {
+                        $cron->setTimeout(15);
+                        log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] cmdCronRefresh Timeout :: Default 15min');
+                    }
+                }
+                $cron->save();
             } else {
-                $cron->setEnable(0);
+                $cron = cron::byClassAndFunction(get_class($this->getEqLogic()), 'cronCmd', array('cmd_id' => $this->getId()));
+                if (is_object($cron)) {
+                    $cron->remove();
+                    log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] Remove cronCmd');
+                }
             }
-
-            $_cronPattern = $this->getConfiguration('cmdCronRefresh');
-            $cron->setSchedule($_cronPattern);
-
-            if ($_cronPattern == '* * * * *') {
-                $cron->setTimeout(1);
-                log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] cmdCronRefresh Timeout :: 1min');
-            } else {
-                $_ExpMatch = array();
-		        $_ExpResult = preg_match('/^([0-9,]+|\*)\/([0-9]+)/', $_cronPattern, $_ExpMatch);
-		        if ($_ExpResult === 1) {
-			        $cron->setTimeout(intval($_ExpMatch[2]));
-			        log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] cmdCronRefresh Timeout :: '. $_ExpMatch[2] .'min');
-		        } else {
-			        $cron->setTimeout(15);
-			        log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] cmdCronRefresh Timeout :: Default 15min');
-		        }
-            }
-            $cron->save();
         } else {
             $cron = cron::byClassAndFunction(get_class($this->getEqLogic()), 'cronCmd', array('cmd_id' => $this->getId()));
             if (is_object($cron)) {
                 $cron->remove();
-                log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] Remove cronCmd');
+                log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] Not Refresh Type :: Remove cronCmd');
             }
         }
+        
+        
     }
 
     public function preRemove() {
