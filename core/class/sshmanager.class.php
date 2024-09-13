@@ -24,7 +24,11 @@ use phpseclib3\Crypt\PublicKeyLoader;
 use phpseclib3\Net\SFTP;
 
 if (!defined('NET_SSH2_LOGGING')) {
-    define('NET_SSH2_LOGGING', 2);
+    define('NET_SSH2_LOGGING', 2); // SSH2::LOG_COMPLEX
+}
+
+if (!defined('NET_SFTP_LOGGING')) {
+    define('NET_SFTP_LOGGING', 2); // SFTP::LOG_COMPLEX
 }
 
 class SSHConnectException extends \RuntimeException {
