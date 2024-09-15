@@ -137,7 +137,7 @@ class sshmanager extends eqLogic {
         if (!is_object($sshmanager)) {
             throw new Exception('Invalid host Id');
         }
-        log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Check SSH Connection");
+        // log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Check SSH Connection");
         return $sshmanager->internalCheckConnection();
     }
 
@@ -156,14 +156,14 @@ class sshmanager extends eqLogic {
         }
 
         if (is_array($commands)) {
-            log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] executeCmds :: " . json_encode($commands));
+            // log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] executeCmds :: " . json_encode($commands));
             $results = [];
             foreach ($commands as $cmd) {
                 $results[] = $sshmanager->internalExecuteCmd($cmd);
             }
             return $results;
         } elseif (is_string($commands)) {
-            log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] executeCmds :: " . $commands);
+            // log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] executeCmds :: " . $commands);
             return $sshmanager->internalExecuteCmd($commands);
         } else {
             throw new Exception('Invalid command type');
@@ -347,7 +347,7 @@ class sshmanager extends eqLogic {
             log::add(__CLASS__, 'debug', "[{$this->getName()}] Exception Log :: {$ex->getLog()}");
             return false;
         } catch (\Throwable $th) {
-            log::add(__CLASS__, 'error', $th->getMessage());
+            log::add(__CLASS__, 'error', "[{$this->getName()}] General CheckConnection Exception :: " . $th->getMessage());
             return false;
         }
     }
@@ -361,7 +361,7 @@ class sshmanager extends eqLogic {
             throw $ex;
             return false;
         } catch (\Throwable $th) {
-            log::add(__CLASS__, 'error', $th->getMessage());
+            log::add(__CLASS__, 'error', "[{$this->getName()}] General ExecuteCmd Exception :: " . $th->getMessage());
             return false;
         }
         
@@ -379,6 +379,9 @@ class sshmanager extends eqLogic {
                 //TODO: '\n' should be escaped from $result before logging
                 log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Cmd :: ' . str_replace("\r\n", "\\r\\n", $command));
                 log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Cmd Result :: ' . str_replace("\r\n", "\\r\\n", $result));
+            } else {
+                log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Cmd :: ' . str_replace("\r\n", "\\r\\n", $command));
+                log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Cmd Result :: VIDE');
             }
             return $result;
         } catch (Exception $e) {
