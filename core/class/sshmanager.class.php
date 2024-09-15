@@ -313,7 +313,7 @@ class sshmanager extends eqLogic {
                 }
 
                 if (!$ssh2->isConnected()) {
-                    throw new SSHConnectException("[{$eqLogicName}] Connection failed:" . $ssh2->getLastError(), $ssh2->getLog());
+                    throw new SSHConnectException("[{$eqLogicName}] Connection failed :: " . $ssh2->getLastError(), $ssh2->getLog());
                 }
 
                 if (!$ssh2->isAuthenticated()) {
@@ -352,11 +352,26 @@ class sshmanager extends eqLogic {
     }
 
     private function internalExecuteCmd(string $command) {
-        $ssh2 = $this->getSSH2Client();
-        $result = $ssh2->exec($command);
-        //TODO: '\n' should be escaped from $result before logging
-        log::add(__CLASS__, 'debug', '['  . $this->getName() .  "] SSH exec :: {$command} => {$result}");
-        return $result;
+        try {
+            $ssh2 = $this->getSSH2Client();
+            $result = $ssh2->exec($command);
+            if ($ssh2->isTimeout()) {
+                log::add(__CLASS__, 'error', "[{$this->getName()}] Timeout :: " . $ssh2->getLastError());
+                $ssh2->reset();
+                $result = '';
+                throw new SSHConnectException("[{$this->getName()}] Timeout :: " . $ssh2->getLastError(), $ssh2->getLog());
+            }
+            if (!empty($result)) {
+                $result = trim($result);
+                //TODO: '\n' should be escaped from $result before logging
+                log::add(__CLASS__, 'debug', '[' .$this->getName() . '] SSH exec :: ' . str_replace("\r\n", "\\r\\n", $command) . ' => ' . str_replace("\r\n", "\\r\\n", $result));
+            }
+            return $result;
+        } catch (Exception $e) {
+            log::add(__CLASS__, 'error', '[' . $this->getName() . '] Exception :: ' . $e->getMessage());
+            // TODO est qu'il ne faut pas faire un SSH disconnect ici ?
+            return false;
+        }
     }
 
     public function preInsert() {
