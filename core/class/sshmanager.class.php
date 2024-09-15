@@ -154,15 +154,16 @@ class sshmanager extends eqLogic {
         if (!is_object($sshmanager)) {
             throw new Exception('Invalid host Id');
         }
-        log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] executeCmds");
 
         if (is_array($commands)) {
+            log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] executeCmds :: " . json_encode($commands));
             $results = [];
             foreach ($commands as $cmd) {
                 $results[] = $sshmanager->internalExecuteCmd($cmd);
             }
             return $results;
         } elseif (is_string($commands)) {
+            log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] executeCmds :: " . $commands);
             return $sshmanager->internalExecuteCmd($commands);
         } else {
             throw new Exception('Invalid command type');
