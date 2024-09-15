@@ -320,11 +320,11 @@ class sshmanager extends eqLogic {
                     throw new SSHConnectException("[{$eqLogicName}] Authentication failed :: " . $ssh2->getLastError(), $ssh2->getLog());
                 }
             } catch (SSHConnectException $ex) {
-                log::add(__CLASS__, 'error', '[' . $eqLogicName . '] ' . $ex->getMessage());
+                log::add(__CLASS__, 'error', '[' . $eqLogicName . '] Exception :: ' . $ex->getMessage());
+                log::add(__CLASS__, 'debug', '[' . $eqLogicName . '] Exception log :: ' . $ex->getLog());
                 throw $ex;
             } catch (\Throwable $th) {
                 log::add(__CLASS__, 'error', "[{$eqLogicName}] General exception during connection :: " . $th->getMessage());
-                log::add(__CLASS__, 'debug', "[{$eqLogicName}] General exception log :: " . $ssh2->getLog());
                 throw $th;
             }
 
