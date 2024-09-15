@@ -325,7 +325,7 @@ class sshmanager extends eqLogic {
                 log::add(__CLASS__, 'debug', '[' . $eqLogicName . '] Exception log :: ' . $ex->getLog());
                 throw $ex;
             } catch (\Throwable $th) {
-                log::add(__CLASS__, 'error', "[{$eqLogicName}] General exception during connection :: " . $th->getMessage());
+                log::add(__CLASS__, 'error', "[{$eqLogicName}] General SSH2Client Exception :: " . $th->getMessage());
                 throw $th;
             }
 
