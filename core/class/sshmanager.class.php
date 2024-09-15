@@ -354,21 +354,35 @@ class sshmanager extends eqLogic {
     private function internalExecuteCmd(string $command) {
         try {
             $ssh2 = $this->getSSH2Client();
+        } catch (SSHConnectException $ex) {
+            log::add(__CLASS__, 'error', "[{$this->getName()}] Exception :: {$ex->getMessage()}");
+            log::add(__CLASS__, 'debug', "[{$this->getName()}] Exception Log :: {$ex->getLog()}");
+            throw $ex;
+            return false;
+        } catch (\Throwable $th) {
+            log::add(__CLASS__, 'error', $th->getMessage());
+            return false;
+        }
+        
+        try {
             $result = $ssh2->exec($command);
             if ($ssh2->isTimeout()) {
-                log::add(__CLASS__, 'error', "[{$this->getName()}] Timeout :: " . $ssh2->getLastError());
+                log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Cmd :: ' . str_replace("\r\n", "\\r\\n", $command));
+                log::add(__CLASS__, 'error', '[' . $this->getName() . '] Cmd Timeout :: ' . $ssh2->getLastError());
                 $ssh2->reset();
                 $result = '';
-                throw new SSHConnectException("[{$this->getName()}] Timeout :: " . $ssh2->getLastError(), $ssh2->getLog());
+                throw new SSHConnectException("[{$this->getName()}] Cmd Timeout :: " . $ssh2->getLastError(), $ssh2->getLog());
             }
             if (!empty($result)) {
                 $result = trim($result);
                 //TODO: '\n' should be escaped from $result before logging
-                log::add(__CLASS__, 'debug', '[' .$this->getName() . '] SSH exec :: ' . str_replace("\r\n", "\\r\\n", $command) . ' => ' . str_replace("\r\n", "\\r\\n", $result));
+                log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Cmd :: ' . str_replace("\r\n", "\\r\\n", $command));
+                log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Cmd Result :: ' . str_replace("\r\n", "\\r\\n", $result));
             }
             return $result;
         } catch (Exception $e) {
-            log::add(__CLASS__, 'error', '[' . $this->getName() . '] Exception :: ' . $e->getMessage());
+            log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Cmd :: ' . str_replace("\r\n", "\\r\\n", $command));
+            log::add(__CLASS__, 'error', '[' . $this->getName() . '] Cmd Exception :: ' . $e->getMessage());
             // TODO est qu'il ne faut pas faire un SSH disconnect ici ?
             return false;
         }
