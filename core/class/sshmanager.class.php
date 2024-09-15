@@ -156,14 +156,14 @@ class sshmanager extends eqLogic {
         }
 
         if (is_array($commands)) {
-            log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Execute Cmds :: " . json_encode($commands));
+            log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Cmds :: " . json_encode($commands));
             $results = [];
             foreach ($commands as $cmd) {
                 $results[] = $sshmanager->internalExecuteCmd($cmd);
             }
             return $results;
         } elseif (is_string($commands)) {
-            log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Execute Cmd :: " . $commands);
+            log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Cmd :: " . $commands);
             return $sshmanager->internalExecuteCmd($commands);
         } else {
             throw new Exception('Invalid command type');
@@ -305,7 +305,7 @@ class sshmanager extends eqLogic {
         if (!(isset(sshmanager::$_ssh2_client[$eqLogicID]))) {
             [$host, $port, $timeout] = $this->getConnectionData();
             [$username, $keyOrpassword] = $this->getAuthenticationData();
-            log::add(__CLASS__, 'debug', "[{$eqLogicName}] Creating SSH2 client (pid: {$pid}) for eqLogic {$eqLogicID} to {$host}");
+            log::add(__CLASS__, 'debug', "[{$eqLogicName}] >>>> Creating SSH2 client (pid: {$pid}) for eqLogic {$eqLogicID} to {$host}");
             $ssh2 = new SSH2($host, $port, $timeout);
 
             try {
@@ -333,7 +333,7 @@ class sshmanager extends eqLogic {
 
             sshmanager::$_ssh2_client[$eqLogicID] = $ssh2;
         } else {
-            log::add(__CLASS__, 'debug', "[" . $eqLogicName . "] Existing SSH2 client (pid: {$pid}) for eqLogic {$eqLogicID}");
+            log::add(__CLASS__, 'debug', "[" . $eqLogicName . "] >>>> Existing SSH2 client (pid: {$pid}) for eqLogic {$eqLogicID} to {$host}");
         }
         return sshmanager::$_ssh2_client[$eqLogicID];
     }
