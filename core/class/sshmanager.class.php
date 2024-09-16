@@ -24,7 +24,11 @@ use phpseclib3\Crypt\PublicKeyLoader;
 use phpseclib3\Net\SFTP;
 
 if (!defined('NET_SSH2_LOGGING')) {
-    define('NET_SSH2_LOGGING', 2);
+    define('NET_SSH2_LOGGING', 2); // SSH2::LOG_COMPLEX
+}
+
+if (!defined('NET_SFTP_LOGGING')) {
+    define('NET_SFTP_LOGGING', 2); // SFTP::LOG_COMPLEX
 }
 
 class SSHConnectException extends \RuntimeException {
@@ -133,7 +137,7 @@ class sshmanager extends eqLogic {
         if (!is_object($sshmanager)) {
             throw new Exception('Invalid host Id');
         }
-        log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Check SSH Connection");
+        // log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Check SSH Connection");
         return $sshmanager->internalCheckConnection();
     }
 
@@ -150,15 +154,16 @@ class sshmanager extends eqLogic {
         if (!is_object($sshmanager)) {
             throw new Exception('Invalid host Id');
         }
-        log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] executeCmds");
 
         if (is_array($commands)) {
+            log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Cmds :: " . json_encode($commands));
             $results = [];
             foreach ($commands as $cmd) {
                 $results[] = $sshmanager->internalExecuteCmd($cmd);
             }
             return $results;
         } elseif (is_string($commands)) {
+            log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Cmd :: " . $commands);
             return $sshmanager->internalExecuteCmd($commands);
         } else {
             throw new Exception('Invalid command type');
@@ -300,35 +305,35 @@ class sshmanager extends eqLogic {
         if (!(isset(sshmanager::$_ssh2_client[$eqLogicID]))) {
             [$host, $port, $timeout] = $this->getConnectionData();
             [$username, $keyOrpassword] = $this->getAuthenticationData();
-            log::add(__CLASS__, 'debug', "[{$eqLogicName}] Creating SSH2 client (pid: {$pid}) for eqLogic {$eqLogicID} to {$host}");
+            log::add(__CLASS__, 'debug', "[{$eqLogicName}] >>>> Creating SSH2 client (pid: {$pid}) for eqLogic {$eqLogicID} to {$host}");
             $ssh2 = new SSH2($host, $port, $timeout);
 
             try {
                 if (!$ssh2->login($username, $keyOrpassword)) {
-                    throw new SSHConnectException("[{$eqLogicName}] Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.", $ssh2->getLog());
+                    throw new SSHConnectException("[{$eqLogicName}] >>>> Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.", $ssh2->getLog());
                 }
 
                 if (!$ssh2->isConnected()) {
-                    throw new SSHConnectException("[{$eqLogicName}] Connection failed:" . $ssh2->getLastError(), $ssh2->getLog());
+                    throw new SSHConnectException("[{$eqLogicName}] >>>> Connection failed :: " . $ssh2->getLastError(), $ssh2->getLog());
                 }
 
                 if (!$ssh2->isAuthenticated()) {
-                    throw new SSHConnectException("[{$eqLogicName}] Authentication failed :: " . $ssh2->getLastError(), $ssh2->getLog());
+                    throw new SSHConnectException("[{$eqLogicName}] >>>> Authentication failed :: " . $ssh2->getLastError(), $ssh2->getLog());
                 }
             } catch (SSHConnectException $ex) {
-                log::add(__CLASS__, 'error', '[' . $eqLogicName . '] ' . $ex->getMessage());
+                log::add(__CLASS__, 'error', '[' . $eqLogicName . '] Login Exception :: ' . $ex->getMessage());
+                log::add(__CLASS__, 'debug', '[' . $eqLogicName . '] Login Exception log :: ' . $ex->getLog());
                 throw $ex;
             } catch (\Throwable $th) {
-                log::add(__CLASS__, 'error', "[{$eqLogicName}] General exception during connection :: " . $th->getMessage());
-                log::add(__CLASS__, 'debug', "[{$eqLogicName}] General exception log :: " . $ssh2->getLog());
+                log::add(__CLASS__, 'error', "[{$eqLogicName}] General SSH2Client Exception :: " . $th->getMessage());
                 throw $th;
             }
 
-            log::add(__CLASS__, 'debug', "[{$eqLogicName}] Connected and authenticated");
+            log::add(__CLASS__, 'debug', "[{$eqLogicName}] >>>> Connected and authenticated");
 
             sshmanager::$_ssh2_client[$eqLogicID] = $ssh2;
         } else {
-            log::add(__CLASS__, 'debug', "[" . $eqLogicName . "] Existing SSH2 client (pid: {$pid}) for eqLogic {$eqLogicID}");
+            log::add(__CLASS__, 'debug', "[" . $eqLogicName . "] >>>> Existing SSH2 client (pid: {$pid}) for eqLogic {$eqLogicID}");
         }
         return sshmanager::$_ssh2_client[$eqLogicID];
     }
@@ -342,17 +347,50 @@ class sshmanager extends eqLogic {
             log::add(__CLASS__, 'debug', "[{$this->getName()}] Exception Log :: {$ex->getLog()}");
             return false;
         } catch (\Throwable $th) {
-            log::add(__CLASS__, 'error', $th->getMessage());
+            log::add(__CLASS__, 'error', "[{$this->getName()}] General CheckConnection Exception :: " . $th->getMessage());
             return false;
         }
     }
 
     private function internalExecuteCmd(string $command) {
-        $ssh2 = $this->getSSH2Client();
-        $result = $ssh2->exec($command);
-        //TODO: '\n' should be escaped from $result before logging
-        log::add(__CLASS__, 'debug', '['  . $this->getName() .  "] SSH exec :: {$command} => {$result}");
-        return $result;
+        try {
+            $ssh2 = $this->getSSH2Client();
+        } catch (SSHConnectException $ex) {
+            log::add(__CLASS__, 'error', "[{$this->getName()}] Exception :: {$ex->getMessage()}");
+            log::add(__CLASS__, 'debug', "[{$this->getName()}] Exception Log :: {$ex->getLog()}");
+            throw $ex;
+            return false;
+        } catch (\Throwable $th) {
+            log::add(__CLASS__, 'error', "[{$this->getName()}] General ExecuteCmd Exception :: " . $th->getMessage());
+            throw $th;
+            return false;
+        }
+        
+        try {
+            $result = $ssh2->exec($command);
+            if ($ssh2->isTimeout()) {
+                // log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Cmd :: ' . str_replace("\r\n", "\\r\\n", $command));
+                log::add(__CLASS__, 'error', '[' . $this->getName() . '] Cmd Timeout :: ' . $ssh2->getLastError());
+                $ssh2->reset();
+                $result = '';
+                throw new SSHConnectException("[{$this->getName()}] Cmd Timeout :: " . $ssh2->getLastError(), $ssh2->getLog());
+            }
+            if (!empty($result)) {
+                $result = trim($result);
+                //TODO: '\n' should be escaped from $result before logging
+                // log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Cmd :: ' . str_replace("\r\n", "\\r\\n", $command));
+                log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Cmd Result :: ' . str_replace("\r\n", "\\r\\n", $result));
+            } else {
+                // log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Cmd :: ' . str_replace("\r\n", "\\r\\n", $command));
+                log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Cmd Result :: VIDE');
+            }
+            return $result;
+        } catch (Exception $e) {
+            // log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Cmd :: ' . str_replace("\r\n", "\\r\\n", $command));
+            log::add(__CLASS__, 'error', '[' . $this->getName() . '] Cmd Exception :: ' . $e->getMessage());
+            // TODO est qu'il ne faut pas faire un SSH disconnect ici ?
+            return false;
+        }
     }
 
     public function preInsert() {
