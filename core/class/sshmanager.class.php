@@ -404,8 +404,8 @@ class sshmanager extends eqLogic {
             log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: ' . str_replace("\r\n", "\\r\\n", $command));
             log::add(__CLASS__, 'error', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' RunTimeEx :: ' . $ex->getMessage());
             
-            log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' RuntimeEx LastError :: ' . $ssh2->getLastError());
-			log::add('Monitoring', 'debug', '['. $this->getName() .'][SSH-EXEC] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' RuntimeEx Logs ::' . "\r\n" . $ssh2->getLog());
+            log::add(__CLASS__, 'debug', '['. $this->getName() .'][SSH-EXEC] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' RuntimeEx LastError :: ' . $ssh2->getLastError());
+			log::add(__CLASS__, 'debug', '['. $this->getName() .'][SSH-EXEC] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' RuntimeEx Logs ::' . "\r\n" . $ssh2->getLog());
             
             throw new SSHException('[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' RunTimeEx :: ' . $ex->getMessage(), $ssh2->getLastError(), $ssh2->getLog());
 
