@@ -233,12 +233,12 @@ document.getElementById('div_pageContainer').addEventListener("click", function(
 								jeedomUtils.showAlert({
 									title: "SSH Manager	- Commands",
 									message: "Error :: Please select a valid command !",
-									level: 'danger',
+									level: 'waring',
 									emptyBefore: false
 								});
 								return
 							}
-							
+
 							addCmdToTable({
 								'type': (new_type === '' ? 'info' : new_type),
 								'subType': (new_subtype === '' ? 'string' : new_subtype),
@@ -272,7 +272,7 @@ document.getElementById('div_pageContainer').addEventListener("click", function(
 						click: function (event) {
 							jeedomUtils.showAlert({
 								title: "SSH Manager	- Commands",
-								message: "Cancel :: Action annulée",
+								message: "Ajout de commande :: Action annulée",
 								level: 'warning',
 								emptyBefore: false
 							});
