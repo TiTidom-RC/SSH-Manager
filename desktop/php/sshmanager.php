@@ -197,8 +197,8 @@ $eqLogics = eqLogic::byType($plugin->getId());
             <div role="tabpanel" class="tab-pane" id="commandtab">
                 <div class="input-group pull-right" style="display:inline-flex">
                     <span class="input-group-btn">
-                    <a class="btn btn-default btn-sm pull-right roundedLeft cmdAction" data-action="add" style="margin-top:5px;"><i class="fas fa-plus-circle"></i> {{Ajouter une commande}}</a>
-                    <a class="btn btn-info btn-sm pull-right roundedRight btnTemplateCmds" data-title="Template de Commandes" style="margin-top:5px"><i class="fas fa-plus-circle icon_green"></i> {{Ajouter une commande (Template)}}</a>
+                    <a class="btn btn-default btn-sm roundedLeft cmdAction" data-action="add" style="margin-top:5px;"><i class="fas fa-plus-circle"></i> {{Ajouter une commande}}</a>
+                    <a class="btn btn-info btn-sm roundedRight btnTemplateCmds" data-title="Template de Commandes" style="margin-top:5px"><i class="fas fa-plus-circle icon_green"></i> {{Ajouter une commande (Template)}}</a>
                     </span>
                 
                 <br><br>
