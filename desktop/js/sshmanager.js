@@ -176,14 +176,12 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
 			tr.querySelector('.divCmdCronRefresh').style.display = "none";
-			// tr.querySelector('.cmdOptionTemplates').style.display = "none";
 		
 		} else if (event.target.value === "refresh" ) {
 			tr.querySelector(".cmdAttr[data-l1key='type']").value = "action";
 			tr.querySelector(".cmdAttr[data-l1key='type']").triggerEvent("change");
 			tr.querySelector(".type").style.display = "none";	
 			tr.querySelector(".subType").style.display = "none";
-			// tr.querySelector('.cmdOptionTemplates').style.display = "none";
 
 			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
@@ -197,14 +195,12 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "block";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
 			tr.querySelector('.divCmdCronRefresh').style.display = "none";
-			// tr.querySelector('.cmdOptionTemplates').style.display = "block";
 			
 		} else {
 			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
 			tr.querySelector('.divCmdCronRefresh').style.display = "none";
-			// tr.querySelector('.cmdOptionTemplates').style.display = "none";
 			
 		}
 	}
@@ -212,10 +208,6 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 
 document.getElementById('div_pageContainer').addEventListener("click", function(event) {
 	if (event.target.classList.contains("btnTemplateCmds")) {
-		let tr = event.target.closest("tr");
-		let cmdTemplate = tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="ssh-command"]');
-		let nameTemplate = tr.querySelector('.cmdAttr[data-l1key="name"]');
-
 		jeeDialog.dialog({
 			id: 'mod_commands',
 			title: '{{Commandes SSH (SSH Manager)}}',
@@ -227,16 +219,30 @@ document.getElementById('div_pageContainer').addEventListener("click", function(
 			},
 			buttons: {
 				confirm: {
-					label: '{{OK}}',
+					label: '{{Ajouter}}',
 					className: 'success',
 					callback: {
 						click: function (event) {
 							let response = jeeDialog.get('#mod_commands', 'content')
 							let new_name = response.querySelector('.cmdAttr[data-l1key="name"]').value;
 							let new_cmd = response.querySelector('.cmdAttr[data-l1key="ssh-command"]').value;
-							
-							cmdTemplate.value = new_cmd;
-							nameTemplate.value = new_name;
+
+							// addtoTableCmd
+							addCmdToTable({
+								'type': 'info',
+								'subType': 'string',
+								'name': new_name,
+
+								configuration: {
+									'cmdType': 'command',
+									'ssh-command': new_cmd,
+									'autorefresh': 1,
+								}
+							});
+							// document.querySelectorAll('.cmdAttr[data-l1key="type"]').last().triggerEvent('change')
+							// document.querySelectorAll('.cmdAttr[data-l1key="subType"]').last().triggerEvent('change')
+    						// jeeFrontEnd.modifyWithoutSave = true
+    						modifyWithoutSave = true
 
 							jeedomUtils.showAlert({
 								title: "SSH Manager	- Commands",
