@@ -345,7 +345,7 @@ class sshmanager extends eqLogic {
             sshmanager::$_ssh2_client[$eqLogicID] = $ssh2;
 
         } else {
-            log::add(__CLASS__, 'debug', "[" . $eqLogicName . "] >>>> Existing SSH2 client (pid: {$pid}) for eqLogic {$eqLogicID}");
+            // log::add(__CLASS__, 'debug', "[" . $eqLogicName . "] >>>> Existing SSH2 client (pid: {$pid}) for eqLogic {$eqLogicID}");
         }
         return sshmanager::$_ssh2_client[$eqLogicID];
     }
