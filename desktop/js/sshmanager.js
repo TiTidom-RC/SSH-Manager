@@ -72,11 +72,6 @@ function addCmdToTable(_cmd) {
 	// Paramètres
 	tr += '<td class="tdOptions">'
 
-	// Paramètres->Templates
-    tr += '<div class="cmdOptionTemplates">'
-	tr += '<a class="btn btn-info btn-xs btnTemplateCmds" title="Templates de Commandes"><i class="fas fa-question-circle"></i> {{Commandes}}</a>'
-	tr += '</div>'
-
 	// Paramètres->Auto-Refresh
 	tr += '<div class="cmdOptionAutoRefresh">'
 	tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="configuration" data-l2key="autorefresh" checked />{{Auto-Refresh}}</label>'
@@ -98,6 +93,7 @@ function addCmdToTable(_cmd) {
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="serviceName" placeholder="{{Nom du Service}}">'
 	tr += '<input class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="serviceAction" placeholder="{{Action du Service}}">'
 	tr += '</div>'
+	
 	tr += '</td>'
 
 	// Options
@@ -180,14 +176,12 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
 			tr.querySelector('.divCmdCronRefresh').style.display = "none";
-			tr.querySelector('.cmdOptionTemplates').style.display = "none";
 		
 		} else if (event.target.value === "refresh" ) {
 			tr.querySelector(".cmdAttr[data-l1key='type']").value = "action";
 			tr.querySelector(".cmdAttr[data-l1key='type']").triggerEvent("change");
 			tr.querySelector(".type").style.display = "none";	
 			tr.querySelector(".subType").style.display = "none";
-			tr.querySelector('.cmdOptionTemplates').style.display = "none";
 
 			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
@@ -201,14 +195,12 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "block";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
 			tr.querySelector('.divCmdCronRefresh').style.display = "none";
-			tr.querySelector('.cmdOptionTemplates').style.display = "block";
 			
 		} else {
 			tr.querySelector(".cmdOptionAutoRefresh").style.display = "none";
 			tr.querySelector(".cmdAttr[data-l1key='configuration'][data-l2key='ssh-command']").style.display = "none";
 			tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="cmdToRefresh"]').style.display = "none";
 			tr.querySelector('.divCmdCronRefresh').style.display = "none";
-			tr.querySelector('.cmdOptionTemplates').style.display = "none";
 			
 		}
 	}
@@ -216,31 +208,52 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 
 document.getElementById('div_pageContainer').addEventListener("click", function(event) {
 	if (event.target.classList.contains("btnTemplateCmds")) {
-		let tr = event.target.closest("tr");
-		let cmdTemplate = tr.querySelector('.cmdAttr[data-l1key="configuration"][data-l2key="ssh-command"]');
-		let nameTemplate = tr.querySelector('.cmdAttr[data-l1key="name"]');
-
 		jeeDialog.dialog({
 			id: 'mod_commands',
 			title: '{{Commandes SSH (SSH Manager)}}',
 			width: 850,
-			height: 600,
+			height: 615,
 			top: '10vh',
 			contentUrl: 'index.php?v=d&plugin=sshmanager&modal=mod.commands',
 			callback: function () {
 			},
 			buttons: {
 				confirm: {
-					label: '{{OK}}',
+					label: '{{Ajouter}}',
 					className: 'success',
 					callback: {
 						click: function (event) {
 							let response = jeeDialog.get('#mod_commands', 'content')
 							let new_name = response.querySelector('.cmdAttr[data-l1key="name"]').value;
 							let new_cmd = response.querySelector('.cmdAttr[data-l1key="ssh-command"]').value;
-							
-							cmdTemplate.value = new_cmd;
-							nameTemplate.value = new_name;
+							let new_type = response.querySelector('.cmdAttr[data-l1key="type"]').value;
+							let new_subtype = response.querySelector('.cmdAttr[data-l1key="subtype"]').value;
+
+							if (new_name === '' || new_cmd === '' || new_type === '' || new_subtype === '') {
+								jeedomUtils.showAlert({
+									title: "SSH Manager	- Commands",
+									message: "Error :: Please select a valid command !",
+									level: 'warning',
+									emptyBefore: false
+								});
+								return
+							}
+
+							addCmdToTable({
+								'type': (new_type === '' ? 'info' : new_type),
+								'subType': (new_subtype === '' ? 'string' : new_subtype),
+								'name': new_name,
+
+								configuration: {
+									'cmdType': 'command',
+									'ssh-command': new_cmd,
+									// 'autorefresh': 1,
+								}
+							});
+							// document.querySelectorAll('.cmdAttr[data-l1key="type"]').last().triggerEvent('change')
+							// document.querySelectorAll('.cmdAttr[data-l1key="subType"]').last().triggerEvent('change')
+    						// jeeFrontEnd.modifyWithoutSave = true
+    						modifyWithoutSave = true
 
 							jeedomUtils.showAlert({
 								title: "SSH Manager	- Commands",
@@ -259,7 +272,7 @@ document.getElementById('div_pageContainer').addEventListener("click", function(
 						click: function (event) {
 							jeedomUtils.showAlert({
 								title: "SSH Manager	- Commands",
-								message: "Cancel :: Action annulée",
+								message: "Ajout de commande :: Action annulée",
 								level: 'warning',
 								emptyBefore: false
 							});

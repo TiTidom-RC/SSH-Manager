@@ -75,6 +75,16 @@ sendVarToJS('commands', $commands);
                             <textarea rows="4" class="cmdAttr form-control" data-l1key="ssh-command" placeholder="{{Commande SSH}}"></textarea>
                         </div>
                     </div>
+                    <br />
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{Type / SubType}}</label>
+                        <div class="col-md-4">
+                            <div style="display:inline-flex; gap: 10px;">
+                                <input type="text" class="cmdAttr form-control" data-l1key="type" placeholder="{{Type}}">
+                                <input type="text" class="cmdAttr form-control" data-l1key="subtype" placeholder="{{SubType}}">
+                            </div>
+                        </div>
+                    </div>
                 </fieldset>
             </form>
         </div>
