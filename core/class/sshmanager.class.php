@@ -368,7 +368,7 @@ class sshmanager extends eqLogic {
             $ssh2 = $this->getSSH2Client();
         } catch (RuntimeException $ex) {
             log::add(__CLASS__, 'error', "[{$this->getName()}] ExecCmd RunTimeEx :: {$ex->getMessage()}");
-            throw new SSHException("[{$this->getName()}] Exception :: {$ex->getMessage()}", $ssh2->getLastError(), $ssh2->getLog());
+            throw new SSHException("ExecCmd RunTimeEx :: {$ex->getMessage()}", $ssh2->getLastError(), $ssh2->getLog());
         } catch (\Throwable $th) {
             log::add(__CLASS__, 'error', "[{$this->getName()}] ExecCmd General Exception :: " . $th->getMessage());
             throw $th;
@@ -407,7 +407,7 @@ class sshmanager extends eqLogic {
             log::add(__CLASS__, 'debug', '['. $this->getName() .'][SSH-EXEC] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' RuntimeEx LastError :: ' . $ssh2->getLastError());
 			log::add(__CLASS__, 'debug', '['. $this->getName() .'][SSH-EXEC] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' RuntimeEx Logs ::' . "\r\n" . $ssh2->getLog());
             
-            throw new SSHException('[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' RunTimeEx :: ' . $ex->getMessage(), $ssh2->getLastError(), $ssh2->getLog());
+            throw new SSHException((!empty($cmdName) ? $cmdName : 'Cmd') . ' RunTimeEx :: ' . $ex->getMessage(), $ssh2->getLastError(), $ssh2->getLog());
 
         } catch (\Throwable $th) {
             log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: ' . str_replace("\r\n", "\\r\\n", $command));
