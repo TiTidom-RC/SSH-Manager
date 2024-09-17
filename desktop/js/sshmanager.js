@@ -212,7 +212,7 @@ document.getElementById('div_pageContainer').addEventListener("click", function(
 			id: 'mod_commands',
 			title: '{{Commandes SSH (SSH Manager)}}',
 			width: 850,
-			height: 600,
+			height: 650,
 			top: '10vh',
 			contentUrl: 'index.php?v=d&plugin=sshmanager&modal=mod.commands',
 			callback: function () {
@@ -247,7 +247,7 @@ document.getElementById('div_pageContainer').addEventListener("click", function(
 								configuration: {
 									'cmdType': 'command',
 									'ssh-command': new_cmd,
-									'autorefresh': 1,
+									// 'autorefresh': 1,
 								}
 							});
 							// document.querySelectorAll('.cmdAttr[data-l1key="type"]').last().triggerEvent('change')
