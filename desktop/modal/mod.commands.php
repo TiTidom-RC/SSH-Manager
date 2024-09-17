@@ -61,19 +61,6 @@ sendVarToJS('commands', $commands);
                             <input type="text" class="cmdAttr form-control" data-l1key="name" placeholder="{{Nom}}" />
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-md-3 control-label">{{Type / SubType}}</label>
-                        <div class="col-md-5">
-                            <div class="row">
-                                <div class="col-md-5 pull-left">
-                                    <input readonly type="text" class="cmdAttr form-control" data-l1key="type" placeholder="{{Type}}">
-                                </div>
-                                <div class="col-md-5 pull-right">
-                                    <input readonly type="text" class="cmdAttr form-control" data-l1key="subtype" placeholder="{{SubType}}">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     <br />
                     <div class="form-group">
                         <label class="col-md-3 control-label">{{Description}}</label>
@@ -86,6 +73,20 @@ sendVarToJS('commands', $commands);
                         <label class="col-md-3 control-label">{{Commande}}</label>
                         <div class="col-md-9">
                             <textarea rows="4" class="cmdAttr form-control" data-l1key="ssh-command" placeholder="{{Commande SSH}}"></textarea>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">{{Type / SubType}}</label>
+                        <div class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-6 pull-left">
+                                    <input readonly type="text" class="cmdAttr form-control" data-l1key="type" placeholder="{{Type}}">
+                                </div>
+                                <div class="col-md-6 pull-right">
+                                    <input readonly type="text" class="cmdAttr form-control" data-l1key="subtype" placeholder="{{SubType}}">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </fieldset>
