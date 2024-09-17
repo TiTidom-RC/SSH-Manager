@@ -212,7 +212,7 @@ document.getElementById('div_pageContainer').addEventListener("click", function(
 			id: 'mod_commands',
 			title: '{{Commandes SSH (SSH Manager)}}',
 			width: 850,
-			height: 650,
+			height: 615,
 			top: '10vh',
 			contentUrl: 'index.php?v=d&plugin=sshmanager&modal=mod.commands',
 			callback: function () {
