@@ -233,7 +233,7 @@ document.getElementById('div_pageContainer').addEventListener("click", function(
 								jeedomUtils.showAlert({
 									title: "SSH Manager	- Commands",
 									message: "Error :: Please select a valid command !",
-									level: 'waring',
+									level: 'warning',
 									emptyBefore: false
 								});
 								return
