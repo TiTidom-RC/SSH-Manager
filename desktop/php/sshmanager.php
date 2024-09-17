@@ -195,12 +195,13 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
             <!-- Onglet des commandes de l'équipement -->
             <div role="tabpanel" class="tab-pane" id="commandtab">
-                <a class="btn btn-default btn-sm pull-right cmdAction" data-action="add" style="margin-top:5px;"><i class="fas fa-plus-circle"></i> {{Ajouter une commande}}</a>
+                <a class="btn btn-default btn-sm pull-left cmdAction" data-action="add" style="margin-top:5px;"><i class="fas fa-plus-circle"></i> {{Ajouter une commande}}</a>
+                <a class="btn btn-info btn-sm pull-right btnTemplateCmds" data-title="Template de Commandes" style="margin-top:5px"><i class="fas fa-plus-circle icon_green"></i> {{Ajouter une commande (Template)}}</a>
                 <br><br>
                 <div class="table-responsive">
                     <table id="table_cmd" class="table table-bordered table-condensed">
                         <thead>
-                        <tr>
+                            <tr>
                                 <th class="hidden-xs" style="min-width:50px;width:70px;">Id</th>
                                 <th style="min-width:220px;width:250px;">{{Nom}}</th>
                                 <th style="min-width:120px;width:150px;">{{Type}}</th>
