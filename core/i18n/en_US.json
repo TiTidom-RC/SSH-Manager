@@ -28,6 +28,7 @@
     "plugins\/sshmanager\/desktop\/js\/sshmanager.js": {
         "Action du Service": "Service action",
         "Afficher": "View",
+        "Ajouter": "Add",
         "Annuler": "Cancel",
         "Assistant Cron": "Cron assistant",
         "Aucune": "No",
@@ -35,7 +36,6 @@
         "Choisir une icône": "Choose an icon",
         "Commande info liée": "Related info command",
         "Commande à rafraîchir": "Refresh command",
-        "Commandes": "Commands",
         "Commandes SSH (SSH Manager)": "SSH commands (SSH Manager)",
         "Cron (? = Assistant)": "Cron (? = Assistant)",
         "Historiser": "History",
@@ -44,7 +44,6 @@
         "Min": "Min",
         "Nom de la commande": "Command name",
         "Nom du Service": "Service name",
-        "OK": "OK",
         "Refresh": "Refresh",
         "Refresh All": "Refresh All",
         "SSH": "SSH",
@@ -65,7 +64,10 @@
         "Description": "Description",
         "Liste des commandes": "List of commands",
         "Nom": "Name",
-        "Sélectionner une commande": "Select a command"
+        "SubType": "SubType",
+        "Sélectionner une commande": "Select a command",
+        "Type": "Type",
+        "Type \/ SubType": "Type \/ SubType"
     },
     "plugins\/sshmanager\/desktop\/php\/params.sshmanager.inc.php": {
         "Adresse IP ou nom de l'hôte": "IP address or host name",
@@ -94,6 +96,7 @@
         "Activer": "Activate",
         "Ajouter": "Add",
         "Ajouter une commande": "Add a command",
+        "Ajouter une commande (Template)": "Add a command (Template)",
         "Aucun": "No",
         "Aucun équipement SSH Manager trouvé, cliquer sur \"Ajouter\" pour commencer": "No SSH Manager equipment found, click on \"Add\" to begin",
         "Auto-actualisation": "Self-actualization",
