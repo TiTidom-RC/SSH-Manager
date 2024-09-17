@@ -229,10 +229,19 @@ document.getElementById('div_pageContainer').addEventListener("click", function(
 							let new_type = response.querySelector('.cmdAttr[data-l1key="type"]').value;
 							let new_subtype = response.querySelector('.cmdAttr[data-l1key="subtype"]').value;
 
+							if (commands.value === '') {
+								jeedomUtils.showAlert({
+									title: "SSH Manager	- Commands",
+									message: "Error :: Please select a command",
+									level: 'danger',
+									emptyBefore: false
+								});
+								return
+							}
 							// addtoTableCmd
 							addCmdToTable({
-								'type': new_type,
-								'subType': new_subtype,
+								'type': (new_type === '' ? 'info' : new_type),
+								'subType': (new_subtype === '' ? 'string' : new_subtype),
 								'name': new_name,
 
 								configuration: {
