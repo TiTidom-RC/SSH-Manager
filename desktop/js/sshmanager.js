@@ -227,7 +227,7 @@ document.getElementById('div_pageContainer').addEventListener("click", function(
 							let new_name = response.querySelector('.cmdAttr[data-l1key="name"]').value;
 							let new_cmd = response.querySelector('.cmdAttr[data-l1key="ssh-command"]').value;
 							let new_type = response.querySelector('.cmdAttr[data-l1key="type"]').value;
-							let new_subtype = response.querySelector('.cmdAttr[data-l1key="subType"]').value;
+							let new_subtype = response.querySelector('.cmdAttr[data-l1key="subtype"]').value;
 
 							// addtoTableCmd
 							addCmdToTable({
