@@ -173,7 +173,7 @@ class sshmanager extends eqLogic {
             }
             return $results;
         } elseif (is_string($commands)) {
-            log::add(__CLASS__, 'debug', "[" . $sshmanager->getName() . "] " . (!empty($cmdName) ? $cmdName : "Cmd") . " :: " . $commands);
+            // log::add(__CLASS__, 'debug', "[" . $sshmanager->getName() . "] " . (!empty($cmdName) ? $cmdName : "Cmd") . " :: " . $commands);
             return $sshmanager->internalExecuteCmd($commands, $cmdName);
         } else {
             throw new Exception('Invalid command type');
