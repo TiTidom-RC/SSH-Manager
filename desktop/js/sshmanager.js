@@ -226,11 +226,13 @@ document.getElementById('div_pageContainer').addEventListener("click", function(
 							let response = jeeDialog.get('#mod_commands', 'content')
 							let new_name = response.querySelector('.cmdAttr[data-l1key="name"]').value;
 							let new_cmd = response.querySelector('.cmdAttr[data-l1key="ssh-command"]').value;
+							let new_type = response.querySelector('.cmdAttr[data-l1key="type"]').value;
+							let new_subtype = response.querySelector('.cmdAttr[data-l1key="subType"]').value;
 
 							// addtoTableCmd
 							addCmdToTable({
-								'type': 'info',
-								'subType': 'string',
+								'type': new_type,
+								'subType': new_subtype,
 								'name': new_name,
 
 								configuration: {

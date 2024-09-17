@@ -63,6 +63,14 @@ sendVarToJS('commands', $commands);
                     </div>
                     <br />
                     <div class="form-group">
+                        <label class="col-md-3 control-label">{{Type / SubType}}</label>
+                        <div class="col-md-2">
+                            <input readonly type="text" class="cmdAttr form-control" data-l1key="type" placeholder="{{Type}}" />
+                            <input readonly type="text" class="cmdAttr form-control" data-l1key="subtype" placeholder="{{SubType}}" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="form-group">
                         <label class="col-md-3 control-label">{{Description}}</label>
                         <div class="col-md-9">
                             <textarea readonly rows="4" class="cmdAttr form-control" data-l1key="description" placeholder="{{Description}}"></textarea>

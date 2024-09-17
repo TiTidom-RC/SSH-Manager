@@ -27,4 +27,6 @@ document.querySelector('.selectCmdTemplate[data-l1key="ssh-select"').addEventLis
     tr.querySelector('.cmdAttr[data-l1key="name"]').value = commands[value]["name"];
     tr.querySelector('.cmdAttr[data-l1key="description"]').value = commands[value]["description"];
     tr.querySelector('.cmdAttr[data-l1key="ssh-command"]').value = commands[value]["command"];
+    tr.querySelector('.cmdAttr[data-l1key="type').value = commands[value]["type"];
+    tr.querySelector('.cmdAttr[data-l1key="subtype').value = commands[value]["subtype"];
   });
