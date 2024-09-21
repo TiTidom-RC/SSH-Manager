@@ -1,0 +1,43 @@
+{
+    "list_services": {
+        "name": "List Running Services",
+        "short_description": "List Running Services",
+        "description": "Retourne la liste des services dont l'état est 'running'",
+        "command": "sudo systemctl list-units --type=service --state=running --plain --no-legend | awk '{ print $1 }' | awk 'BEGIN {RS=\"\"}{gsub(/\\n/,\",\",$0); print $0}'",
+        "type": "info",
+        "subtype": "string"
+    },
+    "nb_sys_updates": {
+        "name": "Sys Updates Number",
+        "short_description": "Number of System Updates",
+        "description": "Retourne le nombre de mises à jour en attente sur le système distant",
+        "command": "sudo apt update -qq 2>/dev/null | cut -d'.' -f1",
+        "type": "info",
+        "subtype": "string"
+
+    },
+    "list_sys_updates": {
+        "name": "List System Updates",
+        "short_description": "List Packages to update",
+        "description": "Retourne la liste des paquets systèmes en attente de mise à jour sur le système distant",
+        "command": "sudo apt-get -qq update; sudo apt list --upgradable -qq 2>/dev/null | cut -d'/' -f1 | awk 'BEGIN {RS=\"\"}{gsub(/\\n/,\",\",$0); print $0}'",
+        "type": "info",
+        "subtype": "string"
+    },
+    "restart_service": {
+        "name": "Restart Service",
+        "short_description": "Restart Service",
+        "description": "Redémarre un service sur le système distant. remplacer #service_name# par le nom du service à redémarrer",
+        "command": "sudo systemctl restart #service_name#",
+        "type": "action",
+        "subtype": "other"
+    },
+    "update_sys_no_confirm": {
+        "name": "Update System",
+        "short_description": "Update System without confirmation",
+        "description": "Met à jour le système distant sans confirmation",
+        "command": "sudo apt-get -qq update; sudo apt-get -qq upgrade -y",
+        "type": "action",
+        "subtype": "other"
+    }
+}

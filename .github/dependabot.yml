@@ -5,13 +5,6 @@
 # https://docs.github.com/fr/code-security/dependabot/working-with-dependabot/configuring-access-to-private-registries-for-dependabot
 version: 2
 updates:
-  # Maintain python pip dependencies in your 'requirement.txt' file
-  - package-ecosystem: "pip"
-    directory: "/resources"
-    target-branch: "beta"
-    schedule:
-      interval: weekly
-
   - package-ecosystem: "composer"
     # Files stored in repository root
     directory: "/"
