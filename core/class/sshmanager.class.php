@@ -170,7 +170,7 @@ class sshmanager extends eqLogic {
             $results = [];
             foreach ($commands as $cmd) {
                 if (trim($cmd) === '') {
-                    log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Empty command (array)");
+                    log::add(__CLASS__, 'warning', "[{$sshmanager->getName()}] Empty command (array)");
                     $results[] = '';
                 }
                 $results[] = $sshmanager->internalExecuteCmd($cmd);
@@ -178,7 +178,7 @@ class sshmanager extends eqLogic {
             return $results;
         } elseif (is_string($commands)) {
             if (trim($commands) === '') {
-                log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Empty command (string)");
+                log::add(__CLASS__, 'warning', "[{$sshmanager->getName()}] Empty command (string)");
                 return '';
             }
             return $sshmanager->internalExecuteCmd($commands, $cmdName);
@@ -548,7 +548,7 @@ class sshmanagerCmd extends cmd {
 
     public function refreshInfo() {
         if ($this->getType() != 'info' || trim($this->getConfiguration('ssh-command')) == '') {
-            log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] Refresh :: Type not info or ssh-command empty');
+            log::add(get_class($this->getEqLogic()), 'warning', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] Refresh :: Type not info or ssh-command empty');
             return;
         }
         $this->getEqLogic()->checkAndUpdateCmd($this, $this->execute());
