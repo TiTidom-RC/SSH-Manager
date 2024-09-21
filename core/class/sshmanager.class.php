@@ -375,7 +375,7 @@ class sshmanager extends eqLogic {
             $ssh2 = $this->getSSH2Client();
         } catch (RuntimeException $ex) {
             log::add(__CLASS__, 'error', "[{$this->getName()}] ExecCmd RunTimeEx :: {$ex->getMessage()}");
-            throw new SSHException("ExecCmd RunTimeEx :: {$ex->getMessage()}", $ssh2->getLastError(), $ssh2->getLog());
+            throw new RuntimeException("ExecCmd RunTimeEx :: {$ex->getMessage()}");
         } catch (\Throwable $th) {
             log::add(__CLASS__, 'error', "[{$this->getName()}] ExecCmd General Exception :: " . $th->getMessage());
             throw $th;
