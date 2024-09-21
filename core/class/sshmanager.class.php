@@ -506,7 +506,7 @@ class sshmanager extends eqLogic {
             try {
                 $cmd->refreshInfo();
             } catch (Exception $exc) {
-                log::add(__CLASS__, 'error', sprintf(__("[%s] refreshAllInfo Exception :: %s", __FILE__), $cmd->getHumanName(), $exc->getMessage()));
+                log::add(__CLASS__, 'error', sprintf(__("%s refreshAllInfo Exception :: %s", __FILE__), $cmd->getHumanName(), $exc->getMessage()));
             }
         }
     }
@@ -517,7 +517,7 @@ class sshmanager extends eqLogic {
             try {
                 $cmd->execute();
             } catch (Exception $exc) {
-                log::add(__CLASS__, 'error', sprintf(__("[%s] cronCmd Exception :: %s", __FILE__), $cmd->getHumanName(), $exc->getMessage()));
+                log::add(__CLASS__, 'error', sprintf(__("%s cronCmd Exception :: %s", __FILE__), $cmd->getHumanName(), $exc->getMessage()));
             }
         }
     }
