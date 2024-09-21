@@ -170,7 +170,7 @@ class sshmanager extends eqLogic {
             $results = [];
             foreach ($commands as $cmd) {
                 if (trim($cmd) === '') {
-                    log::add(__CLASS__, 'warning', '[' . $sshmanager->getName() . ']  ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: Empty command (array)');
+                    log::add(__CLASS__, 'warning', '[' . $sshmanager->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: Empty command (array)');
                     $results[] = '';
                 }
                 $results[] = $sshmanager->internalExecuteCmd($cmd);
@@ -178,7 +178,7 @@ class sshmanager extends eqLogic {
             return $results;
         } elseif (is_string($commands)) {
             if (trim($commands) === '') {
-                log::add(__CLASS__, 'warning', '[' . $sshmanager->getName() . ']  ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: Empty command (string)');
+                log::add(__CLASS__, 'warning', '[' . $sshmanager->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: Empty command (string)');
                 return '';
             }
             return $sshmanager->internalExecuteCmd($commands, $cmdName);
