@@ -170,13 +170,15 @@ class sshmanager extends eqLogic {
             $results = [];
             foreach ($commands as $cmd) {
                 if (trim($cmd) === '') {
-                    continue;
+                    log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Empty command (array)");
+                    $results[] = '';
                 }
                 $results[] = $sshmanager->internalExecuteCmd($cmd);
             }
             return $results;
         } elseif (is_string($commands)) {
             if (trim($commands) === '') {
+                log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Empty command (string)");
                 return '';
             }
             return $sshmanager->internalExecuteCmd($commands, $cmdName);
