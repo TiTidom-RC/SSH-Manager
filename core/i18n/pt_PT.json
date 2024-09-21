@@ -4,6 +4,8 @@
         "Aucune méthode correspondante à : ": "Nenhum método correspondente a :"
     },
     "plugins\/sshmanager\/core\/class\/sshmanager.class.php": {
+        "%s cronCmd Exception :: %s": "%s cronCmd Exceção :: %s",
+        "%s refreshAllInfo Exception :: %s": "%s refreshAllInfo Exceção :: %s",
         "Adresse IP ou nom d\\'hôte non configuré": "Endereço IP ou nome do anfitrião não configurado",
         "Clé SSH non configurée": "Chave SSH não configurada",
         "Le message et le sujet ne peuvent pas être vide": "A mensagem e o assunto não podem estar vazios",
@@ -14,9 +16,7 @@
         "Rafraichir": "Atualizar",
         "Refresh (postSave) de l\\'équipement": "Atualização (postSave) do equipamento",
         "Refresh de la commande": "Comando de atualização",
-        "[%s] cronCmd Exception :: %s": "[%s] Exceção cronCmd :: %s",
-        "[%s] cronEqLogic Exception :: %s": "[%s] Exceção cronEqLogic :: %s",
-        "[%s] refreshAllInfo Exception :: %s": "[%s] refreshAllInfo Exceção :: %s"
+        "[%s] cronEqLogic Exception :: %s": "[%s] Exceção cronEqLogic :: %s"
     },
     "plugins\/sshmanager\/desktop\/js\/sshmanager.helper.js": {
         "Equipement créé": "Equipamento criado",
