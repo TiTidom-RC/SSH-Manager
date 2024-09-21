@@ -548,6 +548,7 @@ class sshmanagerCmd extends cmd {
 
     public function refreshInfo() {
         if ($this->getType() != 'info' || trim($this->getConfiguration('ssh-command')) == '') {
+            log::add(get_class($this->getEqLogic()), 'debug', '[' . $this->getEqLogic()->getName() . '][' . $this->getName() . '] refreshInfo :: Type not info or ssh-command empty');
             return;
         }
         $this->getEqLogic()->checkAndUpdateCmd($this, $this->execute());
