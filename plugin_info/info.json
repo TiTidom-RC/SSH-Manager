@@ -1,7 +1,7 @@
 {
 	"id": "sshmanager",
 	"name": "SSH Manager",
-	"pluginVersion": "0.5.1",
+	"pluginVersion": "0.5.2",
 	"description": {
 		"fr_FR": "SSH Manager",
 		"en_US": "SSH Manager",
