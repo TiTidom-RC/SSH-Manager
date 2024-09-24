@@ -643,6 +643,7 @@ class sshmanagerCmd extends cmd {
         }
 
         $command = $this->getConfiguration('ssh-command');
+        $cmd_name = $this->getName();
 
         if ($_options != null) {
             if ($this->getType() == 'action') {
@@ -667,7 +668,7 @@ class sshmanagerCmd extends cmd {
                 }
             }
         }
-        $result = sshmanager::executeCmds($this->getEqLogic_id(), $command);
+        $result = sshmanager::executeCmds($this->getEqLogic_id(), $command, $cmd_name);
         if ($this->getType() == 'info') {
             return $result; //TODO: what to do with '\n' in result?
         }
