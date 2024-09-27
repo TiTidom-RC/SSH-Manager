@@ -82,8 +82,8 @@ function buildSelectCommands(currentValue) {
               });
               return;
           } else {
-              for (const id in data.result) {
-                  selectCmd.append(new Option(data.result[id], id));
+              data.result
+                  selectCmd.append(new Option(data.result['short_description'], id));
               }
               selectCmd.value = currentValue;
           }
