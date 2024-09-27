@@ -151,7 +151,9 @@ class sshmanager extends eqLogic {
             log::add(__CLASS__, 'error', '[TemplateCmds] Error :: json file not found');
             throw new Exception('Error :: json file not found');
         }
-        return json_decode($commandsJson, true);
+        $commands = json_decode($commandsJson, true);
+        ksort($commands);
+        return $commands;
     }
     
     /**
