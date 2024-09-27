@@ -14,7 +14,7 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-document.addEventListener('loadSelectCommands', buildSelectCommands);
+document.addEventListener('loadSelectCommands', buildSelectCommands(''));
 
 function triggerLoadSelectCommands() {
   document.dispatchEvent(new Event('loadSelectCommands'));
@@ -45,6 +45,26 @@ document.querySelector('.selectCmdTemplate[data-l1key="ssh-select"').addEventLis
   }
 });
 
+/**
+ * Builds and populates a select element with SSH commands.
+ *
+ * @param {string} [currentValue] - The current value to be selected in the dropdown. If not provided, the current value of the select element will be used.
+ * @returns {void}
+ *
+ * @description
+ * This function fetches SSH command templates via an AJAX request and populates a select element with these commands.
+ * If the `currentValue` parameter is not provided, the function will use the current value of the select element.
+ * The function handles errors by displaying an alert message.
+ *
+ * @example
+ * buildSelectCommands(); // Populates the select element with SSH commands and retains the current selection.
+ *
+ * @example
+ * buildSelectCommands('someCommandKey'); // Populates the select element with SSH commands and sets 'someCommandKey' as the selected value.
+ *
+ * @async
+ * @function buildSelectCommands
+ */
 function buildSelectCommands(currentValue) {
   const selectCmd = document.querySelector('.selectCmdTemplate[data-l1key=ssh-select]');
   if (selectCmd === null) {
