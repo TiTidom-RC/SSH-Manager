@@ -18,6 +18,9 @@
         "Refresh de la commande": "Refresh des Befehls",
         "[%s] cronEqLogic Exception :: %s": "[%s] cronEqLogic Exception :: %s"
     },
+    "plugins\/sshmanager\/desktop\/js\/mod.commands.js": {
+        "Sélectionner une commande": "Einen Befehl auswählen"
+    },
     "plugins\/sshmanager\/desktop\/js\/sshmanager.helper.js": {
         "Equipement créé": "Erstellte Ausstattung",
         "Fermer": "Schließen",
@@ -65,7 +68,6 @@
         "Liste des commandes": "Liste der Befehle",
         "Nom": "Name",
         "SubType": "SubType",
-        "Sélectionner une commande": "Einen Befehl auswählen",
         "Type": "Typ",
         "Type \/ SubType": "Typ \/ SubType"
     },
