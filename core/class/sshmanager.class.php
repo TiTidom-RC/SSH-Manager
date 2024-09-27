@@ -125,6 +125,16 @@ class sshmanager extends eqLogic {
         return $pluginVersion;
     }
 
+    public static function getConfigForCommunity()
+    {
+      $CommunityInfo = "```\n";
+      $CommunityInfo = $CommunityInfo . 'Debian : ' . system::getOsVersion() . "\n";
+      $CommunityInfo = $CommunityInfo . 'SSHManager : ' . config::byKey('sshmanager_version', 'sshmanager') . "\n";
+      $CommunityInfo = $CommunityInfo . 'Plugin : ' . config::byKey('pluginVersion', 'sshmanager') . "\n";
+      $CommunityInfo = $CommunityInfo . "```";
+      return $CommunityInfo;
+    }
+
     // Methods used by client plugins
 
     public static function getRemoteHosts() {
