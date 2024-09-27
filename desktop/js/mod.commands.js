@@ -14,6 +14,12 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+document.addEventListener('loadSelectCommands', buildSelectCommands);
+
+function triggerLoadSelectCommands() {
+  document.dispatchEvent(new Event('loadSelectCommands'));
+}
+
 document.querySelector('.selectCmdTemplate[data-l1key="ssh-select"').addEventListener("change", function(event) {
   var tr = event.target.closest("#mod_commands");
   var value = event.target.value;
@@ -84,3 +90,5 @@ function buildSelectCommands(currentValue) {
       }
   });
 }
+
+triggerLoadSelectCommands();
