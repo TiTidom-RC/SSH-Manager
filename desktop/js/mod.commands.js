@@ -58,6 +58,7 @@ function buildSelectCommands(currentValue) {
   const option = document.createElement('option');
   option.text = '{{Sélectionner une commande}}';
   option.value = '';
+  option.selected = true;
   selectCmd.add(option);
 
   return domUtils.ajax({
@@ -82,9 +83,9 @@ function buildSelectCommands(currentValue) {
               });
               return;
           } else {
-              for (const id in data.result) {
-                  selectCmd.append(new Option(data.result['short_description'], id));
-              }
+              data.result.forEach(function (element) {
+                  selectCmd.append(new Option(element['short_description'], element['id']));
+              });
               selectCmd.value = currentValue;
           }
       }

@@ -22,8 +22,8 @@ if (!isConnect('admin')) {
 
 sendVarToJS(sshmanager::CONST_TO_JS);
 
-$commands = sshmanager::getTemplateCommands();
-sendVarToJS('commands', $commands);
+// $commands = sshmanager::getTemplateCommands();
+// sendVarToJS('commands', $commands);
 
 ?>
 
@@ -38,10 +38,10 @@ sendVarToJS('commands', $commands);
                         <label class="col-md-3 control-label">{{Liste des commandes}}</label>
                         <div class="col-md-6">
                             <select class="form-control selectCmdTemplate" data-l1key="ssh-select">
-                                <option value="">{{Sélectionner une commande}}</option>
+                                <!-- <option value="">{{Sélectionner une commande}}</option>
                                 <?php foreach ($commands as $id => $command): ?>
                                     <option value="<?php echo $id; ?>"><?php echo $command['short_description']; ?></option>
-                                <?php endforeach; ?>
+                                <?php endforeach; ?> -->
                             </select>
                         </div>
                     </div>
