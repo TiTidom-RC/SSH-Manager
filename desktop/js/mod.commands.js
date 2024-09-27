@@ -14,6 +14,11 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+window.addEventListener("load", function() { 
+  console.log("window.onload !");
+  buildSelectCommands();
+});
+
 document.querySelector('.selectCmdTemplate[data-l1key="ssh-select"').addEventListener("change", function(event) {
   var tr = event.target.closest("#mod_commands");
   var value = event.target.value;
@@ -38,17 +43,6 @@ document.querySelector('.selectCmdTemplate[data-l1key="ssh-select"').addEventLis
     tr.querySelector('.cmdAttr[data-l1key="subtype').value = commands[value]["subtype"];
   }
 });
-
-function printEqLogic(_eqLogic) {
-  console.log("printEqLogic !");
-  buildSelectCommands(_eqLogic.ssh-select);
-}
-
-window.onload = function() {
-  console.log("window.onload !");
-  buildSelectCommands();
-};
-
 
 function buildSelectCommands(currentValue) {
   const selectCmd = document.querySelector('.selectCmdTemplate[data-l1key=ssh-select]');
