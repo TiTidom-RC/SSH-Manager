@@ -129,8 +129,7 @@ class sshmanager extends eqLogic {
     {
       $CommunityInfo = "```\n";
       $CommunityInfo = $CommunityInfo . 'Debian : ' . system::getOsVersion() . "\n";
-      $CommunityInfo = $CommunityInfo . 'SSHManager : ' . config::byKey('sshmanager_version', 'sshmanager') . "\n";
-      $CommunityInfo = $CommunityInfo . 'Plugin : ' . config::byKey('pluginVersion', 'sshmanager') . "\n";
+      $CommunityInfo = $CommunityInfo . 'PluginVersion : ' . config::byKey('pluginVersion', 'sshmanager') . "\n";
       $CommunityInfo = $CommunityInfo . "```";
       return $CommunityInfo;
     }
