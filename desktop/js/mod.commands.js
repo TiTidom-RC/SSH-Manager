@@ -16,10 +16,6 @@
 
 document.addEventListener('loadSelectCommands', buildSelectCommands(''));
 
-function triggerLoadSelectCommands() {
-  document.dispatchEvent(new Event('loadSelectCommands'));
-}
-
 document.querySelector('.selectCmdTemplate[data-l1key="ssh-select"').addEventListener("change", function(event) {
   var tr = event.target.closest("#mod_commands");
   var value = event.target.value;
@@ -44,6 +40,12 @@ document.querySelector('.selectCmdTemplate[data-l1key="ssh-select"').addEventLis
     tr.querySelector('.cmdAttr[data-l1key="subtype').value = commands[value]["subtype"];
   }
 });
+
+function triggerLoadSelectCommands() {
+  document.dispatchEvent(new Event('loadSelectCommands'));
+}
+
+triggerLoadSelectCommands();
 
 /**
  * Builds and populates a select element with SSH commands.
@@ -104,7 +106,7 @@ function buildSelectCommands(currentValue) {
               return;
           } else {
               commands = {}; // Initialize the commands object if not already initialized
-              console.log(Object.entries(data.result));
+              // console.log(data.result);
               for (const [key, value] of Object.entries(data.result)) {
                 commands[key] = value;
                 selectCmd.append(new Option(value['short_description'], key));
@@ -114,5 +116,3 @@ function buildSelectCommands(currentValue) {
       }
   });
 }
-
-triggerLoadSelectCommands();
