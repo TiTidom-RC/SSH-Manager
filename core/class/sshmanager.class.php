@@ -125,6 +125,14 @@ class sshmanager extends eqLogic {
         return $pluginVersion;
     }
 
+    public static function getConfigForCommunity() {
+      $CommunityInfo = "```\n";
+      $CommunityInfo = $CommunityInfo . 'Debian : ' . system::getOsVersion() . "\n";
+      $CommunityInfo = $CommunityInfo . 'PluginVersion : ' . config::byKey('pluginVersion', 'sshmanager') . "\n";
+      $CommunityInfo = $CommunityInfo . "```";
+      return $CommunityInfo;
+    }
+
     // Methods used by client plugins
 
     public static function getRemoteHosts() {
@@ -135,6 +143,19 @@ class sshmanager extends eqLogic {
         return $hosts;
     }
 
+    public static function getTemplateCommands() {
+        $commandsJson = self::COMMANDS_FILEPATH;
+        if (file_exists($commandsJson)) {
+            $commandsJson = file_get_contents($commandsJson, true);
+        } else {
+            log::add(__CLASS__, 'error', '[TemplateCmds] Error :: json file not found');
+            throw new Exception('Error :: json file not found');
+        }
+        $commands = json_decode($commandsJson, true);
+        ksort($commands);
+        return $commands;
+    }
+    
     /**
      * check ssh connection on the remote host provided by hostId
      *

@@ -79,7 +79,7 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
                 <sup><i class="fas fa-question-circle tooltips" title="{{Optionnel : Phrase secrète pour la clé SSH}}"></i></sup>
             </label>
             <div class="col-md-6 input-group">
-                <input type="password" id="ssh-passphrase" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_SSH_PASSPHRASE ?>" placeholder="{{Saisir la passphrase SSH}}" />
+                <input type="password" autocomplete="new-password" id="ssh-passphrase" class="eqLogicAttr form-control roundedLeft" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_SSH_PASSPHRASE ?>" placeholder="{{Saisir la passphrase SSH}}" />
                 <span class="input-group-btn">
                     <a class="btn btn-default form-control roundedRight bt_togglePass"><i class="fas fa-eye"></i></a>
                 </span>
