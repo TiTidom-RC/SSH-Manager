@@ -22,6 +22,9 @@ function sshmanager_install() {
     $pluginVersion = sshmanager::getPluginVersion();
     config::save('pluginVersion', $pluginVersion, 'sshmanager');
 
+    message::removeAll('sshmanager');
+    message::add('sshmanager', 'Installation du plugin SSH Manager :: v' . $pluginVersion, 'install');
+
     // Init des valeurs par défaut
     if (config::byKey('refreshOnSave', 'sshmanager') == '') {
         config::save('refreshOnSave', '1', 'sshmanager');
@@ -31,6 +34,9 @@ function sshmanager_install() {
 function sshmanager_update() {
     $pluginVersion = sshmanager::getPluginVersion();
     config::save('pluginVersion', $pluginVersion, 'sshmanager');
+
+    message::removeAll('sshmanager');
+    message::add('sshmanager', 'Mise à jour du plugin SSH Manager :: v' . $pluginVersion, 'update');
 
     // Init des valeurs par défaut
     if (config::byKey('refreshOnSave', 'sshmanager') == '') {

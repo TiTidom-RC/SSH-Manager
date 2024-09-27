@@ -1,4 +1,12 @@
 {
+    "uptime": {
+        "name": "Uptime",
+        "short_description": "Uptime of the system",
+        "description": "Affiche l'uptime du système distant",
+        "command": "awk '{print $1}' /proc/uptime",
+        "type": "info",
+        "subtype": "numeric"
+    },
     "list_services": {
         "name": "List Running Services",
         "short_description": "List Running Services",
@@ -8,19 +16,19 @@
         "subtype": "string"
     },
     "nb_sys_updates": {
-        "name": "Sys Updates Number",
+        "name": "Nb Sys Updates",
         "short_description": "Number of System Updates",
         "description": "Retourne le nombre de mises à jour en attente sur le système distant",
-        "command": "sudo apt update -qq 2>/dev/null | cut -d'.' -f1",
+        "command": "sudo apt update -qq 2>/dev/null | grep -o '^[0-9]*' | awk 'BEGIN {ORS=\"\";} {print ($1 == \"\" ? 0 : $1)} END {if (NR == 0) print 0}'",
         "type": "info",
-        "subtype": "string"
+        "subtype": "numeric"
 
     },
     "list_sys_updates": {
-        "name": "List System Updates",
+        "name": "List Sys Updates",
         "short_description": "List Packages to update",
         "description": "Retourne la liste des paquets systèmes en attente de mise à jour sur le système distant",
-        "command": "sudo apt-get -qq update; sudo apt list --upgradable -qq 2>/dev/null | cut -d'/' -f1 | awk 'BEGIN {RS=\"\"}{gsub(/\\n/,\",\",$0); print $0}'",
+        "command": "sudo apt-get -qq update 2>/dev/null && sudo apt list --upgradable -qq 2>/dev/null | cut -d'/' -f1 | awk 'BEGIN {RS=\"\"}{gsub(/\\n/,\",\",$0); print $0}'",
         "type": "info",
         "subtype": "string"
     },
@@ -36,7 +44,7 @@
         "name": "Update System",
         "short_description": "Update System without confirmation",
         "description": "Met à jour le système distant sans confirmation",
-        "command": "sudo apt-get -qq update; sudo apt-get -qq upgrade -y",
+        "command": "sudo apt-get -qq update 2>/dev/null && sudo apt-get -qq upgrade -y",
         "type": "action",
         "subtype": "other"
     }

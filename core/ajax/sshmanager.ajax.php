@@ -35,6 +35,11 @@ try {
         ajax::success($remoteHosts);
     }
 
+    if (init('action') == 'getTemplateCommands') {
+        $commands = sshmanager::getTemplateCommands();
+        ajax::success($commands);
+    }
+
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
 } catch (Exception $e) {
