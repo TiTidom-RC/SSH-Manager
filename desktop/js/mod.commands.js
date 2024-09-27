@@ -104,6 +104,7 @@ function buildSelectCommands(currentValue) {
               return;
           } else {
               commands = {}; // Initialize the commands object if not already initialized
+              console.log(JSON.parse(data.result));
               for (const [key, value] of data.result) {
                 commands[key] = value;
                 selectCmd.append(new Option(value['short_description'], key));
