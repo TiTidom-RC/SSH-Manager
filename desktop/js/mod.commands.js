@@ -40,8 +40,15 @@ document.querySelector('.selectCmdTemplate[data-l1key="ssh-select"').addEventLis
 });
 
 function printEqLogic(_eqLogic) {
+  console.log("printEqLogic !");
   buildSelectCommands(_eqLogic.ssh-select);
 }
+
+window.onload = function() {
+  console.log("window.onload !");
+  buildSelectCommands();
+};
+
 
 function buildSelectCommands(currentValue) {
   const selectCmd = document.querySelector('.selectCmdTemplate[data-l1key=ssh-select]');
