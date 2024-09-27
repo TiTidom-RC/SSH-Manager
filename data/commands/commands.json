@@ -1,4 +1,12 @@
 {
+    "uptime": {
+        "name": "Uptime",
+        "short_description": "Uptime of the system",
+        "description": "Affiche l'uptime du système distant",
+        "command": "awk '{print $1}' /proc/uptime",
+        "type": "info",
+        "subtype": "numeric"
+    },
     "list_services": {
         "name": "List Running Services",
         "short_description": "List Running Services",
@@ -39,13 +47,5 @@
         "command": "sudo apt-get -qq update 2>/dev/null && sudo apt-get -qq upgrade -y",
         "type": "action",
         "subtype": "other"
-    },
-    "uptime": {
-        "name": "Uptime",
-        "short_description": "Uptime of the system",
-        "description": "Affiche l'uptime du système distant",
-        "command": "awk '{print $1}' /proc/uptime",
-        "type": "info",
-        "subtype": "numeric"
-    },
+    }
 }
