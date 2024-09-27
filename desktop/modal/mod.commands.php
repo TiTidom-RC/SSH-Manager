@@ -22,16 +22,6 @@ if (!isConnect('admin')) {
 
 sendVarToJS(sshmanager::CONST_TO_JS);
 
-$commandsJson = sshmanager::COMMANDS_FILEPATH;
-
-if (file_exists($commandsJson)) {
-    $commandsJson = file_get_contents($commandsJson, true);
-} else {
-    log::add('sshmanager', 'error', '[TemplateCmds] Error :: json file not found');
-    throw new Exception('Error :: json file not found');
-}
-
-$commands = json_decode($commandsJson, true);
 sendVarToJS('commands', $commands);
 
 ?>
@@ -47,10 +37,6 @@ sendVarToJS('commands', $commands);
                         <label class="col-md-3 control-label">{{Liste des commandes}}</label>
                         <div class="col-md-6">
                             <select class="form-control selectCmdTemplate" data-l1key="ssh-select">
-                                <option value="">{{Sélectionner une commande}}</option>
-                                <?php foreach ($commands as $id => $command): ?>
-                                    <option value="<?php echo $id; ?>"><?php echo $command['short_description']; ?></option>
-                                <?php endforeach; ?>
                             </select>
                         </div>
                     </div>

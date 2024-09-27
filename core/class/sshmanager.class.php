@@ -143,6 +143,17 @@ class sshmanager extends eqLogic {
         return $hosts;
     }
 
+    public static function getTemplateCommands() {
+        $commandsJson = self::COMMANDS_FILEPATH;
+        if (file_exists($commandsJson)) {
+            $commandsJson = file_get_contents($commandsJson, true);
+        } else {
+            log::add(__CLASS__, 'error', '[TemplateCmds] Error :: json file not found');
+            throw new Exception('Error :: json file not found');
+        }
+        return json_decode($commandsJson, true);
+    }
+    
     /**
      * check ssh connection on the remote host provided by hostId
      *

@@ -15,26 +15,76 @@
  */
 
 document.querySelector('.selectCmdTemplate[data-l1key="ssh-select"').addEventListener("change", function(event) {
-    var tr = event.target.closest("#mod_commands");
-    var value = event.target.value;
+  var tr = event.target.closest("#mod_commands");
+  var value = event.target.value;
   
-    /* console.log(value);
-    console.log(commands[value]);
-    console.log(commands[value]["name"]);
-    console.log(commands[value]["description"]);
-    console.log(commands[value]["command"]); */
+  /* console.log(value);
+  console.log(commands[value]);
+  console.log(commands[value]["name"]);
+  console.log(commands[value]["description"]);
+  console.log(commands[value]["command"]); */
 
-    if (value == "") {
-      tr.querySelector('.cmdAttr[data-l1key="name"]').value = "";
-      tr.querySelector('.cmdAttr[data-l1key="description"]').value = "";
-      tr.querySelector('.cmdAttr[data-l1key="ssh-command"]').value = "";
-      tr.querySelector('.cmdAttr[data-l1key="type').value = "";
-      tr.querySelector('.cmdAttr[data-l1key="subtype').value = "";
-    } else {
-      tr.querySelector('.cmdAttr[data-l1key="name"]').value = commands[value]["name"];
-      tr.querySelector('.cmdAttr[data-l1key="description"]').value = commands[value]["description"];
-      tr.querySelector('.cmdAttr[data-l1key="ssh-command"]').value = commands[value]["command"];
-      tr.querySelector('.cmdAttr[data-l1key="type').value = commands[value]["type"];
-      tr.querySelector('.cmdAttr[data-l1key="subtype').value = commands[value]["subtype"];
-    }
+  if (value == "") {
+    tr.querySelector('.cmdAttr[data-l1key="name"]').value = "";
+    tr.querySelector('.cmdAttr[data-l1key="description"]').value = "";
+    tr.querySelector('.cmdAttr[data-l1key="ssh-command"]').value = "";
+    tr.querySelector('.cmdAttr[data-l1key="type').value = "";
+    tr.querySelector('.cmdAttr[data-l1key="subtype').value = "";
+  } else {
+    tr.querySelector('.cmdAttr[data-l1key="name"]').value = commands[value]["name"];
+    tr.querySelector('.cmdAttr[data-l1key="description"]').value = commands[value]["description"];
+    tr.querySelector('.cmdAttr[data-l1key="ssh-command"]').value = commands[value]["command"];
+    tr.querySelector('.cmdAttr[data-l1key="type').value = commands[value]["type"];
+    tr.querySelector('.cmdAttr[data-l1key="subtype').value = commands[value]["subtype"];
+  }
+});
+
+function printEqLogic(_eqLogic) {
+  buildSelectCommands(_eqLogic.ssh-select);
+}
+
+function buildSelectCommands(currentValue) {
+  const selectCmd = document.querySelector('.selectCmdTemplate[data-l1key=ssh-select]');
+  if (selectCmd === null) {
+      return;
+  }
+  if (currentValue === undefined) {
+      currentValue = selectCmd.value;
+  }
+
+  selectCmd.innerHTML = '';
+  const option = document.createElement('option');
+  option.text = '{{Sélectionner une commande}}';
+  option.value = '';
+  selectCmd.add(option);
+
+  return domUtils.ajax({
+      type: 'POST',
+      url: 'plugins/sshmanager/core/ajax/sshmanager.ajax.php',
+      data: {
+          action: "getTemplateCommands",
+      },
+      dataType: 'json',
+      async: true,
+      global: false,
+      error: function (request, status, error) {
+          handleAjaxError(request, status, error);
+      },
+      success: function (data) {
+          if (data.state != 'ok') {
+              jeedomUtils.showAlert({
+                  title: "SSH Manager - Build Select Commands",
+                  message: data.result,
+                  level: 'danger',
+                  emptyBefore: false
+              });
+              return;
+          } else {
+              for (const id in data.result) {
+                  selectCmd.append(new Option(data.result[id], id));
+              }
+              selectCmd.value = currentValue;
+          }
+      }
   });
+}
