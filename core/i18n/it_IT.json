@@ -18,6 +18,9 @@
         "Refresh de la commande": "Comando di aggiornamento",
         "[%s] cronEqLogic Exception :: %s": "[%s] eccezione cronEqLogic :: %s"
     },
+    "plugins\/sshmanager\/desktop\/js\/mod.commands.js": {
+        "Sélectionner une commande": "Selezionare un comando"
+    },
     "plugins\/sshmanager\/desktop\/js\/sshmanager.helper.js": {
         "Equipement créé": "Apparecchiature create",
         "Fermer": "Chiudere",
@@ -65,7 +68,6 @@
         "Liste des commandes": "Elenco dei comandi",
         "Nom": "Nome",
         "SubType": "Sottotipo",
-        "Sélectionner une commande": "Selezionare un comando",
         "Type": "Tipo",
         "Type \/ SubType": "Tipo \/ Sottotipo"
     },
