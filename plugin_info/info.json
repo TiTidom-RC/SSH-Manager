@@ -3,7 +3,12 @@
 	"name": "SSH Manager",
 	"pluginVersion": "0.6.0",
 	"description": {
-		"fr_FR": "Plugin permettant d'ajouter (manuellement ou à partir de templates) des commandes SSH à executer (manuellement ou automatiquement) sur des équipements distants, et pouvant également être utilisé par d'autres plugin comme passerelle SSH."
+		"fr_FR": "Plugin permettant d'ajouter (manuellement ou à partir de templates) des commandes SSH à executer (manuellement ou automatiquement) sur des équipements distants, et pouvant également être utilisé par d'autres plugin comme passerelle SSH.",
+		"en_US": "Plugin for adding (manually or from templates) SSH commands to be executed (manually or automatically) on remote devices, and which can also be used by other plugins as an SSH gateway.",
+		"es_ES": "Plugin para añadir (manualmente o desde plantillas) comandos SSH para ser ejecutados (manual o automáticamente) en dispositivos remotos, y que también puede ser utilizado por otros plugins como pasarela SSH.",
+		"de_DE": "Plugin zum Hinzufügen (manuell oder aus Templates) von SSH-Befehlen, die (manuell oder automatisch) auf entfernten Geräten ausgeführt werden sollen, und das auch von anderen Plugins als SSH-Gateway verwendet werden kann.",
+		"it_IT": "Plugin per aggiungere (manualmente o da modelli) comandi SSH da eseguire (manualmente o automaticamente) su dispositivi remoti, e che può essere utilizzato anche da altri plugin come gateway SSH.",
+		"pt_PT": "Plugin para adicionar (manualmente ou a partir de modelos) comandos SSH a executar (manual ou automaticamente) em dispositivos remotos e que também pode ser utilizado por outros plugins como gateway SSH."
 	},
 	"utilization": "Ajoutez vos équipements distants (config via mot de passe ou clé SSH), puis vos commandes SSH à executer. Vous pourrez ensuite les executer manuellement ou automatiquement (via un scénario par exemple ou une planification personnalisée).",
 	"licence": "AGPL",
