@@ -3,12 +3,7 @@
 	"name": "SSH Manager",
 	"pluginVersion": "0.6.0",
 	"description": {
-		"fr_FR": "Plugin permettant d'ajouter (manuellement ou à partir de templates) des commandes SSH à executer (manuellement ou automatiquement) sur des équipements distants, et pouvant également être utilisé par d'autres plugin comme passerelle SSH.",
-		"en_US": "SSH Manager",
-		"es_ES": "SSH Manager",
-		"de_DE": "SSH Manager",
-		"it_IT": "Gestore SSH",
-		"pt_PT": "Gestor SSH"
+		"fr_FR": "Plugin permettant d'ajouter (manuellement ou à partir de templates) des commandes SSH à executer (manuellement ou automatiquement) sur des équipements distants, et pouvant également être utilisé par d'autres plugin comme passerelle SSH."
 	},
 	"utilization": "Ajoutez vos équipements distants (config via mot de passe ou clé SSH), puis vos commandes SSH à executer. Vous pourrez ensuite les executer manuellement ou automatiquement (via un scénario par exemple ou une planification personnalisée).",
 	"licence": "AGPL",
