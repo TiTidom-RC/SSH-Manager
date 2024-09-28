@@ -142,34 +142,31 @@ class sshmanager extends eqLogic {
         }
         return $hosts;
     }
-
-    public static function getTemplateCommands() {
-        $commandsJson = self::COMMANDS_FILEPATH;
-        if (file_exists($commandsJson)) {
-            $commandsJson = file_get_contents($commandsJson, true);
-        } else {
-            log::add(__CLASS__, 'error', '[TemplateCmds] Error :: json file not found');
-            throw new Exception('Error :: json file not found');
-        }
-        $commands = json_decode($commandsJson, true);
-        ksort($commands);
-        return $commands;
-    }
     
+    public static function checkSFTPConnection($hostId) {
+        /** @var sshmanager */
+        $sshmanager = eqLogic::byId($hostId);
+        if (!is_object($sshmanager)) {
+            throw new Exception('Invalid Host Id');
+        }
+        // log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Check SFTP Connection");
+        return $sshmanager->internalCheckSFTPConnection();
+    }
+
     /**
      * check ssh connection on the remote host provided by hostId
      *
      * @param int $hostId
      * @return bool $status
      */
-    public static function checkConnection($hostId) {
+    public static function checkSSHConnection($hostId) {
         /** @var sshmanager */
         $sshmanager = eqLogic::byId($hostId);
         if (!is_object($sshmanager)) {
-            throw new Exception('Invalid host Id');
+            throw new Exception('Invalid Host Id');
         }
         // log::add(__CLASS__, 'debug', "[{$sshmanager->getName()}] Check SSH Connection");
-        return $sshmanager->internalCheckConnection();
+        return $sshmanager->internalCheckSSHConnection();
     }
 
     /**
@@ -183,7 +180,7 @@ class sshmanager extends eqLogic {
         /** @var sshmanager */
         $sshmanager = eqLogic::byId($hostId);
         if (!is_object($sshmanager)) {
-            throw new Exception('Invalid host Id');
+            throw new Exception('Invalid Host Id');
         }
 
         if (is_array($commands)) {
@@ -204,7 +201,7 @@ class sshmanager extends eqLogic {
             }
             return $sshmanager->internalExecuteCmd($commands, $cmdName);
         } else {
-            throw new Exception('Invalid command type');
+            throw new Exception('Invalid Command Type');
         }
     }
 
@@ -216,13 +213,13 @@ class sshmanager extends eqLogic {
      * @param string $remoteFile - path to the remote file
      * @return bool - true if the file was sent successfully
      */
-    public static function sendFile($hostId, string $localFile, string $remoteFile) {
+    public static function sendFile($hostId, string $localFile, string $remoteFile, $resume = false) {
         /** @var sshmanager */
         $sshmanager = eqLogic::byId($hostId);
         if (!is_object($sshmanager)) {
-            throw new Exception('Invalid host id');
+            throw new Exception('Invalid Host Id');
         }
-        return $sshmanager->internalSendFile($localFile, $remoteFile);
+        return $sshmanager->internalSendFile($localFile, $remoteFile, $resume);
     }
 
     /**
@@ -231,18 +228,32 @@ class sshmanager extends eqLogic {
      * @param int $hostId
      * @param string $remoteFile - path to the remote file
      * @param string $localFile - path to the local file
+     * @param bool $resume - resume the download
      * @return bool - true if the file was received successfully
      */
-    public static function getFile($hostId, string $remoteFile, string $localFile) {
+    public static function getFile($hostId, string $remoteFile, $localFile = false) {
         /** @var sshmanager */
         $sshmanager = eqLogic::byId($hostId);
         if (!is_object($sshmanager)) {
-            throw new Exception('Invalid host id');
+            throw new Exception('Invalid Host Id');
         }
         return $sshmanager->internalGetFile($remoteFile, $localFile);
     }
 
     // end methods used by client plugins
+
+    public static function getTemplateCommands() {
+        $commandsJson = self::COMMANDS_FILEPATH;
+        if (file_exists($commandsJson)) {
+            $commandsJson = file_get_contents($commandsJson, true);
+        } else {
+            log::add(__CLASS__, 'error', '[TemplateCmds] Commands :: JSON File not found');
+            throw new Exception('Commands :: JSON File not found');
+        }
+        $commands = json_decode($commandsJson, true);
+        ksort($commands);
+        return $commands;
+    }
 
     private function getConnectionData() {
         /** @var string */
@@ -261,7 +272,6 @@ class sshmanager extends eqLogic {
     }
 
     private function getAuthenticationData() {
-
         /** @var string */
         $username = $this->getConfiguration(self::CONFIG_USERNAME);
         if ($username == "") {
@@ -305,40 +315,170 @@ class sshmanager extends eqLogic {
         return [$username, $keyOrpassword];
     }
 
-    private function internalSendFile(string $localFile, string $remoteFile) {
-        [$host, $port, $timeout] = $this->getConnectionData();
-        [$username, $keyOrpassword] = $this->getAuthenticationData();
-
-        $sftp = new SFTP($host, $port, $timeout);
-        if ($sftp->login($username, $keyOrpassword)) {
-            log::add(__CLASS__, 'debug', "[{$this->getName()}] Send file to {$host}");
-            // TODO Check if the file exists before sending it and add try catch block to handle exceptions :
-            // @throws \UnexpectedValueException — on receipt of unexpected packets
-            // @throws \BadFunctionCallException - if you're uploading via a callback and the callback function is invalid
-            // @throws FileNotFoundException - if you're uploading via a file and the file doesn't exist
-            return $sftp->put($remoteFile, $localFile, SFTP::SOURCE_LOCAL_FILE);
+    private function internalSendFile(string $localFile, string $remoteFile, $resume = false) {	
+        if (!file_exists($localFile)) {
+            log::add(__CLASS__, 'error', "[{$this->getName()}] SFTP Local file not found :: {$localFile}");
+            return false;
         }
-        log::add(__CLASS__, 'debug', "[{$this->getName()}] login failed, could not put file {$remoteFile}");
-        return false;
+        
+        try {
+            $sftp = $this->getSFTPClient();
+        } catch (RuntimeException $ex) {
+            log::add(__CLASS__, 'error', "[{$this->getName()}] SFTP (GetSFTPClient) RunTimeEx :: {$ex->getMessage()}");
+            throw new RuntimeException("SFTP (GetSFTPClient) RunTimeEx :: {$ex->getMessage()}");
+        } catch (\Throwable $th) {
+            log::add(__CLASS__, 'error', "[{$this->getName()}] SFTP (GetSFTPClient) General Exception :: " . $th->getMessage());
+            throw $th;
+        }
+
+        $result = false;
+        log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Send file :: ' . $localFile);
+
+        try {
+            // @throws \UnexpectedValueException — on receipt of unexpected packets
+            // @throws FileNotFoundException - if you're uploading via a file and the file doesn't exist    
+            
+            if ($resume) {
+                $result = $sftp->put($remoteFile, $localFile, SFTP::SOURCE_LOCAL_FILE | SFTP::RESUME);
+            } else {
+                $result = $sftp->put($remoteFile, $localFile, SFTP::SOURCE_LOCAL_FILE);
+            }
+
+        } catch (\UnexpectedValueException $ex) {
+            log::add(__CLASS__, 'debug', "[{$this->getName()}] SFTP (SendFile) Remote File Expected :: {$localFile}");
+            log::add(__CLASS__, 'error', "[{$this->getName()}] SFTP (SendFile) UnexpectedValueException :: " . $ex->getMessage());
+
+            log::add(__CLASS__, 'debug', '['. $this->getName() .'] SFTP (SendFile) RuntimeEx LastError :: ' . $sftp->getLastSFTPError());
+            log::add(__CLASS__, 'debug', '['. $this->getName() .'] SFTP (SendFile) RuntimeEx Logs ::' . "\r\n" . $sftp->getSFTPLog());
+            throw new SSHException($ex->getMessage(), $sftp->getLastSFTPError(), $sftp->getSFTPLog());
+
+        } catch (\phpseclib3\Exception\FileNotFoundException $ex) {
+            log::add(__CLASS__, 'debug', "[{$this->getName()}] SFTP (SendFile) Local File Expected :: {$localFile}");
+            log::add(__CLASS__, 'error', "[{$this->getName()}] SFTP (SendFile) FileNotFoundException :: " . $ex->getMessage());
+
+            log::add(__CLASS__, 'debug', '['. $this->getName() .'] SFTP (SendFile) FileNotFoundException LastError :: ' . $sftp->getLastSFTPError());
+            log::add(__CLASS__, 'debug', '['. $this->getName() .'] SFTP (SendFile) FileNotFoundException Logs ::' . "\r\n" . $sftp->getSFTPLog());
+            throw new SSHException($ex->getMessage(), $sftp->getLastSFTPError(), $sftp->getSFTPLog());
+
+        } catch (RuntimeException $ex) {
+            log::add(__CLASS__, 'debug', "[{$this->getName()}] SFTP (SendFile) Local File Expected :: {$localFile}");
+            log::add(__CLASS__, 'error', "[{$this->getName()}] SFTP (SendFile) RunTimeEx :: {$ex->getMessage()}");
+            
+            log::add(__CLASS__, 'debug', '['. $this->getName() .'] SFTP (SendFile) RuntimeEx LastError :: ' . $sftp->getLastSFTPError());
+            log::add(__CLASS__, 'debug', '['. $this->getName() .'] SFTP (SendFile) RuntimeEx Logs ::' . "\r\n" . $sftp->getSFTPLog());
+            throw new SSHException($ex->getMessage(), $sftp->getLastSFTPError(), $sftp->getSFTPLog());
+
+        } catch (\Throwable $th) {
+            log::add(__CLASS__, 'debug', "[{$this->getName()}] SFTP (SendFile) Local File Expected :: {$localFile}");
+            log::add(__CLASS__, 'error', "[{$this->getName()}] SFTP (SendFile) General Exception :: " . $th->getMessage());
+            throw $th;
+        }
+        return $result;
     }
 
-    private function internalGetFile(string $remoteFile, string $localFile) {
-        [$host, $port, $timeout] = $this->getConnectionData();
-        [$username, $keyOrpassword] = $this->getAuthenticationData();
-
-        $sftp = new SFTP($host, $port, $timeout);
-        if ($sftp->login($username, $keyOrpassword)) {
-            log::add(__CLASS__, 'debug', "[{$this->getName()}] Get file from {$host}");
-            // TODO Check if the file exists before getting it and add try catch block to handle exceptions :
-            // @throws \UnexpectedValueException — on receipt of unexpected packets
-            return $sftp->get($remoteFile, $localFile);
+    private function internalGetFile(string $remoteFile, $localFile = false) {
+        try {
+            $sftp = $this->getSFTPClient();
+        } catch (RuntimeException $ex) {
+            log::add(__CLASS__, 'error', "[{$this->getName()}] SFTP (GetSFTPClient) RunTimeEx :: {$ex->getMessage()}");
+            throw new RuntimeException("SFTP (GetSFTPClient) RunTimeEx :: {$ex->getMessage()}");
+        } catch (\Throwable $th) {
+            log::add(__CLASS__, 'error', "[{$this->getName()}] SFTP (GetSFTPClient) General Exception :: " . $th->getMessage());
+            throw $th;
         }
-        log::add(__CLASS__, 'debug', "[{$this->getName()}] Login failed, could not get file {$remoteFile}");
-        return false;
+        
+        $result = false;
+        log::add(__CLASS__, 'debug', '[' . $this->getName() . '] Get file :: ' . $remoteFile);
+
+        try {
+            if ($localFile === false) {
+                $result = $sftp->get($remoteFile);
+            } else {
+                $result = $sftp->get($remoteFile, $localFile);
+            }
+
+            if (!$sftp->isConnected()) {
+                log::add(__CLASS__, 'error', '[' . $this->getName() . '] SFTP (GetFile) :: Disconnected');
+                $sftp->disconnect();
+                return $result;
+            }
+
+            if ($sftp->isTimeout()) {
+                log::add(__CLASS__, 'error', '[' . $this->getName() . '] SFTP (GetFile) :: Timeout');
+                $sftp->reset();
+                return $result;
+            }
+
+            if ($result !== false) {
+                log::add(__CLASS__, 'debug', '[' . $this->getName() . '] SFTP (GetFile) Remote File Received :: ' . $remoteFile);
+            }
+        } catch (\UnexpectedValueException $ex) {
+            log::add(__CLASS__, 'debug', '[' . $this->getName() . '] SFTP (GetFile) Remote File Expected :: ' . $remoteFile);
+            log::add(__CLASS__, 'error', "[{$this->getName()}] SFTP (GetFile) UnexpectedValueException :: " . $ex->getMessage());
+            
+            log::add(__CLASS__, 'debug', '['. $this->getName() .'] SFTP (GetFile) UnexpectedValueException LastError :: ' . $sftp->getLastSFTPError());
+            log::add(__CLASS__, 'debug', '['. $this->getName() .'] SFTP (GetFile) UnexpectedValueException Logs ::' . "\r\n" . $sftp->getSFTPLog());
+            throw new SSHException($ex->getMessage(), $sftp->getLastSFTPError(), $sftp->getSFTPLog());
+
+        } catch (RuntimeException $ex) {
+            log::add(__CLASS__, 'debug', '[' . $this->getName() . '] SFTP (GetFile) Remote File Expected :: ' . $remoteFile);
+            log::add(__CLASS__, 'error', "[{$this->getName()}] SFTP (GetFile) RunTimeEx :: {$ex->getMessage()}");
+            
+            log::add(__CLASS__, 'debug', '['. $this->getName() .'] SFTP (GetFile) RuntimeEx LastError :: ' . $sftp->getLastSFTPError());
+            log::add(__CLASS__, 'debug', '['. $this->getName() .'] SFTP (GetFile) RuntimeEx Logs ::' . "\r\n" . $sftp->getSFTPLog());
+            throw new SSHException($ex->getMessage(), $sftp->getLastSFTPError(), $sftp->getSFTPLog());
+
+        } catch (\Throwable $th) {
+            log::add(__CLASS__, 'debug', '[' . $this->getName() . '] SFTP (GetFile) Remote File Expected :: ' . $remoteFile);
+            log::add(__CLASS__, 'error', "[{$this->getName()}] SFTP (GetFile) General Exception :: " . $th->getMessage());
+            throw $th;
+        }
+        return $result;
     }
 
     /** @var SSH2[] */
     private static $_ssh2_client = [];
+
+    /** @var SFTP[] */
+    private static $_sftp_client = [];
+
+    private function getSFTPClient() {
+        $eqLogicID = $this->getId();
+        $eqLogicName = $this->getName();
+        $pid = getmypid();
+
+        if (!(isset(sshmanager::$_sftp_client[$eqLogicID]))) {
+            [$host, $port, $timeout] = $this->getConnectionData();
+            [$username, $keyOrpassword] = $this->getAuthenticationData();
+            log::add(__CLASS__, 'debug', "[{$eqLogicName}] >>>> Creating SFTP client (pid: {$pid}) for eqLogic {$eqLogicID} to {$host}");
+            
+            try {
+                $sftp = new SFTP($host, $port, $timeout);
+            } catch (Exception $e) {
+                log::add(__CLASS__, 'error', "[{$eqLogicName}] >>>> SFTP Exception :: " . $e->getMessage());
+                throw $e;
+            }
+
+            try {
+                if (!$sftp->login($username, $keyOrpassword)) {
+                    log::add(__CLASS__, 'error', "[{$eqLogicName}] >>>> SFTP Login failed for {$username}@{$host}:{$port}");
+                    throw new RuntimeException("[{$eqLogicName}] >>>> SFTP Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.");
+                }
+            } catch (RuntimeException $ex) {
+                log::add(__CLASS__, 'error', '[' . $eqLogicName . '] SFTP Login Exception :: ' . $ex->getMessage());
+                throw $ex;
+            } catch (\Throwable $th) {
+                log::add(__CLASS__, 'error', "[{$eqLogicName}] SFTP General Exception :: " . $th->getMessage());
+                throw $th;
+            }
+            log::add(__CLASS__, 'debug', "[{$eqLogicName}] >>>> SFTP Connected and authenticated");
+            sshmanager::$_sftp_client[$eqLogicID] = $sftp;
+
+        } else {
+            // log::add(__CLASS__, 'debug', "[" . $eqLogicName . "] >>>> Existing SFTP client (pid: {$pid}) for eqLogic {$eqLogicID}");
+        }
+        return sshmanager::$_sftp_client[$eqLogicID];
+    }
 
     private function getSSH2Client() {
         $eqLogicID = $this->getId();
@@ -353,23 +493,23 @@ class sshmanager extends eqLogic {
             try {
                 $ssh2 = new SSH2($host, $port, $timeout);
             } catch (Exception $e) {
-                log::add(__CLASS__, 'error', "[{$eqLogicName}] >>>> SSH2Client Exception :: " . $e->getMessage());
+                log::add(__CLASS__, 'error', "[{$eqLogicName}] >>>> SSH2 Exception :: " . $e->getMessage());
                 throw $e;
             }
 
             try {
                 if (!$ssh2->login($username, $keyOrpassword)) {
-                    log::add(__CLASS__, 'error', "[{$eqLogicName}] >>>> Login failed for {$username}@{$host}:{$port}");
-                    throw new RuntimeException("[{$eqLogicName}] >>>> Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.");
+                    log::add(__CLASS__, 'error', "[{$eqLogicName}] >>>> SSH2 Login failed for {$username}@{$host}:{$port}");
+                    throw new RuntimeException("[{$eqLogicName}] >>>> SSH2 Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.");
                 }
             } catch (RuntimeException $ex) {
-                log::add(__CLASS__, 'error', '[' . $eqLogicName . '] Login Exception :: ' . $ex->getMessage());
+                log::add(__CLASS__, 'error', '[' . $eqLogicName . '] SSH2 Login Exception :: ' . $ex->getMessage());
                 throw $ex;
             } catch (\Throwable $th) {
-                log::add(__CLASS__, 'error', "[{$eqLogicName}] General SSH2Client Exception :: " . $th->getMessage());
+                log::add(__CLASS__, 'error', "[{$eqLogicName}] SSH2 General Exception :: " . $th->getMessage());
                 throw $th;
             }
-            log::add(__CLASS__, 'debug', "[{$eqLogicName}] >>>> Connected and authenticated");
+            log::add(__CLASS__, 'debug', "[{$eqLogicName}] >>>> SSH2 :: Connected and authenticated");
             sshmanager::$_ssh2_client[$eqLogicID] = $ssh2;
 
         } else {
@@ -378,15 +518,28 @@ class sshmanager extends eqLogic {
         return sshmanager::$_ssh2_client[$eqLogicID];
     }
 
-    private function internalCheckConnection() {
+    private function internalCheckSFTPConnection() {
+        try {
+            $sftp = $this->getSFTPClient();
+            return $sftp->isConnected() && $sftp->isAuthenticated();
+        } catch (RuntimeException $ex) {
+            // log::add(__CLASS__, 'error', "[{$this->getName()}] SFTP CheckConnection Exception :: {$ex->getMessage()}");
+            return false;
+        } catch (\Throwable $th) {
+            log::add(__CLASS__, 'error', "[{$this->getName()}] SFTP General CheckConnection Exception :: " . $th->getMessage());
+            return false;
+        }
+    }
+
+    private function internalCheckSSHConnection() {
         try {
             $ssh2 = $this->getSSH2Client();
             return $ssh2->isConnected() && $ssh2->isAuthenticated();
         } catch (RuntimeException $ex) {
-            // log::add(__CLASS__, 'error', "[{$this->getName()}] CheckConnection Exception :: {$ex->getMessage()}");
+            // log::add(__CLASS__, 'error', "[{$this->getName()}] SSH2 CheckConnection Exception :: {$ex->getMessage()}");
             return false;
         } catch (\Throwable $th) {
-            log::add(__CLASS__, 'error', "[{$this->getName()}] General CheckConnection Exception :: " . $th->getMessage());
+            log::add(__CLASS__, 'error', "[{$this->getName()}] SSH2 General CheckConnection Exception :: " . $th->getMessage());
             return false;
         }
     }
@@ -432,8 +585,8 @@ class sshmanager extends eqLogic {
             log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: ' . str_replace("\r\n", "\\r\\n", $command));
             log::add(__CLASS__, 'error', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' RunTimeEx :: ' . $ex->getMessage());
             
-            log::add(__CLASS__, 'debug', '['. $this->getName() .'][SSH-EXEC] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' RuntimeEx LastError :: ' . $ssh2->getLastError());
-			log::add(__CLASS__, 'debug', '['. $this->getName() .'][SSH-EXEC] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' RuntimeEx Logs ::' . "\r\n" . $ssh2->getLog());
+            log::add(__CLASS__, 'debug', '['. $this->getName() .'] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' RuntimeEx LastError :: ' . $ssh2->getLastError());
+			log::add(__CLASS__, 'debug', '['. $this->getName() .'] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' RuntimeEx Logs ::' . "\r\n" . $ssh2->getLog());
             
             throw new SSHException($ex->getMessage(), $ssh2->getLastError(), $ssh2->getLog());
 
