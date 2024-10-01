@@ -500,7 +500,7 @@ class sshmanager extends eqLogic {
             try {
                 if (!$ssh2->login($username, $keyOrpassword)) {
                     log::add(__CLASS__, 'error', "[{$eqLogicName}] >>>> SSH2 Login failed for {$username}@{$host}:{$port}");
-                    throw new RuntimeException("[{$eqLogicName}] >>>> SSH2 Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.");
+                    throw new RuntimeException("Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.");
                 }
             } catch (RuntimeException $ex) {
                 log::add(__CLASS__, 'error', '[' . $eqLogicName . '] SSH2 Login Exception :: ' . $ex->getMessage());
