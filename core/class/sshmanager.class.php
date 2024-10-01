@@ -462,7 +462,7 @@ class sshmanager extends eqLogic {
             try {
                 if (!$sftp->login($username, $keyOrpassword)) {
                     log::add(__CLASS__, 'error', "[{$eqLogicName}] >>>> SFTP Login failed for {$username}@{$host}:{$port}");
-                    throw new RuntimeException("[{$eqLogicName}] >>>> SFTP Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.");
+                    throw new RuntimeException("SFTP Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.");
                 }
             } catch (RuntimeException $ex) {
                 log::add(__CLASS__, 'error', '[' . $eqLogicName . '] SFTP Login Exception :: ' . $ex->getMessage());
@@ -500,7 +500,7 @@ class sshmanager extends eqLogic {
             try {
                 if (!$ssh2->login($username, $keyOrpassword)) {
                     log::add(__CLASS__, 'error', "[{$eqLogicName}] >>>> SSH2 Login failed for {$username}@{$host}:{$port}");
-                    throw new RuntimeException("Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.");
+                    throw new RuntimeException("SSH2 Login failed for {$username}@{$host}:{$port}; please check username and password or ssh key.");
                 }
             } catch (RuntimeException $ex) {
                 log::add(__CLASS__, 'error', '[' . $eqLogicName . '] SSH2 Login Exception :: ' . $ex->getMessage());
@@ -691,7 +691,7 @@ class sshmanager extends eqLogic {
             try {
                 $cmd->execute();
             } catch (Exception $exc) {
-                log::add(__CLASS__, 'error', sprintf(__("%s cronCmd Exception :: %s", __FILE__), $cmd->getHumanName(), $exc->getMessage()));
+                log::add(__CLASS__, 'error', sprintf(__("%s cronCmd :: %s", __FILE__), $cmd->getHumanName(), $exc->getMessage()));
             }
         }
     }
