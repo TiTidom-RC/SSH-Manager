@@ -4,7 +4,7 @@
         "Aucune méthode correspondante à : ": "Nenhum método correspondente a :"
     },
     "plugins\/sshmanager\/core\/class\/sshmanager.class.php": {
-        "%s cronCmd Exception :: %s": "%s cronCmd Exceção :: %s",
+        "%s cronCmd :: %s": "%s cronCmd :: %s",
         "%s refreshAllInfo Exception :: %s": "%s refreshAllInfo Exceção :: %s",
         "Adresse IP ou nom d\\'hôte non configuré": "Endereço IP ou nome do anfitrião não configurado",
         "Clé SSH non configurée": "Chave SSH não configurada",
