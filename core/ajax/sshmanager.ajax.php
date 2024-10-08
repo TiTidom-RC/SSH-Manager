@@ -31,7 +31,10 @@ try {
     ajax::init(array());
 
     if (init('action') == 'getRemoteHosts') {
-        $remoteHosts = sshmanager::getRemoteHosts();
+        $remoteHosts = array();
+        if (class_exists('sshmanager')) {
+            $remoteHosts = sshmanager::getRemoteHosts();
+        } 
         ajax::success($remoteHosts);
     }
 
