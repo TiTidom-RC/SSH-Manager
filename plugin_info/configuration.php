@@ -22,6 +22,19 @@ if (!isConnect()) {
     include_file('desktop', '404', 'php');
     die();
 }
+
+$_branchSSHManager = config::byKey('pluginBranch', 'sshmanager', 'N/A');
+
+if (strpos($_branchSSHManager, 'stable') !== false) {
+    $_labelBranchSSHM = '<span class="label label-success text-capitalize">' . $_branchSSHManager . '</span>';
+} elseif (strpos($_branchSSHManager, 'beta') !== false) {
+    $_branchSSHM = '<span class="label label-warning text-capitalize">' . $_branchSSHManager . '</span>';
+} elseif (strpos($_branchSSHManager, 'dev') !== false) {
+    $_labelBranchSSHM = '<span class="label label-danger text-capitalize">' . $_branchSSHManager . '</span>';
+} else {
+    $_labelBranchSSHM = '<span class="label label-info">N/A</span>';
+}
+
 ?>
 
 <form class="form-horizontal">
@@ -34,6 +47,9 @@ if (!isConnect()) {
                 </label>
                 <div class="col-md-1">
                     <input class="configKey form-control" data-l1key="pluginVersion" readonly />
+                </div>
+                <div class="col-md-1">
+                    <?php echo $_labelBranchSSHM ?>
                 </div>
             </div>
             <legend><i class="fas fa-list-alt"></i> {{Options}}</legend>
