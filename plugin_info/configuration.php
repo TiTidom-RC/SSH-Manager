@@ -28,7 +28,7 @@ $_branchSSHManager = config::byKey('pluginBranch', 'sshmanager', 'N/A');
 if (strpos($_branchSSHManager, 'stable') !== false) {
     $_labelBranchSSHM = '<span class="label label-success text-capitalize">' . $_branchSSHManager . '</span>';
 } elseif (strpos($_branchSSHManager, 'beta') !== false) {
-    $_branchSSHM = '<span class="label label-warning text-capitalize">' . $_branchSSHManager . '</span>';
+    $_labelBranchSSHM = '<span class="label label-warning text-capitalize">' . $_branchSSHManager . '</span>';
 } elseif (strpos($_branchSSHManager, 'dev') !== false) {
     $_labelBranchSSHM = '<span class="label label-danger text-capitalize">' . $_branchSSHManager . '</span>';
 } else {
