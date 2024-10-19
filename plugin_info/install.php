@@ -19,8 +19,13 @@
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 function sshmanager_install() {
+    // Get Plugin Version from plugin_info/info.json
     $pluginVersion = sshmanager::getPluginVersion();
     config::save('pluginVersion', $pluginVersion, 'sshmanager');
+
+    // Get Plugin Branch
+    $pluginBranch = sshmanager::getPluginBranch();
+    config::save('pluginBranch', $pluginBranch, 'sshmanager');
 
     message::removeAll('sshmanager');
     message::add('sshmanager', 'Installation du plugin SSH Manager :: v' . $pluginVersion, 'install');
@@ -32,8 +37,13 @@ function sshmanager_install() {
 }
 
 function sshmanager_update() {
+    // Get Plugin Version from plugin_info/info.json
     $pluginVersion = sshmanager::getPluginVersion();
     config::save('pluginVersion', $pluginVersion, 'sshmanager');
+
+    // Get Plugin Branch
+    $pluginBranch = sshmanager::getPluginBranch();
+    config::save('pluginBranch', $pluginBranch, 'sshmanager');
 
     message::removeAll('sshmanager');
     message::add('sshmanager', 'Mise à jour du plugin SSH Manager :: v' . $pluginVersion, 'update');
