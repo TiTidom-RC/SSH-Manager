@@ -617,6 +617,7 @@ class sshmanager extends eqLogic {
             if ($exNeedReset) {
                 try {
                     $ssh2->reset();
+                    log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: Reset Connection');
                 } catch (Exception $ex) {
                     log::add(__CLASS__, 'error', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' Reset Exception :: ' . $ex->getMessage());
                 }
