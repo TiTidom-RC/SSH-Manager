@@ -103,6 +103,19 @@ class sshmanager extends eqLogic {
         $this->setConfiguration(self::CONFIG_SSH_PASSPHRASE, utils::encrypt($this->getConfiguration(self::CONFIG_SSH_PASSPHRASE)));
     }
 
+    public static function getPluginBranch() {
+        $pluginBranch = 'N/A';
+		try {
+			$_updateSSHManager = update::byLogicalId('sshmanager');
+			$pluginBranch = $_updateSSHManager->getConfiguration('version', 'N/A') . ' (' . $_updateSSHManager->getSource() . ')';
+		}
+		catch (\Exception $e) {
+			log::add(__CLASS__, 'warning', '[BRANCH] Get ERROR :: ' . $e->getMessage());
+		}
+		log::add(__CLASS__, 'info', '[BRANCH] PluginBranch :: ' . $pluginBranch);
+        return $pluginBranch;
+    }
+
     public static function getPluginVersion() {
         $pluginVersion = '0.0.0';
         try {
@@ -126,11 +139,12 @@ class sshmanager extends eqLogic {
     }
 
     public static function getConfigForCommunity() {
-      $CommunityInfo = "```\n";
-      $CommunityInfo = $CommunityInfo . 'Debian : ' . system::getOsVersion() . "\n";
-      $CommunityInfo = $CommunityInfo . 'PluginVersion : ' . config::byKey('pluginVersion', 'sshmanager') . "\n";
-      $CommunityInfo = $CommunityInfo . "```";
-      return $CommunityInfo;
+        $CommunityInfo = "```\n";
+        $CommunityInfo = $CommunityInfo . 'Debian : ' . system::getOsVersion() . "\n";
+        $CommunityInfo = $CommunityInfo . 'PluginVersion : ' . config::byKey('pluginVersion', 'sshmanager') . "\n";
+        $CommunityInfo = $CommunityInfo . 'PluginBranch : ' . config::byKey('pluginBranch', 'sshmanager') . "\n";
+        $CommunityInfo = $CommunityInfo . "```";
+        return $CommunityInfo;
     }
 
     // Methods used by client plugins
@@ -556,6 +570,7 @@ class sshmanager extends eqLogic {
         }
         
         $result = '';
+        $exNeedReset = false;
 
         try {
             $result = $ssh2->exec($command);
@@ -572,7 +587,8 @@ class sshmanager extends eqLogic {
                 log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: ' . str_replace("\r\n", "\\r\\n", $command));
                 log::add(__CLASS__, 'error', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: Timeout');
                 $result = '';
-                $ssh2->reset();
+                $exNeedReset = true;
+                return $result;
             }
             
             if (!empty($result)) {
@@ -588,15 +604,25 @@ class sshmanager extends eqLogic {
             log::add(__CLASS__, 'debug', '['. $this->getName() .'] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' RuntimeEx LastError :: ' . $ssh2->getLastError());
 			log::add(__CLASS__, 'debug', '['. $this->getName() .'] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' RuntimeEx Logs ::' . "\r\n" . $ssh2->getLog());
             
+            $exNeedReset = true;
             throw new SSHException($ex->getMessage(), $ssh2->getLastError(), $ssh2->getLog());
 
         } catch (\Throwable $th) {
             log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: ' . str_replace("\r\n", "\\r\\n", $command));
             log::add(__CLASS__, 'error', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' Exception :: ' . $th->getMessage());
             
+            $exNeedReset = true;
             throw $th;
+        } finally {
+            if ($exNeedReset) {
+                try {
+                    $ssh2->reset();
+                    log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: Reset Connection');
+                } catch (Exception $ex) {
+                    log::add(__CLASS__, 'error', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' Reset Exception :: ' . $ex->getMessage());
+                }
+            }
         }
-
         return $result;
     }
 
