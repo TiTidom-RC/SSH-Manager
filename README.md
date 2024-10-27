@@ -111,7 +111,7 @@ Example:
 $commands = [
   'mv -f /tmp/config.yaml /opt/my_app/config.yaml',
   'cd /opt/my_app/; sudo make install'
-]
+];
 $outputs = sshmanager::executeCmds($this->getConfiguration('host_id'), $commands);
 ```
 
@@ -124,6 +124,8 @@ return value, `$outputs` in the example, will be an array providing one item by 
 if you provide a string with a single command then the output will be a string as well.
 
 If your command produce several lines, you will receive line feed `\n` in the output, don't forget to take them into account in your code.
+
+If you prefer an array of strings instead of multilines from the output, you can use the command `$outputsArray = explode("\n", $outputs)` in your code.
 
 #### retrieve remote file
 
