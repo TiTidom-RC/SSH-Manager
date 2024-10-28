@@ -183,6 +183,9 @@ class sshmanager extends eqLogic {
         return $sshmanager->internalCheckSSHConnection();
     }
 
+    // TODO Add a timeout option to executeCmds
+    // TODO Check on timeout if the connection is closed or not, and if not, reset the connection
+
     /**
      * execute ssh cmd on the remote host provided by hostId
      *
@@ -617,6 +620,7 @@ class sshmanager extends eqLogic {
             if ($exNeedReset) {
                 try {
                     $ssh2->reset();
+                    
                     log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: Reset Connection');
                 } catch (Exception $ex) {
                     log::add(__CLASS__, 'error', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' Reset Exception :: ' . $ex->getMessage());
