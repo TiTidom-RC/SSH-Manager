@@ -594,6 +594,8 @@ class sshmanager extends eqLogic {
                 return $result;
             }
             
+            // TODO ATTENTION, une variable qui renvoit 0 est considérée comme vide... A corriger
+
             if (!empty($result)) {
                 $result = trim($result);
                 //TODO: '\n' should be escaped from $result before logging
