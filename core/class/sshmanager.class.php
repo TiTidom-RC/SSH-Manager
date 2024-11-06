@@ -183,6 +183,8 @@ class sshmanager extends eqLogic {
         return $sshmanager->internalCheckSSHConnection();
     }
 
+    // TODO Add a timeout option to executeCmds
+
     /**
      * execute ssh cmd on the remote host provided by hostId
      *
@@ -591,11 +593,16 @@ class sshmanager extends eqLogic {
                 return $result;
             }
             
+            // TODO ATTENTION, une variable qui renvoit 0 est considérée comme vide.
+
             if (!empty($result)) {
                 $result = trim($result);
                 //TODO: '\n' should be escaped from $result before logging
                 log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: ' . str_replace("\r\n", "\\r\\n", $command));
                 log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' Result :: ' . $result);
+            } else {
+                log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: ' . str_replace("\r\n", "\\r\\n", $command));
+                log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: Empty Result');
             }
         } catch (RuntimeException $ex) {
             log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: ' . str_replace("\r\n", "\\r\\n", $command));
@@ -617,6 +624,7 @@ class sshmanager extends eqLogic {
             if ($exNeedReset) {
                 try {
                     $ssh2->reset();
+                    
                     log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: Reset Connection');
                 } catch (Exception $ex) {
                     log::add(__CLASS__, 'error', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' Reset Exception :: ' . $ex->getMessage());
