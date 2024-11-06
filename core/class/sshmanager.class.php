@@ -184,7 +184,6 @@ class sshmanager extends eqLogic {
     }
 
     // TODO Add a timeout option to executeCmds
-    // TODO Check on timeout if the connection is closed or not, and if not, reset the connection
 
     /**
      * execute ssh cmd on the remote host provided by hostId
@@ -594,7 +593,7 @@ class sshmanager extends eqLogic {
                 return $result;
             }
             
-            // TODO ATTENTION, une variable qui renvoit 0 est considérée comme vide... A corriger
+            // TODO ATTENTION, une variable qui renvoit 0 est considérée comme vide.
 
             if (!empty($result)) {
                 $result = trim($result);
