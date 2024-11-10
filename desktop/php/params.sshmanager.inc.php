@@ -87,6 +87,19 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
         </div>
         <div class="form-group">
             <label class="col-md-4 control-label">{{Clé SSH}}</label>
+            <sup>
+                <button type="button" class="btn btn-default" onclick="reformatSSHKey()">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            </sup>
+            <script>
+                function reformatSSHKey() {
+                    var sshKeyField = document.querySelector('[data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>"]');
+                    var sshKey = sshKeyField.value;
+                    var formattedKey = sshKey.replace(/(.{64})/g, "$1\n");
+                    sshKeyField.value = formattedKey;
+                }
+            </script>
             <div class="col-md-8">
                 <textarea class="eqLogicAttr form-control" rows="5" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>" placeholder="{{Saisir la clé SSH}}" wrap="off" spellcheck="false"></textarea>
             </div>
