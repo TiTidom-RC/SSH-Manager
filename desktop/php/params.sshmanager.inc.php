@@ -87,17 +87,15 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
         </div>
         <div class="form-group">
             <label class="col-md-4 control-label">{{Clé SSH}}</label>
-            <sup>
-                <button type="button" class="fas fa-sync-alt" onclick="reformatSSHKey()"></button>
-            </sup>
+            <sup><i class="fas fa-sync-alt tooltips" title="{{Cliquez sur ce bouton pour reformater la clé SSH en blocs de 64 caractères}}" onclick="reformatSSHKey()"></i></sup>
             <script>
                 function reformatSSHKey() {
                     var sshKeyField = document.querySelector('[data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>"]');
                     var sshKey = sshKeyField.value;
 
                     // Regular expressions to match the header and footer
-                    var headerRegex = /-----BEGIN [A-Z ]+-----/;
-                    var footerRegex = /-----END [A-Z ]+-----/;
+                    var headerRegex = /-----BEGIN [A-Z ]+ KEY-----/;
+                    var footerRegex = /-----END [A-Z ]+ KEY-----/;
 
                     // Extract the header and footer
                     var headerMatch = sshKey.match(headerRegex);
