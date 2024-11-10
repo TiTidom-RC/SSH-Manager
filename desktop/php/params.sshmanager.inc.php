@@ -87,7 +87,7 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
         </div>
         <div class="form-group">
             <label class="col-md-4 control-label">{{Clé SSH}}
-            <sup><i class="fas fa-check-circle icon_orange tooltips" title="{{Cliquez ici pour formater la clé SSH en blocs de 64 caractères}}" onclick="reformatSSHKey()"></i></sup>
+            <sup><i class="fas fa-play-circle icon_orange tooltips" title="{{Cliquez ici pour formater la clé SSH en blocs de 64 caractères}}" onclick="reformatSSHKey()"></i></sup>
                 <script>
                     function reformatSSHKey() {
                         var sshKeyField = document.querySelector('[data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>"]');
