@@ -74,10 +74,13 @@
     "plugins\/sshmanager\/desktop\/php\/params.sshmanager.inc.php": {
         "Adresse IP ou nom de l'hôte": "Indirizzo IP o nome host",
         "Agent (non-supporté)": "Agente (non supportato)",
+        "Cliquez ici pour formater la clé SSH en blocs de 64 caractères": "Fare clic qui per formattare la chiave SSH in blocchi di 64 caratteri",
         "Clé SSH": "Chiave SSH",
         "Durée maximale (en secondes) avant expiration de la connexion SSH<br\/>Laisser vide pour utiliser le timeout par défaut (recommandé)": "Tempo massimo (in secondi) prima che la connessione SSH scada<br\/>Lasciare vuoto per utilizzare il timeout predefinito (consigliato)",
+        "Format de la clé SSH invalide !": "Formato chiave SSH non valido!",
         "Hôte distant": "Host remoto",
         "Identifiant": "Identificatore",
+        "La clé SSH est déjà formatée en blocs de 64 caractères !": "La chiave SSH è già formattata in blocchi di 64 caratteri!",
         "Laisser vide pour utiliser le port par défaut (recommandé)": "Lasciare vuoto per utilizzare la porta predefinita (consigliato)",
         "Mot de Passe": "Password",
         "Mot de passe": "Password",
