@@ -86,41 +86,42 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-4 control-label">{{Clé SSH}}</label>
+            <label class="col-md-4 control-label">{{Clé SSH}}
             <sup><i class="fas fa-sync-alt tooltips" title="{{Cliquez sur ce bouton pour reformater la clé SSH en blocs de 64 caractères}}" onclick="reformatSSHKey()"></i></sup>
-            <script>
-                function reformatSSHKey() {
-                    var sshKeyField = document.querySelector('[data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>"]');
-                    var sshKey = sshKeyField.value;
+                <script>
+                    function reformatSSHKey() {
+                        var sshKeyField = document.querySelector('[data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>"]');
+                        var sshKey = sshKeyField.value;
 
-                    // Regular expressions to match the header and footer
-                    var headerRegex = /-----BEGIN [A-Z ]+ KEY-----/;
-                    var footerRegex = /-----END [A-Z ]+ KEY-----/;
+                        // Regular expressions to match the header and footer
+                        var headerRegex = /-----BEGIN [A-Z ]+ KEY-----/;
+                        var footerRegex = /-----END [A-Z ]+ KEY-----/;
 
-                    // Extract the header and footer
-                    var headerMatch = sshKey.match(headerRegex);
-                    var footerMatch = sshKey.match(footerRegex);
+                        // Extract the header and footer
+                        var headerMatch = sshKey.match(headerRegex);
+                        var footerMatch = sshKey.match(footerRegex);
 
-                    if (headerMatch && footerMatch) {
-                        var header = headerMatch[0];
-                        var footer = footerMatch[0];
+                        if (headerMatch && footerMatch) {
+                            var header = headerMatch[0];
+                            var footer = footerMatch[0];
 
-                        // Remove the header and footer from the key
-                        var keyBody = sshKey.replace(header, "").replace(footer, "").trim();
+                            // Remove the header and footer from the key
+                            var keyBody = sshKey.replace(header, "").replace(footer, "").trim();
 
-                        // Format the key body
-                        var formattedKeyBody = keyBody.replace(/(.{64})/g, "$1\n");
+                            // Format the key body
+                            var formattedKeyBody = keyBody.replace(/(.{64})/g, "$1\n");
 
-                        // Reconstruct the key with header and footer
-                        var formattedKey = header + "\n" + formattedKeyBody + "\n" + footer;
+                            // Reconstruct the key with header and footer
+                            var formattedKey = header + "\n" + formattedKeyBody + "\n" + footer;
 
-                        // Update the input field with the formatted key
-                        sshKeyField.value = formattedKey;
-                    } else {
-                        console.error("Invalid SSH key format");
+                            // Update the input field with the formatted key
+                            sshKeyField.value = formattedKey;
+                        } else {
+                            console.error("Invalid SSH key format");
+                        }
                     }
-                }
-            </script>
+                </script>
+            </label>
             <div class="col-md-8">
                 <textarea class="eqLogicAttr form-control" rows="5" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>" placeholder="{{Saisir la clé SSH}}" wrap="off" spellcheck="false"></textarea>
             </div>
