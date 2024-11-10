@@ -122,24 +122,24 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
                                 sshKeyField.value = formattedKey;
                                 jeedomUtils.showAlert({
                                     title: "SSH Manager - Format SSH Key",
-                                    message: "Reformat SSH Key :: Success",
+                                    message: "Formatage de la clé SSH en blocs de 64 caractères :: OK",
                                     level: 'success',
                                     emptyBefore: false
                                 });
                             } else {
                                 jeedomUtils.showAlert({
                                     title: "SSH Manager - Format SSH Key",
-                                    message: "SSH key is already formatted :: No changes made",
+                                    message: "{{La clé SSH est déjà formatée en blocs de 64 caractères !}}",
                                     level: 'info',
                                     emptyBefore: false
                                 });
-                                console.error("SSH key is already formatted :: No changes made");
+                                console.error("SSH key is already formatted in blocks of 64 characters");
                             }
 
                         } else {
                             jeedomUtils.showAlert({
                                 title: "SSH Manager - Format SSH Key",
-                                message: "Invalid SSH key format",
+                                message: "{{Format de la clé SSH invalide !}}",
                                 level: 'warning',
                                 emptyBefore: false
                             });
