@@ -108,20 +108,34 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
                             // Remove the header and footer from the key and trim it
                             var keyBody = sshKey.replace(header, "").replace(footer, "").trim();
 
-                            // Format the key body in blocks of 64 characters
-                            var formattedKeyBody = keyBody.replace(/(.{64})/g, "$1\n");
+                            // Check if the key body is already formatted
+                            var isFormatted = keyBody.split('\n').every(line => line.length <= 64);
 
-                            // Reconstruct the key with header and footer
-                            var formattedKey = header + "\n" + formattedKeyBody + "\n" + footer;
+                            if (!isFormatted) {
+                                // Format the key body in blocks of 64 characters
+                                var formattedKeyBody = keyBody.replace(/(.{64})/g, "$1\n");
 
-                            // Update the input field with the formatted key
-                            sshKeyField.value = formattedKey;
-                            jeedomUtils.showAlert({
-                                title: "SSH Manager - Format SSH Key",
-                                message: "Reformat SSH Key :: Success",
-                                level: 'success',
-                                emptyBefore: false
-                            });
+                                // Reconstruct the key with header and footer
+                                var formattedKey = header + "\n" + formattedKeyBody + "\n" + footer;
+
+                                // Update the input field with the formatted key
+                                sshKeyField.value = formattedKey;
+                                jeedomUtils.showAlert({
+                                    title: "SSH Manager - Format SSH Key",
+                                    message: "Reformat SSH Key :: Success",
+                                    level: 'success',
+                                    emptyBefore: false
+                                });
+                            } else {
+                                jeedomUtils.showAlert({
+                                    title: "SSH Manager - Format SSH Key",
+                                    message: "SSH key is already formatted :: No changes made",
+                                    level: 'info',
+                                    emptyBefore: false
+                                });
+                                console.error("SSH key is already formatted :: No changes made");
+                            }
+
                         } else {
                             jeedomUtils.showAlert({
                                 title: "SSH Manager - Format SSH Key",
