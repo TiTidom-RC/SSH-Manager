@@ -88,16 +88,39 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
         <div class="form-group">
             <label class="col-md-4 control-label">{{Clé SSH}}</label>
             <sup>
-                <button type="button" class="btn btn-default" onclick="reformatSSHKey()">
-                    <i class="fas fa-sync-alt"></i>
-                </button>
+                <button type="button" class="fas fa-sync-alt" onclick="reformatSSHKey()"></button>
             </sup>
             <script>
                 function reformatSSHKey() {
                     var sshKeyField = document.querySelector('[data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>"]');
                     var sshKey = sshKeyField.value;
-                    var formattedKey = sshKey.replace(/(.{64})/g, "$1\n");
-                    sshKeyField.value = formattedKey;
+
+                    // Regular expressions to match the header and footer
+                    var headerRegex = /-----BEGIN [A-Z ]+-----/;
+                    var footerRegex = /-----END [A-Z ]+-----/;
+
+                    // Extract the header and footer
+                    var headerMatch = sshKey.match(headerRegex);
+                    var footerMatch = sshKey.match(footerRegex);
+
+                    if (headerMatch && footerMatch) {
+                        var header = headerMatch[0];
+                        var footer = footerMatch[0];
+
+                        // Remove the header and footer from the key
+                        var keyBody = sshKey.replace(header, "").replace(footer, "").trim();
+
+                        // Format the key body
+                        var formattedKeyBody = keyBody.replace(/(.{64})/g, "$1\n");
+
+                        // Reconstruct the key with header and footer
+                        var formattedKey = header + "\n" + formattedKeyBody + "\n" + footer;
+
+                        // Update the input field with the formatted key
+                        sshKeyField.value = formattedKey;
+                    } else {
+                        console.error("Invalid SSH key format");
+                    }
                 }
             </script>
             <div class="col-md-8">
