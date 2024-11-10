@@ -93,11 +93,11 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
                         var sshKeyField = document.querySelector('[data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>"]');
                         var sshKey = sshKeyField.value;
 
-                        // Regular expressions to match the header and footer
+                        // Regular expressions to match the header and footer of the key
                         var headerRegex = /-----BEGIN [A-Z ]+ KEY-----/;
                         var footerRegex = /-----END [A-Z ]+ KEY-----/;
 
-                        // Extract the header and footer
+                        // Extract the header and footer of the key
                         var headerMatch = sshKey.match(headerRegex);
                         var footerMatch = sshKey.match(footerRegex);
 
@@ -105,10 +105,10 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
                             var header = headerMatch[0];
                             var footer = footerMatch[0];
 
-                            // Remove the header and footer from the key
+                            // Remove the header and footer from the key and trim it
                             var keyBody = sshKey.replace(header, "").replace(footer, "").trim();
 
-                            // Format the key body
+                            // Format the key body in blocks of 64 characters
                             var formattedKeyBody = keyBody.replace(/(.{64})/g, "$1\n");
 
                             // Reconstruct the key with header and footer
@@ -116,7 +116,19 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
 
                             // Update the input field with the formatted key
                             sshKeyField.value = formattedKey;
+                            jeedomUtils.showAlert({
+                                title: "SSH Manager - Format SSH Key",
+                                message: "Reformat SSH Key :: Success",
+                                level: 'success',
+                                emptyBefore: false
+                            });
                         } else {
+                            jeedomUtils.showAlert({
+                                title: "SSH Manager - Format SSH Key",
+                                message: "Invalid SSH key format",
+                                level: 'warning',
+                                emptyBefore: false
+                            });
                             console.error("Invalid SSH key format");
                         }
                     }
