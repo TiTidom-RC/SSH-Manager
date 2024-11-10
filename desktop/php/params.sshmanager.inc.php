@@ -86,7 +86,68 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
             </div>
         </div>
         <div class="form-group">
-            <label class="col-md-4 control-label">{{Clé SSH}}</label>
+            <label class="col-md-4 control-label">{{Clé SSH}}
+            <sup><i class="fas fa-play-circle icon_orange tooltips" title="{{Cliquez ici pour formater la clé SSH en blocs de 64 caractères}}" onclick="reformatSSHKey()"></i></sup>
+                <script>
+                    function reformatSSHKey() {
+                        var sshKeyField = document.querySelector('[data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>"]');
+                        var sshKey = sshKeyField.value;
+
+                        // Regular expressions to match the header and footer of the key
+                        var headerRegex = /-----BEGIN [A-Z ]+ KEY-----/;
+                        var footerRegex = /-----END [A-Z ]+ KEY-----/;
+
+                        // Extract the header and footer of the key
+                        var headerMatch = sshKey.match(headerRegex);
+                        var footerMatch = sshKey.match(footerRegex);
+
+                        if (headerMatch && footerMatch) {
+                            var header = headerMatch[0];
+                            var footer = footerMatch[0];
+
+                            // Remove the header and footer from the key and trim it
+                            var keyBody = sshKey.replace(header, "").replace(footer, "").trim();
+
+                            // Check if the key body is already formatted
+                            var isFormatted = keyBody.split('\n').every(line => line.length <= 64);
+
+                            if (!isFormatted) {
+                                // Format the key body in blocks of 64 characters
+                                var formattedKeyBody = keyBody.replace(/(.{64})/g, "$1\n");
+
+                                // Reconstruct the key with header and footer
+                                var formattedKey = header + "\n" + formattedKeyBody + "\n" + footer;
+
+                                // Update the input field with the formatted key
+                                sshKeyField.value = formattedKey;
+                                jeedomUtils.showAlert({
+                                    title: "SSH Manager - Format SSH Key",
+                                    message: "Formatage de la clé SSH en blocs de 64 caractères :: OK",
+                                    level: 'success',
+                                    emptyBefore: false
+                                });
+                            } else {
+                                jeedomUtils.showAlert({
+                                    title: "SSH Manager - Format SSH Key",
+                                    message: "{{La clé SSH est déjà formatée en blocs de 64 caractères !}}",
+                                    level: 'info',
+                                    emptyBefore: false
+                                });
+                                console.error("SSH key is already formatted in blocks of 64 characters");
+                            }
+
+                        } else {
+                            jeedomUtils.showAlert({
+                                title: "SSH Manager - Format SSH Key",
+                                message: "{{Format de la clé SSH invalide !}}",
+                                level: 'warning',
+                                emptyBefore: false
+                            });
+                            console.error("Invalid SSH key format");
+                        }
+                    }
+                </script>
+            </label>
             <div class="col-md-8">
                 <textarea class="eqLogicAttr form-control" rows="5" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_SSH_KEY ?>" placeholder="{{Saisir la clé SSH}}" wrap="off" spellcheck="false"></textarea>
             </div>
