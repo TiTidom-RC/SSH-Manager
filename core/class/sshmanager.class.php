@@ -708,7 +708,7 @@ class sshmanager extends eqLogic {
     public function refreshAllInfo() {
         $isConnected = $this->internalCheckSSHConnection();
         if (!$isConnected) {
-            log::add(__CLASS__, 'error', '[' . $this->getName() . '][RefreshAllInfo] ' . __('Connexion SSH :: KO', __FILE__));
+            log::add(__CLASS__, 'error', '[' . $this->getName() . '][RefreshAllInfo] SSH Connection :: KO');
             return;
         }
         /** @var sshmanagerCmd */
