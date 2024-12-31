@@ -42,6 +42,19 @@ try {
         $commands = sshmanager::getTemplateCommands();
         ajax::success($commands);
     }
+  
+    if (init('action') == 'getUsedBy') {
+        $return = '';
+        $usedBy = sshmanager::customUsedBy('eqLogic', init('eqLogic_id'));
+        foreach ($usedBy as $usedByEqLogic) {
+            if ($usedByEqLogic->getIsEnable() != 1) {
+                $return .= '<a href="' . $usedByEqLogic->getLinkToConfiguration() . '" class="btn btn-xs btn-info">' . $usedByEqLogic->getHumanName() . '</a><br/>';
+            } else {
+                $return .= '<a href="' . $usedByEqLogic->getLinkToConfiguration() . '" class="btn btn-xs btn-primary">' . $usedByEqLogic->getHumanName() . '</a><br/>';
+            }
+        }
+        ajax::success($return);
+    }
 
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
