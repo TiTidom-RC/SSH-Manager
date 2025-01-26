@@ -207,7 +207,7 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 });
 
 function printEqLogic(_eqLogic) {
-  $.ajax({
+  domUtils.ajax({
     type: 'POST',
     url: 'plugins/sshmanager/core/ajax/sshmanager.ajax.php',
     data: {
