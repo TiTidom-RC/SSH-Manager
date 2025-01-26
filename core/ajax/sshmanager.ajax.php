@@ -52,10 +52,10 @@ try {
 		    // $return .= '<a href="' . $plugin->getLinkToConfiguration() . '" class="btn btn-xs btn-info"><img class="img-responsive" style="width:15px;display:inline-block;" src="' . $plugin->getPathImgIcon() . '" /> ' . $plugin->getName(). ' </a>';
             $return .= '<a class="btn btn-xs btn-info"><img class="img-responsive" style="width:15px;display:inline-block;" src="' . $plugin->getPathImgIcon() . '" /> ' . $plugin->getName(). ' </a>';
             if ($usedByEqLogic->getIsEnable() != 1) {
-                log::add('sshmanager', 'debug', '[' . $eqLogic->getName() . '][UsedBy] ' . 'L\'équipement ' . $usedByEqLogic->getHumanName(false) . ' est utilisé mais désactivé');
+                log::add('sshmanager', 'debug', '[' . $eqLogic->getName() . '][UsedBy] ' . 'L\'équipement ' . $usedByEqLogic->getHumanName(false) . ' utilise cet objet mais est désactivé');
                 $return .= ' - <a href="' . $usedByEqLogic->getLinkToConfiguration() . '" class="btn btn-xs btn-secondary">' . $usedByEqLogic->getHumanName(true) . '</a><br/>';
             } else {
-                log::add('sshmanager', 'debug', '[' . $eqLogic->getName() . '][UsedBy] ' . 'L\'équipement ' . $usedByEqLogic->getHumanName(false) . ' est utilisé activé');
+                log::add('sshmanager', 'debug', '[' . $eqLogic->getName() . '][UsedBy] ' . 'L\'équipement ' . $usedByEqLogic->getHumanName(false) . ' utilise cet objet et est actif');
                 $return .= ' - <a href="' . $usedByEqLogic->getLinkToConfiguration() . '" class="btn btn-xs btn-info">' . $usedByEqLogic->getHumanName(true) . '</a><br/>';
             }
         }
