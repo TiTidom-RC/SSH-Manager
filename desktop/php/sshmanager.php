@@ -189,7 +189,9 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">{{Equipement(s) enfants}}</label>
+                                <label class="col-sm-4 control-label">{{Références}}
+                                    <sup><i class="fas fa-question-circle tooltips" title="{{Liste des autres plugins et objets référençant cet équipement}}"></i></sup>
+                                </label>
                                 <div class="col-sm-6" id="div_eqLogicList">
                                 </div>
                               </div>
