@@ -147,6 +147,12 @@ class sshmanager extends eqLogic {
         return $CommunityInfo;
     }
 
+    public static function customUsedBy($_type, $_id) {
+        if ($_type == 'eqLogic') {
+            return array_merge(eqLogic::searchConfiguration(array('#eqLogic' . $_id . '#', '"host_id":"' . $_id . '"')));
+        }
+    }
+
     // Methods used by client plugins
 
     public static function getRemoteHosts() {

@@ -206,6 +206,34 @@ document.getElementById('div_pageContainer').addEventListener("change", function
 	}
 });
 
+function printEqLogic(_eqLogic) {
+  domUtils.ajax({
+    type: 'POST',
+    url: 'plugins/sshmanager/core/ajax/sshmanager.ajax.php',
+    data: {
+      action: 'getUsedBy',
+      eqLogic_id: _eqLogic.id
+    },
+    dataType: 'json',
+    error: function (error) {
+      jeedomUtils.showAlert({ message: error.message, level: 'danger' })
+    },
+    success: function (data) {
+      if (data.state != 'ok') {
+        jeedomUtils.showAlert({
+          title: "SSH Manager	- UsedBy",
+          message: "Error :: Retrieving children eqLogic !",
+          level: 'warning',
+          emptyBefore: false
+        });
+        return;
+      }
+      document.getElementById('div_eqLogicList').innerHTML = data.result;
+    }
+  });
+
+}
+
 document.getElementById('div_pageContainer').addEventListener("click", function(event) {
 	if (event.target.classList.contains("btnTemplateCmds")) {
 		jeeDialog.dialog({

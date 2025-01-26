@@ -42,6 +42,21 @@ try {
         $commands = sshmanager::getTemplateCommands();
         ajax::success($commands);
     }
+  
+    if (init('action') == 'getUsedBy') {
+        $return = '';
+        $usedBy = sshmanager::customUsedBy('eqLogic', init('eqLogic_id'));
+        foreach ($usedBy as $usedByEqLogic) {
+            $plugin = plugin::byId($usedByEqLogic->getEqType_name());
+		    $return .= '<a href="' . $plugin->getLinkToConfiguration() . '" class="btn btn-xs btn-info"><img class="img-responsive" style="width : 18px;display:inline-block;" src="' . $plugin->getPathImgIcon() . '" /> ' . $plugin->getName(). ' </a>';
+            if ($usedByEqLogic->getIsEnable() != 1) {
+                $return .= '<a href="' . $usedByEqLogic->getLinkToConfiguration() . '" class="btn btn-xs btn-info">' . $usedByEqLogic->getHumanName(true) . '</a><br/>';
+            } else {
+                $return .= '<a href="' . $usedByEqLogic->getLinkToConfiguration() . '" class="btn btn-xs btn-primary">' . $usedByEqLogic->getHumanName(true) . '</a><br/>';
+            }
+        }
+        ajax::success($return);
+    }
 
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
     /*     * *********Catch exeption*************** */
