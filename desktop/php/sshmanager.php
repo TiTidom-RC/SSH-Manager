@@ -188,6 +188,13 @@ $eqLogics = eqLogic::byType($plugin->getId());
                                     <textarea class="form-control eqLogicAttr" rows="5" data-l1key="comment"></textarea>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">{{Références}}
+                                    <sup><i class="fas fa-question-circle tooltips" title="{{Liste des autres plugins et objets référençant cet équipement}}"></i></sup>
+                                </label>
+                                <div class="col-sm-6" id="div_eqLogicList">
+                                </div>
+                              </div>
                         </div>
                     </fieldset>
                 </form>
