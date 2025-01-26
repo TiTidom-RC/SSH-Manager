@@ -221,7 +221,7 @@ function printEqLogic(_eqLogic) {
     success: function (data) {
       if (data.state != 'ok') {
         jeedomUtils.showAlert({
-          title: "SSH Manager	- UsedBy",
+          title: "SSH Manager - UsedBy",
           message: "Error :: Retrieving children eqLogic !",
           level: 'warning',
           emptyBefore: false

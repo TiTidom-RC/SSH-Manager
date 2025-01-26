@@ -48,10 +48,12 @@ try {
         $usedBy = sshmanager::customUsedBy('eqLogic', init('eqLogic_id'));
         foreach ($usedBy as $usedByEqLogic) {
             $plugin = plugin::byId($usedByEqLogic->getEqType_name());
-		    $return .= '<a href="' . $plugin->getLinkToConfiguration() . '" class="btn btn-xs btn-info"><img class="img-responsive" style="width : 18px;display:inline-block;" src="' . $plugin->getPathImgIcon() . '" /> ' . $plugin->getName(). ' </a>';
+		    $return .= '<a href="' . $plugin->getLinkToConfiguration() . '" class="btn btn-xs btn-info"><img class="img-responsive" style="width : 15px;display:inline-block;" src="' . $plugin->getPathImgIcon() . '" /> ' . $plugin->getName(). ' </a>';
             if ($usedByEqLogic->getIsEnable() != 1) {
+                log::add('sshmanager', 'debug', 'L\'équipement ' . $usedByEqLogic->getHumanName(true) . ' est désactivé');
                 $return .= '<a href="' . $usedByEqLogic->getLinkToConfiguration() . '" class="btn btn-xs btn-info">' . $usedByEqLogic->getHumanName(true) . '</a><br/>';
             } else {
+                log::add('sshmanager', 'debug', 'L\'équipement ' . $usedByEqLogic->getHumanName(true) . ' est activé');
                 $return .= '<a href="' . $usedByEqLogic->getLinkToConfiguration() . '" class="btn btn-xs btn-primary">' . $usedByEqLogic->getHumanName(true) . '</a><br/>';
             }
         }
@@ -59,7 +61,7 @@ try {
     }
 
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-    /*     * *********Catch exeption*************** */
+    /*     * *********Catch exception*************** */
 } catch (Exception $e) {
     ajax::error(displayException($e), $e->getCode());
 }
