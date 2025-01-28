@@ -42,9 +42,28 @@ try {
         $commands = sshmanager::getTemplateCommands();
         ajax::success($commands);
     }
+  
+    if (init('action') == 'getUsedBy') {
+        $return = '';
+        $usedBy = sshmanager::customUsedBy('eqLogic', init('eqLogic_id'));
+        $eqLogic = eqLogic::byId(init('eqLogic_id'));
+        foreach ($usedBy as $usedByEqLogic) {
+            $plugin = plugin::byId($usedByEqLogic->getEqType_name());
+		    // $return .= '<a href="' . $plugin->getLinkToConfiguration() . '" class="btn btn-xs btn-info"><img class="img-responsive" style="width:15px;display:inline-block;" src="' . $plugin->getPathImgIcon() . '" /> ' . $plugin->getName(). ' </a>';
+            $return .= '<a class="btn btn-xs btn-info"><img class="img-responsive" style="width:15px;display:inline-block;" src="' . $plugin->getPathImgIcon() . '" /> ' . $plugin->getName(). ' </a>';
+            if ($usedByEqLogic->getIsEnable() != 1) {
+                log::add('sshmanager', 'debug', '[' . $eqLogic->getName() . '][UsedBy] ' . 'L\'équipement ' . $usedByEqLogic->getHumanName(false) . ' utilise cet objet mais est désactivé');
+                $return .= ' - <a href="' . $usedByEqLogic->getLinkToConfiguration() . '" class="btn btn-xs btn-secondary">' . $usedByEqLogic->getHumanName(true) . '</a><br/>';
+            } else {
+                log::add('sshmanager', 'debug', '[' . $eqLogic->getName() . '][UsedBy] ' . 'L\'équipement ' . $usedByEqLogic->getHumanName(false) . ' utilise cet objet et est actif');
+                $return .= ' - <a href="' . $usedByEqLogic->getLinkToConfiguration() . '" class="btn btn-xs btn-info">' . $usedByEqLogic->getHumanName(true) . '</a><br/>';
+            }
+        }
+        ajax::success($return);
+    }
 
     throw new Exception(__('Aucune méthode correspondante à : ', __FILE__) . init('action'));
-    /*     * *********Catch exeption*************** */
+    /*     * *********Catch exception*************** */
 } catch (Exception $e) {
     ajax::error(displayException($e), $e->getCode());
 }

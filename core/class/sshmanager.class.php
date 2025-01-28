@@ -147,6 +147,15 @@ class sshmanager extends eqLogic {
         return $CommunityInfo;
     }
 
+    public static function customUsedBy($_type, $_id) {
+        if ($_type == 'eqLogic') {
+            return array_merge(
+                eqLogic::searchConfiguration(array('#eqLogic' . $_id . '#', '"host_id":"' . $_id . '"')),
+                eqLogic::searchConfiguration(array('#eqLogic' . $_id . '#', '"SSHHostId":"' . $_id . '"')) # specific to the Monitoring Plugin
+            );
+        }
+    }
+
     // Methods used by client plugins
 
     public static function getRemoteHosts() {
@@ -706,6 +715,11 @@ class sshmanager extends eqLogic {
     }
 
     public function refreshAllInfo() {
+        $isConnected = $this->internalCheckSSHConnection();
+        if (!$isConnected) {
+            log::add(__CLASS__, 'error', '[' . $this->getName() . '][RefreshAllInfo] SSH Connection :: KO');
+            return;
+        }
         /** @var sshmanagerCmd */
         foreach ($this->getCmd('info') as $cmd) {
             if ($cmd->getConfiguration('autorefresh', 1) != 1) {
