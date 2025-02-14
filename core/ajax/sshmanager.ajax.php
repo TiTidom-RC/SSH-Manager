@@ -45,9 +45,9 @@ try {
 
     if (init('action') == 'getUsedBy') {
         $return = '';
-        $usedBy = sshmanager::customUsedBy(init('eqLogic_id'));
         $eqLogic = eqLogic::byId(init('eqLogic_id'));
-        foreach ($usedBy['eqLogic'] as $usedByEqLogic) {
+        $usedByEqlogics = sshmanager::customUsedBy('eqLogic', init('eqLogic_id'));
+        foreach ($usedByEqlogics as $usedByEqLogic) {
             $plugin = plugin::byId($usedByEqLogic->getEqType_name());
             $return .= '<a class="btn btn-xs btn-info"><img class="img-responsive" style="width:15px;display:inline-block;" src="' . $plugin->getPathImgIcon() . '" /> ' . $plugin->getName(). ' </a>';
             if ($usedByEqLogic->getIsEnable() != 1) {
@@ -58,8 +58,9 @@ try {
                 $return .= ' - <a href="' . $usedByEqLogic->getLinkToConfiguration() . '" class="btn btn-xs btn-info">' . $usedByEqLogic->getHumanName(true) . '</a><br/>';
             }
         }
-        foreach ($usedBy['scenario'] as $usedByEqLogic) {
-            $scenario = $usedByEqLogic->getSubElement()->getElement()->getScenario();
+        $usedByScenarios = sshmanager::customUsedBy('scenario', init('eqLogic_id'));
+        foreach ($usedByScenarios as $usedByScenario) {
+            $scenario = $usedByScenario->getSubElement()->getElement()->getScenario();
             if ($scenario->getIsActive() != 1) {
                 $return .= '<a href="' . $scenario->getLinkToConfiguration() . '&search=' . urlencode($eqLogic->getHumanName()) . '" class="btn btn-xs btn-info">' . $scenario->getHumanName() . '</a><br/>';
             } else {
