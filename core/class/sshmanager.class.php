@@ -147,14 +147,16 @@ class sshmanager extends eqLogic {
         return $CommunityInfo;
     }
 
-    public static function customUsedBy($_id) {
-        return array(
-            'eqLogic' => array_merge(
+    public static function customUsedBy($_type, $_id) {
+        if ($_type == 'eqLogic') {
+            return array_merge(
                 eqLogic::searchConfiguration(array('#eqLogic' . $_id . '#', '"host_id":"' . $_id . '"')),
                 eqLogic::searchConfiguration(array('#eqLogic' . $_id . '#', '"SSHHostId":"' . $_id . '"')) # specific to the Monitoring Plugin
-            ),
-            'scenario' => scenarioExpression::searchExpression('#eqLogic' . $_id . '#')
-        );
+            );
+        }
+        if ($_type == 'scenario') {
+            return scenarioExpression::searchExpression('#eqLogic' . $_id . '#');
+        }
     }
 
     // Methods used by client plugins
