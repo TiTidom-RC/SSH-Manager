@@ -51,14 +51,20 @@ try {
             $plugin = plugin::byId($usedByEqLogic->getEqType_name());
             $return .= '<a class="btn btn-xs btn-info"><img class="img-responsive" style="width:15px;display:inline-block;" src="' . $plugin->getPathImgIcon() . '" /> ' . $plugin->getName(). ' </a>';
             if ($usedByEqLogic->getIsEnable() != 1) {
-                log::add('sshmanager', 'debug', '[' . $eqLogic->getName() . '][UsedBy] ' . 'L\'équipement ' . $usedByEqLogic->getHumanName(false) . ' utilise cet objet mais est désactivé');
+                log::add('sshmanager', 'debug', '[' . $eqLogic->getName() . '][UsedByEqLogic] ' . 'L\'équipement ' . $usedByEqLogic->getHumanName(false) . ' utilise cet objet mais est désactivé');
                 $return .= ' - <a href="' . $usedByEqLogic->getLinkToConfiguration() . '" class="btn btn-xs btn-secondary">' . $usedByEqLogic->getHumanName(true) . '</a><br/>';
             } else {
-                log::add('sshmanager', 'debug', '[' . $eqLogic->getName() . '][UsedBy] ' . 'L\'équipement ' . $usedByEqLogic->getHumanName(false) . ' utilise cet objet et est actif');
+                log::add('sshmanager', 'debug', '[' . $eqLogic->getName() . '][UsedByEqLogic] ' . 'L\'équipement ' . $usedByEqLogic->getHumanName(false) . ' utilise cet objet et est actif');
                 $return .= ' - <a href="' . $usedByEqLogic->getLinkToConfiguration() . '" class="btn btn-xs btn-info">' . $usedByEqLogic->getHumanName(true) . '</a><br/>';
             }
         }
         $usedByScenarios = sshmanager::customUsedBy('scenario', init('eqLogic_id'));
+        if (count($usedByScenarios) == 0) {
+            log::add('sshmanager', 'debug', '[' . $eqLogic->getName() . '][UsedByScenario] ' . 'L\'équipement ' . $eqLogic->getHumanName(false) . ' n\'est utilisé par aucun scénario');
+            ajax::success($return);
+        } else {
+            log::add('sshmanager', 'debug', '[' . $eqLogic->getName() . '][UsedByScenario] ' . 'L\'équipement ' . $eqLogic->getHumanName(false) . ' est utilisé par : ' . json_encode($usedByScenarios));
+        }
         foreach ($usedByScenarios as $usedByScenario) {
             $scenario = $usedByScenario->getSubElement()->getElement()->getScenario();
             if ($scenario->getIsActive() != 1) {
