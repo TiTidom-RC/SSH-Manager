@@ -154,6 +154,9 @@ class sshmanager extends eqLogic {
                 eqLogic::searchConfiguration(array('#eqLogic' . $_id . '#', '"SSHHostId":"' . $_id . '"')) # specific to the Monitoring Plugin
             );
         }
+        if ($_type == 'scenario') {
+            return scenarioExpression::searchExpression('#eqLogic' . $_id . '#');
+        }
     }
 
     // Methods used by client plugins
