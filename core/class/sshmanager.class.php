@@ -155,7 +155,11 @@ class sshmanager extends eqLogic {
             );
         }
         if ($_type == 'scenario') {
-            return scenarioExpression::searchExpression('#eqLogic' . $_id . '#');
+            log::add(__CLASS__, 'debug', '[UsedByScenario] Search for scenario using eqLogic id: ' . $_id);
+            
+            $scenarios = scenarioExpression::searchExpression('#eqLogic' . $_id . '#');
+            log::add(__CLASS__, 'debug', '[UsedByScenario] Found scenarios: ' . json_encode($scenarios));
+            return $scenarios;
         }
     }
 
