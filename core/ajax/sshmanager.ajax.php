@@ -62,9 +62,11 @@ try {
         foreach ($usedByScenarios as $usedByScenario) {
             $scenario = $usedByScenario->getSubElement()->getElement()->getScenario();
             if ($scenario->getIsActive() != 1) {
-                $return .= '<a href="' . $scenario->getLinkToConfiguration() . '&search=' . urlencode($eqLogic->getHumanName()) . '" class="btn btn-xs btn-info">' . $scenario->getHumanName() . '</a><br/>';
+                log::add('sshmanager', 'debug', '[' . $eqLogic->getName() . '][UsedByScenario] ' . 'L\'équipement ' . $usedByScenario->getHumanName(false) . ' utilise cet objet mais est désactivé');
+                $return .= '<a href="' . $scenario->getLinkToConfiguration() . '&search=' . urlencode($eqLogic->getHumanName()) . '" class="btn btn-xs btn-info">' . $scenario->getHumanName(true) . '</a><br/>';
             } else {
-                $return .= '<a href="' . $scenario->getLinkToConfiguration() . '&search=' . urlencode($eqLogic->getHumanName()) . '" class="btn btn-xs btn-primary">' . $scenario->getHumanName() . '</a><br/>';
+                log::add('sshmanager', 'debug', '[' . $eqLogic->getName() . '][UsedByScenario] ' . 'L\'équipement ' . $usedByScenario->getHumanName(false) . ' utilise cet objet et est actif');
+                $return .= '<a href="' . $scenario->getLinkToConfiguration() . '&search=' . urlencode($eqLogic->getHumanName()) . '" class="btn btn-xs btn-primary">' . $scenario->getHumanName(true) . '</a><br/>';
             }
         }
         ajax::success($return);
