@@ -58,7 +58,7 @@ try {
                 $return .= ' - <a href="' . $usedByEqLogic->getLinkToConfiguration() . '" class="btn btn-xs btn-info">' . $usedByEqLogic->getHumanName(true) . '</a><br/>';
             }
         }
-        $usedByScenarios = sshmanager::customUsedBy('scenario', $eqLogic->getHumanName(false));
+        $usedByScenarios = sshmanager::customUsedBy('scenario', init('eqLogic_id'));
         if (count($usedByScenarios) == 0) {
             log::add('sshmanager', 'debug', '[' . $eqLogic->getName() . '][UsedByScenario] ' . 'L\'équipement ' . $eqLogic->getHumanName(false) . ' n\'est utilisé par aucun scénario');
             ajax::success($return);
