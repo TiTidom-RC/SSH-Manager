@@ -609,7 +609,7 @@ class sshmanager extends eqLogic {
                 return $result;
             }
             
-            // TODO ATTENTION, une variable qui renvoit 0 est considérée comme vide.
+            // TODO ATTENTION, une variable qui renvoie 0 est considérée comme vide.
 
             if (!empty($result)) {
                 $result = trim($result);
