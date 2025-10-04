@@ -1,7 +1,7 @@
 {
 	"id": "sshmanager",
 	"name": "SSH Manager",
-	"pluginVersion": "1.0.9",
+	"pluginVersion": "1.0.10",
 	"description": {
 		"fr_FR": "Plugin permettant d'ajouter (manuellement ou à partir de templates) des commandes SSH à executer (manuellement ou automatiquement) sur des équipements distants, et pouvant également être utilisé par d'autres plugin comme passerelle SSH.",
 		"en_US": "Plugin for adding (manually or from templates) SSH commands to be executed (manually or automatically) on remote devices, and which can also be used by other plugins as an SSH gateway.",

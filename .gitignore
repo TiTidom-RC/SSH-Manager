@@ -1,1 +1,4 @@
-.vscode
+# Ignore VSCode directory
+.vscode/
+# but keep the settings file
+!.vscode/settings.json
