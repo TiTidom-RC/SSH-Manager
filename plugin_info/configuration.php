@@ -52,6 +52,14 @@ if (strpos($_branchSSHManager, 'stable') !== false) {
                     <?php echo $_labelBranchSSHM ?>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="col-lg-3 control-label">{{Désactiver les messages de MàJ}}
+                    <sup><i class="fas fa-question-circle tooltips" title="{{Cocher cette case désactivera les messages de mise à jour du plugin dans le centre de message}}"></i></sup>
+                </label>
+                <div class="col-lg-1">
+                    <input type="checkbox" class="configKey" data-l1key="disableUpdateMsg" />
+                </div>
+            </div>
             <legend><i class="fas fa-list-alt"></i> {{Options}}</legend>
             <div class="form-group">
                 <label class="col-lg-3 control-label">{{Rafraichir les valeurs à la sauvegarde}}
