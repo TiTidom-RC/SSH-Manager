@@ -34,6 +34,9 @@ function sshmanager_install() {
     if (config::byKey('refreshOnSave', 'sshmanager') == '') {
         config::save('refreshOnSave', '1', 'sshmanager');
     }
+    if (config::byKey('disableUpdateMsg', 'sshmanager') == '') {
+        config::save('disableUpdateMsg', '0', 'sshmanager');
+    }
 }
 
 function sshmanager_update() {
@@ -45,12 +48,17 @@ function sshmanager_update() {
     $pluginBranch = sshmanager::getPluginBranch();
     config::save('pluginBranch', $pluginBranch, 'sshmanager');
 
-    message::removeAll('sshmanager');
-    message::add('sshmanager', 'Mise à jour du plugin SSH Manager :: v' . $pluginVersion, 'update');
+    if (config::byKey('disableUpdateMsg', 'sshmanager', '0') == '0') {
+        message::removeAll('sshmanager');
+        message::add('sshmanager', 'Mise à jour du plugin SSH Manager :: v' . $pluginVersion, 'update');
+    }
 
     // Init des valeurs par défaut
     if (config::byKey('refreshOnSave', 'sshmanager') == '') {
         config::save('refreshOnSave', '1', 'sshmanager');
+    }
+    if (config::byKey('disableUpdateMsg', 'sshmanager') == '') {
+        config::save('disableUpdateMsg', '0', 'sshmanager');
     }
 
     /* Ménage dans les répertoires du plugin si besoin */

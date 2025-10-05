@@ -154,6 +154,13 @@ class sshmanager extends eqLogic {
                 eqLogic::searchConfiguration(array('#eqLogic' . $_id . '#', '"SSHHostId":"' . $_id . '"')) # specific to the Monitoring Plugin
             );
         }
+        if ($_type == 'scenario') {
+            log::add(__CLASS__, 'debug', '[UsedByScenario] Search for scenario using eqLogic: ' . $_id);
+            
+            $scenarios = scenarioExpression::searchExpression('#eqLogic' . $_id . '#', '#eqLogic' . $_id . '#', false);
+            log::add(__CLASS__, 'debug', '[UsedByScenario] Found scenarios: ' . json_encode($scenarios));
+            return $scenarios;
+        }
     }
 
     // Methods used by client plugins
@@ -330,7 +337,7 @@ class sshmanager extends eqLogic {
                 }
                 break;
             case self::AUTH_METHOD_AGENT:
-                //TODO: check if agent auth could be usefull? we only need to uncomment the following line and remove the exception
+                //TODO: check if agent auth could be useful? we only need to uncomment the following line and remove the exception
                 // $keyOrpassword = new \phpseclib3\System\SSH\Agent();
                 throw new RuntimeException(sprintf(__("Méthode d'authentification non supportée: %s", __FILE__), $authmethod));
                 break;
@@ -602,7 +609,7 @@ class sshmanager extends eqLogic {
                 return $result;
             }
             
-            // TODO ATTENTION, une variable qui renvoit 0 est considérée comme vide.
+            // TODO ATTENTION, une variable qui renvoie 0 est considérée comme vide.
 
             if (!empty($result)) {
                 $result = trim($result);
@@ -720,8 +727,8 @@ class sshmanager extends eqLogic {
             log::add(__CLASS__, 'error', '[' . $this->getName() . '][RefreshAllInfo] SSH Connection :: KO');
             return;
         }
-        /** @var sshmanagerCmd */
         foreach ($this->getCmd('info') as $cmd) {
+            /** @var sshmanagerCmd $cmd */
             if ($cmd->getConfiguration('autorefresh', 1) != 1) {
                 continue;
             }
@@ -748,6 +755,7 @@ class sshmanager extends eqLogic {
         $eqLogic = eqLogic::byId($_options['SSHManager_Id']);
         if (is_object($eqLogic)) {
             try {
+                /** @var sshmanager $eqLogic */
                 $eqLogic->refreshAllInfo();
             } catch (Exception $exc) {
                 log::add(__CLASS__, 'error', sprintf(__("[%s] cronEqLogic Exception :: %s", __FILE__), $eqLogic->getName(), $exc->getMessage()));
@@ -855,6 +863,7 @@ class sshmanagerCmd extends cmd {
             return;
         } elseif ($this->getConfiguration('cmdType') == 'refresh') {
             if ($this->getConfiguration('cmdToRefresh') != '') {
+                /** @var sshmanagerCmd $cmd */
                 $cmd = cmd::byId($this->getConfiguration('cmdToRefresh'));
                 if (is_object($cmd)) {
                     log::add(get_class($this->getEqLogic()), 'info', '[' . $this->getEqLogic()->getName() . '][' . $cmd->getName() . '] ' . __('Refresh de la commande', __FILE__));
