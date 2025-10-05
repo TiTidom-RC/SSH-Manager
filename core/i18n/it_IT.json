@@ -141,7 +141,9 @@
         "Visible": "Visibile"
     },
     "plugins\/sshmanager\/plugin_info\/configuration.php": {
+        "Cocher cette case désactivera les messages de mise à jour du plugin dans le centre de message": "Selezionando questa casella, i messaggi di aggiornamento del plugin nel centro messaggi saranno disattivati.",
         "Cochez cette option pour rafraîchir automatiquement les valeurs des commandes lors de la sauvegarde d'un équipement": "Selezionare questa opzione per aggiornare automaticamente i valori dei comandi quando si salva un dispositivo",
+        "Désactiver les messages de MàJ": "Disattivare i messaggi di aggiornamento",
         "Options": "Opzioni",
         "Plugin": "Plugin",
         "Rafraichir les valeurs à la sauvegarde": "Aggiornare i valori salvati",
