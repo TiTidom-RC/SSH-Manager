@@ -52,7 +52,7 @@
         "name": "Ping Google",
         "short_description": "Ping Google",
         "description": "Ping Google (8.8.8.8) et retourne la latence en ms. Retourne -1 si le ping échoue.",
-        "command": "ping -c 1 8.8.8.8 | awk -F'=' 'BEGIN {ORS=\"\"} /avg/ {split($2, a, \"/\"); print a[2]; exit} END {if (!a[2]) print \"-1\"}'",
+        "command": "ping -c 1 -W 1 8.8.8.8 | awk -F'=' 'BEGIN {ORS=\"\"} /avg/ {split($2, a, \"/\"); print a[2]; exit} END {if (!a[2]) print \"-1\"}'",
         "type": "info",
         "subtype": "numeric"
     }
