@@ -107,7 +107,16 @@ function buildSelectCommands(currentValue) {
           } else {
               commands = {}; // Initialize the commands object if not already initialized
               // console.log(data.result);
-              for (const [key, value] of Object.entries(data.result)) {
+              
+              // Convert to array and sort by short_description
+              const sortedEntries = Object.entries(data.result).sort((a, b) => {
+                  const descA = a[1]['short_description'].toLowerCase();
+                  const descB = b[1]['short_description'].toLowerCase();
+                  return descA.localeCompare(descB);
+              });
+              
+              // Add sorted options to select
+              for (const [key, value] of sortedEntries) {
                 commands[key] = value;
                 selectCmd.append(new Option(value['short_description'], key));
               }
