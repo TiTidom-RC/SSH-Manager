@@ -95,6 +95,15 @@ function sshmanager_update() {
 }
 
 function sshmanager_remove() {
+    // Close all active SSH and SFTP connections
+    try {
+        $count = sshmanager::closeAllConnections();
+        log::add('sshmanager', 'info', "[REMOVE] Closed {$count} active connection(s)");
+    } catch (Exception $e) {
+        log::add('sshmanager', 'error', '[REMOVE] Error closing connections :: ' . $e->getMessage());
+    }
+    
+    // Remove all cron jobs
     foreach (eqLogic::byType('sshmanager', false) as $sshmanager) {
         $cron = cron::byClassAndFunction('sshmanager', 'cronEqLogic', array('SSHManager_Id' => intval($sshmanager->getId())));
         if (is_object($cron)) {
