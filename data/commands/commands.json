@@ -52,8 +52,224 @@
         "name": "Ping Google",
         "short_description": "Ping Google",
         "description": "Ping Google (8.8.8.8) et retourne la latence en ms. Retourne -1 si le ping échoue.",
-        "command": "ping -c 1 8.8.8.8 | awk -F'=' 'BEGIN {ORS=\"\"} /avg/ {split($2, a, \"/\"); print a[2]; exit} END {if (!a[2]) print \"-1\"}'",
+        "command": "ping -c 1 -W 1 8.8.8.8 | awk -F'=' 'BEGIN {ORS=\"\"} /avg/ {split($2, a, \"/\"); print a[2]; exit} END {if (!a[2]) print \"-1\"}'",
         "type": "info",
         "subtype": "numeric"
+    },
+    "cpu_usage": {
+        "name": "CPU Usage",
+        "short_description": "CPU usage percentage",
+        "description": "Retourne le pourcentage d'utilisation CPU",
+        "command": "top -bn1 | grep 'Cpu(s)' | awk '{print 100 - $8}'",
+        "type": "info",
+        "subtype": "numeric"
+    },
+    "memory_usage": {
+        "name": "Memory Usage",
+        "short_description": "RAM usage percentage",
+        "description": "Retourne le pourcentage d'utilisation de la RAM",
+        "command": "LC_ALL=C free | grep Mem | awk '{printf \"%.1f\", ($3/$2) * 100.0}'",
+        "type": "info",
+        "subtype": "numeric"
+    },
+    "memory_free": {
+        "name": "Memory Free",
+        "short_description": "Free RAM in MB",
+        "description": "Retourne la RAM libre en MB",
+        "command": "LC_ALL=C free -m | grep Mem | awk '{print $4}'",
+        "type": "info",
+        "subtype": "numeric"
+    },
+    "swap_usage": {
+        "name": "Swap Usage",
+        "short_description": "Swap usage percentage",
+        "description": "Retourne le pourcentage d'utilisation du swap",
+        "command": "LC_ALL=C free | grep Swap | awk '{if ($2 > 0) printf \"%.1f\", ($3/$2) * 100.0; else print \"0\"}'",
+        "type": "info",
+        "subtype": "numeric"
+    },
+    "disk_usage": {
+        "name": "Disk Usage",
+        "short_description": "Disk usage percentage of /",
+        "description": "Retourne le pourcentage d'utilisation du disque pour la partition racine",
+        "command": "LC_ALL=C df -hP / | awk 'NR==2 {gsub(/%/, \"\", $5); print $5}'",
+        "type": "info",
+        "subtype": "numeric"
+    },
+    "disk_free": {
+        "name": "Disk Free",
+        "short_description": "Free disk space in GB",
+        "description": "Retourne l'espace disque libre en GB pour la partition racine",
+        "command": "LC_ALL=C df -BG -P / | awk 'NR==2 {gsub(/G/, \"\", $4); print $4}'",
+        "type": "info",
+        "subtype": "numeric"
+    },
+    "cpu_temperature": {
+        "name": "CPU Temperature",
+        "short_description": "CPU temperature (Raspberry Pi)",
+        "description": "Retourne la température du CPU en degrés Celsius (compatible Raspberry Pi)",
+        "command": "if [ -f /sys/class/thermal/thermal_zone0/temp ]; then awk '{printf \"%.1f\", $1/1000}' /sys/class/thermal/thermal_zone0/temp; else echo \"-1\"; fi",
+        "type": "info",
+        "subtype": "numeric"
+    },
+    "os_version": {
+        "name": "OS Version",
+        "short_description": "Operating system version",
+        "description": "Retourne la version du système d'exploitation",
+        "command": "lsb_release -ds 2>/dev/null || cat /etc/os-release 2>/dev/null | grep PRETTY_NAME | cut -d'\"' -f2",
+        "type": "info",
+        "subtype": "string"
+    },
+    "kernel_version": {
+        "name": "Kernel Version",
+        "short_description": "Kernel version",
+        "description": "Retourne la version du kernel Linux",
+        "command": "uname -r",
+        "type": "info",
+        "subtype": "string"
+    },
+    "hostname": {
+        "name": "Hostname",
+        "short_description": "System hostname",
+        "description": "Retourne le nom d'hôte du système",
+        "command": "hostname",
+        "type": "info",
+        "subtype": "string"
+    },
+    "last_reboot": {
+        "name": "Last Reboot",
+        "short_description": "Last system reboot time",
+        "description": "Retourne la date et l'heure du dernier redémarrage",
+        "command": "who -b | awk '{print $3, $4}'",
+        "type": "info",
+        "subtype": "string"
+    },
+    "logged_users": {
+        "name": "Logged Users",
+        "short_description": "Number of logged users",
+        "description": "Retourne le nombre d'utilisateurs connectés",
+        "command": "who | wc -l",
+        "type": "info",
+        "subtype": "numeric"
+    },
+    "process_count": {
+        "name": "Process Count",
+        "short_description": "Number of running processes",
+        "description": "Retourne le nombre de processus en cours d'exécution",
+        "command": "ps aux | wc -l",
+        "type": "info",
+        "subtype": "numeric"
+    },
+    "network_interfaces": {
+        "name": "Network Interfaces",
+        "short_description": "List network interfaces",
+        "description": "Retourne la liste des interfaces réseau",
+        "command": "ip -o link show | awk -F': ' '{print $2}' | grep -v '^lo$' | awk 'BEGIN {RS=\"\"}{gsub(/\\n/,\",\",$0); print $0}'",
+        "type": "info",
+        "subtype": "string"
+    },
+    "ip_address": {
+        "name": "IP Address",
+        "short_description": "IP address of primary interface",
+        "description": "Retourne l'adresse IP de l'interface réseau principale",
+        "command": "hostname -I | awk '{print $1}'",
+        "type": "info",
+        "subtype": "string"
+    },
+    "open_ports": {
+        "name": "Open Ports",
+        "short_description": "List of open ports",
+        "description": "Retourne la liste des ports TCP en écoute",
+        "command": "sudo ss -tlnp | awk 'NR>1 {split($4, a, \":\"); print a[length(a)]}' | sort -u | awk 'BEGIN {RS=\"\"}{gsub(/\\n/,\",\",$0); print $0}'",
+        "type": "info",
+        "subtype": "string"
+    },
+    "top_processes_cpu": {
+        "name": "Top Processes CPU",
+        "short_description": "Top 5 CPU consuming processes",
+        "description": "Retourne les 5 processus consommant le plus de CPU",
+        "command": "ps aux --sort=-%cpu | awk 'NR>1 && NR<=6 {if (NR>2) printf \", \"; printf \"%s (%.1f%%)\", $11, $3}'",
+        "type": "info",
+        "subtype": "string"
+    },
+    "top_processes_mem": {
+        "name": "Top Processes Memory",
+        "short_description": "Top 5 memory consuming processes",
+        "description": "Retourne les 5 processus consommant le plus de mémoire",
+        "command": "ps aux --sort=-%mem | awk 'NR>1 && NR<=6 {if (NR>2) printf \", \"; printf \"%s (%.1f%%)\", $11, $4}'",
+        "type": "info",
+        "subtype": "string"
+    },
+    "stop_service": {
+        "name": "Stop Service",
+        "short_description": "Stop a service",
+        "description": "Arrête un service sur le système distant. Remplacer #service_name# par le nom du service à arrêter",
+        "command": "sudo systemctl stop #service_name#",
+        "type": "action",
+        "subtype": "other"
+    },
+    "start_service": {
+        "name": "Start Service",
+        "short_description": "Start a service",
+        "description": "Démarre un service sur le système distant. Remplacer #service_name# par le nom du service à démarrer",
+        "command": "sudo systemctl start #service_name#",
+        "type": "action",
+        "subtype": "other"
+    },
+    "service_status": {
+        "name": "Service Status",
+        "short_description": "Check service status",
+        "description": "Vérifie le statut d'un service (active/inactive). Remplacer #service_name# par le nom du service",
+        "command": "sudo systemctl is-active #service_name#",
+        "type": "info",
+        "subtype": "string"
+    },
+    "reboot_system": {
+        "name": "Reboot System",
+        "short_description": "Reboot the system",
+        "description": "Redémarre le système distant",
+        "command": "sudo reboot",
+        "type": "action",
+        "subtype": "other"
+    },
+    "shutdown_system": {
+        "name": "Shutdown System",
+        "short_description": "Shutdown the system",
+        "description": "Éteint le système distant",
+        "command": "sudo shutdown -h now",
+        "type": "action",
+        "subtype": "other"
+    },
+    "clean_apt_cache": {
+        "name": "Clean APT Cache",
+        "short_description": "Clean apt cache",
+        "description": "Nettoie le cache apt pour libérer de l'espace disque",
+        "command": "sudo apt-get clean && sudo apt-get autoclean",
+        "type": "action",
+        "subtype": "other"
+    },
+    "docker_containers": {
+        "name": "Docker Containers",
+        "short_description": "List running Docker containers",
+        "description": "Retourne la liste des conteneurs Docker en cours d'exécution",
+        "command": "if command -v docker > /dev/null 2>&1; then sudo docker ps --format '{{.Names}}' | awk 'BEGIN {RS=\"\"}{gsub(/\\n/,\",\",$0); print $0}'; else echo 'Docker not installed'; fi",
+        "type": "info",
+        "subtype": "string"
+    },
+    "docker_images_count": {
+        "name": "Docker Images Count",
+        "short_description": "Number of Docker images",
+        "description": "Retourne le nombre d'images Docker présentes sur le système",
+        "command": "if command -v docker > /dev/null 2>&1; then sudo docker images -q | wc -l; else echo '0'; fi",
+        "type": "info",
+        "subtype": "numeric"
+    },
+    "restart_docker_container": {
+        "name": "Restart Docker Container",
+        "short_description": "Restart a Docker container",
+        "description": "Redémarre un conteneur Docker. Remplacer #container_name# par le nom du conteneur",
+        "command": "sudo docker restart #container_name#",
+        "type": "action",
+        "subtype": "other"
     }
 }
