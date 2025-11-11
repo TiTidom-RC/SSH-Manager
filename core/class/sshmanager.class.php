@@ -272,6 +272,55 @@ class sshmanager extends eqLogic {
         return $sshmanager->internalGetFile($remoteFile, $localFile);
     }
 
+    /**
+     * Close SSH and SFTP connections for a specific host
+     *
+     * @param int $hostId
+     * @return bool - true if at least one connection was closed
+     */
+    public static function closeConnection($hostId) {
+        /** @var sshmanager */
+        $sshmanager = eqLogic::byId($hostId);
+        if (!is_object($sshmanager)) {
+            throw new Exception('Invalid Host Id');
+        }
+        return $sshmanager->internalCloseConnection();
+    }
+
+    /**
+     * Close all SSH and SFTP connections
+     *
+     * @return int - number of connections closed
+     */
+    public static function closeAllConnections() {
+        $count = 0;
+        
+        foreach (self::$_ssh2_client as $eqLogicID => $ssh2) {
+            try {
+                $ssh2->disconnect();
+                unset(self::$_ssh2_client[$eqLogicID]);
+                $count++;
+                log::add(__CLASS__, 'debug', "SSH2 connection closed for eqLogic {$eqLogicID}");
+            } catch (Exception $e) {
+                log::add(__CLASS__, 'error', "Error closing SSH2 connection {$eqLogicID} :: {$e->getMessage()}");
+            }
+        }
+        
+        foreach (self::$_sftp_client as $eqLogicID => $sftp) {
+            try {
+                $sftp->disconnect();
+                unset(self::$_sftp_client[$eqLogicID]);
+                $count++;
+                log::add(__CLASS__, 'debug', "SFTP connection closed for eqLogic {$eqLogicID}");
+            } catch (Exception $e) {
+                log::add(__CLASS__, 'error', "Error closing SFTP connection {$eqLogicID} :: {$e->getMessage()}");
+            }
+        }
+        
+        log::add(__CLASS__, 'info', "Closed {$count} connection(s)");
+        return $count;
+    }
+
     // end methods used by client plugins
 
     public static function getTemplateCommands() {
@@ -576,6 +625,47 @@ class sshmanager extends eqLogic {
         }
     }
 
+    /**
+     * Close SSH and SFTP connections for this equipment
+     *
+     * @return bool - true if at least one connection was closed
+     */
+    private function internalCloseConnection() {
+        $eqLogicID = $this->getId();
+        $eqLogicName = $this->getName();
+        $closed = false;
+        
+        // Close SSH2 connection
+        if (isset(self::$_ssh2_client[$eqLogicID])) {
+            try {
+                self::$_ssh2_client[$eqLogicID]->disconnect();
+                unset(self::$_ssh2_client[$eqLogicID]);
+                log::add(__CLASS__, 'debug', "[{$eqLogicName}] SSH2 connection closed");
+                $closed = true;
+            } catch (Exception $e) {
+                log::add(__CLASS__, 'error', "[{$eqLogicName}] Error closing SSH2 connection :: {$e->getMessage()}");
+            }
+        }
+        
+        // Close SFTP connection
+        if (isset(self::$_sftp_client[$eqLogicID])) {
+            try {
+                self::$_sftp_client[$eqLogicID]->disconnect();
+                unset(self::$_sftp_client[$eqLogicID]);
+                log::add(__CLASS__, 'debug', "[{$eqLogicName}] SFTP connection closed");
+                $closed = true;
+            } catch (Exception $e) {
+                log::add(__CLASS__, 'error', "[{$eqLogicName}] Error closing SFTP connection :: {$e->getMessage()}");
+            }
+        }
+        
+        if (!$closed) {
+            log::add(__CLASS__, 'debug', "[{$eqLogicName}] No active connection to close");
+        }
+        
+        return $closed;
+    }
+
     private function internalExecuteCmd(string $command, $cmdName = '') {
         try {
             $ssh2 = $this->getSSH2Client();
@@ -764,6 +854,10 @@ class sshmanager extends eqLogic {
     }
 
     public function preRemove() {
+        // Close SSH and SFTP connections before removing the equipment
+        $this->internalCloseConnection();
+        
+        // Remove cron jobs
         $cron = cron::byClassAndFunction(__CLASS__, 'cronEqLogic', array('SSHManager_Id' => intval($this->getId())));
         if (is_object($cron)) {
             $cron->remove();
