@@ -812,22 +812,36 @@ class sshmanager extends eqLogic {
     }
 
     public function refreshAllInfo() {
+        // Check if there are commands to refresh before opening SSH connection
+        $cmdsToRefresh = [];
+        foreach ($this->getCmd('info') as $cmd) {
+            /** @var sshmanagerCmd $cmd */
+            if ($cmd->getConfiguration('autorefresh', 1) == 1) {
+                $cmdsToRefresh[] = $cmd;
+            }
+        }
+        
+        if (count($cmdsToRefresh) == 0) {
+            log::add(__CLASS__, 'debug', '[' . $this->getName() . '][RefreshAllInfo] No commands to refresh');
+            return;
+        }
+        
         $isConnected = $this->internalCheckSSHConnection();
         if (!$isConnected) {
             log::add(__CLASS__, 'error', '[' . $this->getName() . '][RefreshAllInfo] SSH Connection :: KO');
             return;
         }
-        foreach ($this->getCmd('info') as $cmd) {
-            /** @var sshmanagerCmd $cmd */
-            if ($cmd->getConfiguration('autorefresh', 1) != 1) {
-                continue;
-            }
+        
+        foreach ($cmdsToRefresh as $cmd) {
             try {
                 $cmd->refreshInfo();
             } catch (Exception $exc) {
                 log::add(__CLASS__, 'error', sprintf(__("%s refreshAllInfo Exception :: %s", __FILE__), $cmd->getHumanName(), $exc->getMessage()));
             }
         }
+        
+        // Close connection after refreshing all commands
+        $this->internalCloseConnection();
     }
 
     public static function cronCmd($_options) {
