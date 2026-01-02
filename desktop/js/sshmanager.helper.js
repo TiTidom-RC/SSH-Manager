@@ -14,7 +14,7 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-(function() {
+(() => {
     'use strict';
 
     // Flag to prevent multiple event attachments (SPA protection)
