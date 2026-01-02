@@ -97,7 +97,8 @@
                                         level: 'success',
                                         emptyBefore: false
                                     });
-                                    buildSelectHost();
+                                    // Rafraîchir la liste ET sélectionner automatiquement le nouvel hôte
+                                    buildSelectHost(data.id);
                                     jeeDialog.get('#mod_add_sshmanager').destroy()
                                 }
                             });
