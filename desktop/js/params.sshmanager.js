@@ -21,9 +21,17 @@
     if (window.sshManagerParamsInit) return;
     window.sshManagerParamsInit = true;
 
-    // Configuration constants (from PHP class)
-    const CONFIG_AUTH_METHOD = 'authentication-method';
-    const CONFIG_SSH_KEY = 'ssh-key';
+    // Use configuration constants injected by PHP via sendVarToJS()
+    // These are set by sshmanager.php, mod.add.sshmanager.php, and mod.commands.php
+    
+    // Configuration keys (attribute names in data-l2key)
+    const CONFIG_AUTH_METHOD = window.CONFIG_AUTH_METHOD || 'auth-method';
+    const CONFIG_SSH_KEY = window.CONFIG_SSH_KEY || 'ssh-key';
+    
+    // Authentication method values (user choices)
+    const AUTH_METHOD_PASSWORD = window.AUTH_METHOD_PASSWORD || 'password';
+    const AUTH_METHOD_SSH_KEY = window.AUTH_METHOD_SSH_KEY || 'ssh-key';
+    const AUTH_METHOD_AGENT = window.AUTH_METHOD_AGENT || 'agent';
 
     // DOM Selectors constants (better minification + no string repetition + immutable)
     const SELECTORS = Object.freeze({
@@ -67,17 +75,25 @@
         document.addEventListener('click', handleReformatSSHKey);
     }
 
-    function handleAuthMethodChange() {
-        switch (this.selectedIndex) {
-            case 0: // Password
+    function handleAuthMethodChange(event) {
+        // Compare against actual values (more robust than selectedIndex)
+        const selectedMethod = event.currentTarget.value;
+        
+        switch (selectedMethod) {
+            case AUTH_METHOD_PASSWORD:
                 remotePwd?.seen();
                 remoteKey?.unseen();
                 break;
-            case 1: // SSH Key
+            case AUTH_METHOD_SSH_KEY:
                 remotePwd?.unseen();
                 remoteKey?.seen();
                 break;
-            default: // Agent (non-supporté)
+            case AUTH_METHOD_AGENT:
+                remotePwd?.unseen();
+                remoteKey?.unseen();
+                break;
+            default:
+                // Fallback for unknown values
                 remotePwd?.unseen();
                 remoteKey?.unseen();
         }
