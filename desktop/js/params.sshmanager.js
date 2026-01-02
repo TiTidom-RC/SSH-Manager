@@ -43,10 +43,6 @@
         REFORMAT_BTN: '.bt_reformatSSHKey'
     });
 
-    // Cache DOM elements (performance optimization)
-    let remotePwd = null;
-    let remoteKey = null;
-
     // Initialize once DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initParams);
@@ -55,10 +51,6 @@
     }
 
     function initParams() {
-        // Cache remote password/key elements for performance
-        remotePwd = document.querySelector(SELECTORS.REMOTE_PWD);
-        remoteKey = document.querySelector(SELECTORS.REMOTE_KEY);
-
         // Authentication method change handler
         const authMethodSelect = document.querySelector(SELECTORS.AUTH_METHOD);
         if (authMethodSelect) {
@@ -78,6 +70,10 @@
     function handleAuthMethodChange(event) {
         // Compare against actual values (more robust than selectedIndex)
         const selectedMethod = event.currentTarget.value;
+        
+        // Recapture elements each time (important for modals with dynamic DOM)
+        const remotePwd = document.querySelector(SELECTORS.REMOTE_PWD);
+        const remoteKey = document.querySelector(SELECTORS.REMOTE_KEY);
         
         switch (selectedMethod) {
             case AUTH_METHOD_PASSWORD:
