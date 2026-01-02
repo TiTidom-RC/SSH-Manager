@@ -14,41 +14,160 @@
  * along with Jeedom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-document.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_AUTH_METHOD + '"]').addEventListener('change', function () {
-    if (this.selectedIndex == 0) {
-        document.querySelector('.remote-pwd').style.display = "block";
-        document.querySelector('.remote-key').style.display = "none";
-    } else if (this.selectedIndex == 1) {
-        document.querySelector('.remote-pwd').style.display = "none";
-        document.querySelector('.remote-key').style.display = "block";
-    } else {
-        document.querySelector('.remote-pwd').style.display = "none";
-        document.querySelector('.remote-key').style.display = "none";
-    }
-});
+(function() {
+    'use strict';
 
-// Events delegation for password and passphrase toggling:
-document.getElementById('pwdorpassphrase')?.addEventListener('click', function(event) {
-    var _target = null
-    if (_target = event.target.closest('a.bt_togglePass')) {
-      event.stopPropagation();
-      var _el = event.target.matches('a.bt_togglePass') ? event.target : event.target.parentNode;
-      var input = _el.closest('.input-group').querySelector('input');
-      
-      if (input.getAttribute('type') === 'password') {
-          input.setAttribute('type', 'text');
-      } else {
-          input.setAttribute('type', 'password');
-      }
-  
-      var icon = _el.querySelector('.fas');
-      if (icon.classList.contains('fa-eye-slash')) {
-          icon.classList.remove('fa-eye-slash');
-          icon.classList.add('fa-eye');
-      } else {
-          icon.classList.remove('fa-eye');
-          icon.classList.add('fa-eye-slash');
-      }
-      return;
+    // Flag to prevent multiple event attachments (SPA protection)
+    if (window.sshManagerParamsInit) return;
+    window.sshManagerParamsInit = true;
+
+    // Configuration constants (from PHP class)
+    const CONFIG_AUTH_METHOD = 'authentication-method';
+    const CONFIG_SSH_KEY = 'ssh-key';
+
+    // DOM Selectors constants (better minification + no string repetition + immutable)
+    const SELECTORS = Object.freeze({
+        AUTH_METHOD: `.eqLogicAttr[data-l2key="${CONFIG_AUTH_METHOD}"]`,
+        SSH_KEY_FIELD: `[data-l2key="${CONFIG_SSH_KEY}"]`,
+        REMOTE_PWD: '.remote-pwd',
+        REMOTE_KEY: '.remote-key',
+        PWD_CONTAINER: '#pwdorpassphrase',
+        REFORMAT_BTN: '.bt_reformatSSHKey'
+    });
+
+    // Cache DOM elements (performance optimization)
+    let remotePwd = null;
+    let remoteKey = null;
+
+    // Initialize once DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initParams);
+    } else {
+        initParams();
     }
-  })
+
+    function initParams() {
+        // Cache remote password/key elements for performance
+        remotePwd = document.querySelector(SELECTORS.REMOTE_PWD);
+        remoteKey = document.querySelector(SELECTORS.REMOTE_KEY);
+
+        // Authentication method change handler
+        const authMethodSelect = document.querySelector(SELECTORS.AUTH_METHOD);
+        if (authMethodSelect) {
+            authMethodSelect.addEventListener('change', handleAuthMethodChange);
+        }
+
+        // Event delegation for password/passphrase visibility toggle
+        const pwdContainer = document.querySelector(SELECTORS.PWD_CONTAINER);
+        if (pwdContainer) {
+            pwdContainer.addEventListener('click', handlePasswordToggle);
+        }
+
+        // Attach reformatSSHKey to button via event delegation
+        document.addEventListener('click', handleReformatSSHKey);
+    }
+
+    function handleAuthMethodChange() {
+        switch (this.selectedIndex) {
+            case 0: // Password
+                remotePwd?.seen();
+                remoteKey?.unseen();
+                break;
+            case 1: // SSH Key
+                remotePwd?.unseen();
+                remoteKey?.seen();
+                break;
+            default: // Agent (non-supporté)
+                remotePwd?.unseen();
+                remoteKey?.unseen();
+        }
+    }
+
+    function handlePasswordToggle(event) {
+        const toggleBtn = event.target.closest('a.bt_togglePass');
+        if (!toggleBtn) return;
+        
+        event.stopPropagation();
+        
+        const input = toggleBtn.closest('.input-group').querySelector('input');
+        const icon = toggleBtn.querySelector('.fas');
+        
+        // Toggle input type
+        input.type = input.type === 'password' ? 'text' : 'password';
+        
+        // Toggle icon
+        icon.classList.toggle('fa-eye');
+        icon.classList.toggle('fa-eye-slash');
+    }
+
+    function handleReformatSSHKey(event) {
+        if (!event.target.closest(SELECTORS.REFORMAT_BTN)) return;
+        
+        event.preventDefault();
+        reformatSSHKey();
+    }
+
+    /**
+     * Reformats SSH key to 64-character blocks (PEM format standard)
+     * @returns {void}
+     */
+    function reformatSSHKey() {
+        const sshKeyField = document.querySelector(SELECTORS.SSH_KEY_FIELD);
+        if (!sshKeyField) {
+            console.error('SSH Key field not found');
+            return;
+        }
+        
+        const sshKey = sshKeyField.value;
+        
+        // Regular expressions for header and footer
+        const headerRegex = /-----BEGIN [A-Z ]+ KEY-----/;
+        const footerRegex = /-----END [A-Z ]+ KEY-----/;
+        
+        const headerMatch = sshKey.match(headerRegex);
+        const footerMatch = sshKey.match(footerRegex);
+        
+        if (!headerMatch || !footerMatch) {
+            jeedomUtils.showAlert({
+                title: 'SSH Manager - Format SSH Key',
+                message: '{{Format de la clé SSH invalide !}}',
+                level: 'warning',
+                emptyBefore: false
+            });
+            console.error('Invalid SSH key format');
+            return;
+        }
+        
+        const header = headerMatch[0];
+        const footer = footerMatch[0];
+        
+        // Remove header/footer and trim
+        const keyBody = sshKey.replace(header, '').replace(footer, '').trim();
+        
+        // Check if already formatted (all lines ≤ 64 chars)
+        const isFormatted = keyBody.split('\n').every(line => line.length <= 64);
+        
+        if (!isFormatted) {
+            // Format in 64-char blocks
+            const formattedKeyBody = keyBody.replace(/(.{64})/g, '$1\n');
+            const formattedKey = `${header}\n${formattedKeyBody}\n${footer}`;
+            
+            sshKeyField.value = formattedKey;
+            
+            jeedomUtils.showAlert({
+                title: 'SSH Manager - Format SSH Key',
+                message: 'Formatage de la clé SSH en blocs de 64 caractères :: OK',
+                level: 'success',
+                emptyBefore: false
+            });
+        } else {
+            jeedomUtils.showAlert({
+                title: 'SSH Manager - Format SSH Key',
+                message: '{{La clé SSH est déjà formatée en blocs de 64 caractères !}}',
+                level: 'info',
+                emptyBefore: false
+            });
+        }
+    }
+
+})();
