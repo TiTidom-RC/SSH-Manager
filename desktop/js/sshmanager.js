@@ -354,5 +354,15 @@
 
     // Expose functions globally for Jeedom to call them
     window.addCmdToTable = addCmdToTable;
+    
+    /**
+     * Called by Jeedom when equipment is displayed
+     */
+    window.printEqLogic = function() {
+        // Initialize authentication method display
+        if (typeof window.initAuthMethodDisplay === 'function') {
+            window.initAuthMethodDisplay();
+        }
+    };
 
 })();

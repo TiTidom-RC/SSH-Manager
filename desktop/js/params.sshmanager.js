@@ -64,23 +64,42 @@
 
         // Event delegation for reformatSSHKey button
         document.addEventListener('click', handleReformatSSHKey);
-        
-        // Watch for authentication method select to appear/change (for Jeedom's setValues)
-        const observer = new MutationObserver(() => {
-            const authMethodSelect = document.querySelector(SELECTORS.AUTH_METHOD);
-            if (authMethodSelect && authMethodSelect.value) {
-                handleAuthMethodChange({ currentTarget: authMethodSelect });
-            }
-        });
-        
-        // Observe the entire page container for DOM changes
-        observer.observe(document.body, { 
-            childList: true, 
-            subtree: true, 
-            attributes: true, 
-            attributeFilter: ['value']
-        });
     }
+    
+    /**
+     * Initialize authentication method display
+     * Called by Jeedom when equipment is displayed
+     */
+    function initAuthMethodDisplay() {
+        const authMethodSelect = document.querySelector(SELECTORS.AUTH_METHOD);
+        const remotePwd = document.querySelector(SELECTORS.REMOTE_PWD);
+        const remoteKey = document.querySelector(SELECTORS.REMOTE_KEY);
+        
+        if (!authMethodSelect) return;
+        
+        const selectedMethod = authMethodSelect.value;
+        
+        switch (selectedMethod) {
+            case AUTH_METHOD_PASSWORD:
+                remotePwd?.seen();
+                remoteKey?.unseen();
+                break;
+            case AUTH_METHOD_SSH_KEY:
+                remotePwd?.unseen();
+                remoteKey?.seen();
+                break;
+            case AUTH_METHOD_AGENT:
+                remotePwd?.unseen();
+                remoteKey?.unseen();
+                break;
+            default:
+                remotePwd?.unseen();
+                remoteKey?.unseen();
+        }
+    }
+    
+    // Expose globally for Jeedom to call
+    window.initAuthMethodDisplay = initAuthMethodDisplay;
 
     function handleAuthMethodChange(event) {
         // Compare against actual values (more robust than selectedIndex)
