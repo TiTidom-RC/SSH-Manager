@@ -31,6 +31,7 @@ sendVarToJS(sshmanager::CONST_TO_JS);
         <div class="col-sm-12">
             <form class="form-horizontal">
                 <fieldset>
+                    <input type="hidden" class="eqLogicAttr" data-l1key="id" />
                     <div class="form-group">
                         <label class="col-md-4 control-label">{{Nom de l'équipement}}</label>
                         <div class="col-md-6">

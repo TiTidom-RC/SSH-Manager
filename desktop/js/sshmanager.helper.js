@@ -34,27 +34,130 @@
         if (addButton) {
             addButton.addEventListener('click', handleAddSSHModal);
         }
+        
+        // Edit existing SSH equipment modal
+        const editButton = document.querySelector('.sshmanagerHelper[data-helper=edit]');
+        if (editButton) {
+            editButton.addEventListener('click', handleEditSSHModal);
+        }
     }
 
     // Add new SSH equipment modal
     function handleAddSSHModal() {
+        openSSHModal(null);
+    }
+
+    // Edit existing SSH equipment modal
+    function handleEditSSHModal() {
+        // Récupérer l'ID de l'hôte sélectionné
+        const selectHost = document.querySelector('.sshmanagerHelper[data-helper=list]');
+        if (!selectHost || !selectHost.value) {
+            jeedomUtils.showAlert({
+                title: "SSH Manager - Edit SSH",
+                message: "{{Veuillez sélectionner un hôte SSH}}",
+                level: 'warning'
+            });
+            return;
+        }
+
+        const hostId = selectHost.value;
+
+        // Récupérer les données de l'hôte via AJAX
+        domUtils.ajax({
+            type: 'POST',
+            url: 'plugins/sshmanager/core/ajax/sshmanager.ajax.php',
+            data: {
+                action: 'getSSHHost',
+                id: hostId
+            },
+            dataType: 'json',
+            error: function (error) {
+                jeedomUtils.showAlert({
+                    title: "SSH Manager - Edit SSH",
+                    message: "Error :: " + error.message,
+                    level: 'danger'
+                });
+            },
+            success: function (data) {
+                if (!data.result) {
+                    jeedomUtils.showAlert({
+                        title: "SSH Manager - Edit SSH",
+                        message: "{{Hôte SSH introuvable}}",
+                        level: 'danger'
+                    });
+                    return;
+                }
+
+                const hostData = data.result;
+                openSSHModal(hostData);
+            }
+        });
+    }
+
+    // Open SSH modal (add or edit mode)
+    function openSSHModal(hostData) {
+        const isEditMode = !!hostData;
+        const modalTitle = isEditMode ? '{{SSH Manager - Éditer un hôte}}' : '{{SSH Manager}}';
+        const buttonLabel = isEditMode ? '{{Mettre à jour l\'hôte SSH}}' : '{{Sauvegarder Hôte SSH}}';
+
         jeeDialog.dialog({
             id: 'mod_add_sshmanager',
-            title: '{{SSH Manager}}',
+            title: modalTitle,
             width: 750,
             height: 650,
             top: '10vh',
             contentUrl: 'index.php?v=d&plugin=sshmanager&modal=mod.add.sshmanager',
             callback: function () {
+                // Si mode édition, pré-remplir les champs
+                if (isEditMode) {
+                    setTimeout(() => {
+                        const modal = jeeDialog.get('#mod_add_sshmanager', 'content');
+                        if (modal) {
+                            const idInput = modal.querySelector('.eqLogicAttr[data-l1key="id"]');
+                            if (idInput) idInput.value = hostData.id || '';
+
+                            const nameInput = modal.querySelector('.eqLogicAttr[data-l1key="name"]');
+                            if (nameInput) nameInput.value = hostData.name || '';
+
+                            const authMethodInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_AUTH_METHOD + '"]');
+                            if (authMethodInput) {
+                                authMethodInput.value = hostData.configuration?.['auth-method'] || AUTH_METHOD_PASSWORD;
+                                authMethodInput.dispatchEvent(new Event('change'));
+                            }
+
+                            const hostInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_HOST + '"]');
+                            if (hostInput) hostInput.value = hostData.configuration?.host || '';
+
+                            const portInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_PORT + '"]');
+                            if (portInput) portInput.value = hostData.configuration?.port || '';
+
+                            const timeoutInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_TIMEOUT + '"]');
+                            if (timeoutInput) timeoutInput.value = hostData.configuration?.timeout || '';
+
+                            const userInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_USERNAME + '"]');
+                            if (userInput) userInput.value = hostData.configuration?.username || '';
+
+                            const passwordInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_PASSWORD + '"]');
+                            if (passwordInput) passwordInput.value = hostData.configuration?.password || '';
+
+                            const keyInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_SSH_KEY + '"]');
+                            if (keyInput) keyInput.value = hostData.configuration?.['ssh-key'] || '';
+
+                            const passphraseInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_SSH_PASSPHRASE + '"]');
+                            if (passphraseInput) passphraseInput.value = hostData.configuration?.['ssh-passphrase'] || '';
+                        }
+                    }, 100);
+                }
             },
             buttons: {
                 confirm: {
-                    label: '{{Sauvegarder Hôte SSH}}',
+                    label: buttonLabel,
                     className: 'success',
                     callback: {
                         click: function (event) {
-                            let response = jeeDialog.get('#mod_add_sshmanager', 'content')
+                            let response = jeeDialog.get('#mod_add_sshmanager', 'content');
 
+                            const id = response.querySelector('.eqLogicAttr[data-l1key="id"]')?.value || undefined;
                             const new_name = response.querySelector('.eqLogicAttr[data-l1key="name"]').value;
                             const new_auth_method = response.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_AUTH_METHOD + '"]').value;
                             const new_host = response.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_HOST + '"]').value;
@@ -65,26 +168,32 @@
                             const new_key = response.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_SSH_KEY + '"]').value;
                             const new_passphrase = response.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_SSH_PASSPHRASE + '"]').value;
 
+                            const eqLogicData = {
+                                name: new_name,
+                                isEnable: 1,
+                                isVisible: 0,
+                                configuration: {
+                                    'host': new_host,
+                                    'port': new_port,
+                                    'timeout': new_timeout,
+                                    'username': new_user,
+                                    'password': new_password,
+                                    'ssh-key': new_key,
+                                    'ssh-passphrase': new_passphrase,
+                                    'auth-method': new_auth_method
+                                }
+                            };
+
+                            if (id) {
+                                eqLogicData.id = id;
+                            }
+
                             jeedom.eqLogic.save({
                                 type: 'sshmanager',
-                                eqLogics: [{
-                                    name: new_name,
-                                    isEnable: 1,
-                                    isVisible: 0,
-                                    configuration: {
-                                        'host': new_host,
-                                        'port': new_port,
-                                        'timeout': new_timeout,
-                                        'username': new_user,
-                                        'password': new_password,
-                                        'ssh-key': new_key,
-                                        'ssh-passphrase': new_passphrase,
-                                        'auth-method': new_auth_method
-                                    }
-                                }],
+                                eqLogics: [eqLogicData],
                                 error: function (error) {
                                     jeedomUtils.showAlert({
-                                        title: "SSH Manager - Add New SSH",
+                                        title: "SSH Manager - " + (id ? "Update" : "Add") + " SSH",
                                         message: "Error :: " + error.message,
                                         level: 'danger',
                                         emptyBefore: false
@@ -92,14 +201,14 @@
                                 },
                                 success: function (data) {
                                     jeedomUtils.showAlert({
-                                        title: "SSH Manager - Add New SSH",
-                                        message: "Success :: {{Equipement créé}} :: " + data.name + " (" + data.configuration['auth-method'] + ")",
+                                        title: "SSH Manager - " + (id ? "Update" : "Add") + " SSH",
+                                        message: "Success :: {{Equipement " + (id ? "mis à jour" : "créé") + "}} :: " + data.name + " (" + data.configuration['auth-method'] + ")",
                                         level: 'success',
                                         emptyBefore: false
                                     });
-                                    // Rafraîchir la liste ET sélectionner automatiquement le nouvel hôte
+                                    // Rafraîchir la liste ET sélectionner l'hôte
                                     buildSelectHost(data.id);
-                                    jeeDialog.get('#mod_add_sshmanager').destroy()
+                                    jeeDialog.get('#mod_add_sshmanager').destroy();
                                 }
                             });
                         }
@@ -111,12 +220,12 @@
                     callback: {
                         click: function (event) {
                             jeedomUtils.showAlert({
-                                title: "SSH Manager - Add New SSH Conf",
+                                title: "SSH Manager - " + (hostData ? "Edit" : "Add") + " SSH Conf",
                                 message: "Cancel :: Action annulée",
                                 level: 'warning',
                                 emptyBefore: false
                             });
-                            jeeDialog.get('#mod_add_sshmanager').destroy()
+                            jeeDialog.get('#mod_add_sshmanager').destroy();
                         }
                     }
                 }
