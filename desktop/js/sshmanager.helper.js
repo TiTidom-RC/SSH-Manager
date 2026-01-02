@@ -53,7 +53,7 @@
         const selectHost = document.querySelector('.sshmanagerHelper[data-helper=list]');
         if (!selectHost || !selectHost.value) {
             jeedomUtils.showAlert({
-                title: "SSH Manager - Edit SSH",
+                title: "SSH Manager",
                 message: "{{Veuillez sélectionner un hôte SSH}}",
                 level: 'warning'
             });
@@ -73,7 +73,7 @@
             dataType: 'json',
             error: function (error) {
                 jeedomUtils.showAlert({
-                    title: "SSH Manager - Edit SSH",
+                    title: "SSH Manager",
                     message: "Error :: " + error.message,
                     level: 'danger'
                 });
@@ -81,7 +81,7 @@
             success: function (data) {
                 if (!data.result) {
                     jeedomUtils.showAlert({
-                        title: "SSH Manager - Edit SSH",
+                        title: "SSH Manager",
                         message: "{{Hôte SSH introuvable}}",
                         level: 'danger'
                     });
@@ -193,7 +193,7 @@
                                 eqLogics: [eqLogicData],
                                 error: function (error) {
                                     jeedomUtils.showAlert({
-                                        title: "SSH Manager - " + (id ? "Update" : "Add") + " SSH",
+                                        title: "SSH Manager",
                                         message: "Error :: " + error.message,
                                         level: 'danger',
                                         emptyBefore: false
@@ -201,7 +201,7 @@
                                 },
                                 success: function (data) {
                                     jeedomUtils.showAlert({
-                                        title: "SSH Manager - " + (id ? "Update" : "Add") + " SSH",
+                                        title: "SSH Manager",
                                         message: "Success :: {{Equipement " + (id ? "mis à jour" : "créé") + "}} :: " + data.name + " (" + data.configuration['auth-method'] + ")",
                                         level: 'success',
                                         emptyBefore: false
@@ -220,8 +220,8 @@
                     callback: {
                         click: function (event) {
                             jeedomUtils.showAlert({
-                                title: "SSH Manager - " + (hostData ? "Edit" : "Add") + " SSH Conf",
-                                message: "Cancel :: Action annulée",
+                                title: "SSH Manager",
+                                message: "{{Action annulée}}",
                                 level: 'warning',
                                 emptyBefore: false
                             });
@@ -268,7 +268,7 @@
             success: function (data) {
                 if (data.state != 'ok') {
                     jeedomUtils.showAlert({
-                        title: "SSH Manager - Build Select Host",
+                        title: "SSH Manager",
                         message: data.result,
                         level: 'danger',
                         emptyBefore: false
