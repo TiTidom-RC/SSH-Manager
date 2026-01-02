@@ -177,4 +177,7 @@
         }
     }
 
+    // Expose functions globally for Jeedom to call them
+    window.handleAuthMethodChange = handleAuthMethodChange;
+
 })();

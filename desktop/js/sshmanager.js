@@ -352,7 +352,25 @@
         }
     });
 
+    /**
+     * Called by Jeedom when equipment is displayed
+     * Re-attaches event handlers for equipment-specific elements
+     */
+    function printEqLogic() {
+        // Re-attach authentication method change handler when equipment changes
+        const authMethodSelect = document.querySelector('.eqLogicAttr[data-l2key="' + window.CONFIG_AUTH_METHOD + '"]');
+        if (authMethodSelect) {
+            // Remove old listener to avoid duplicates
+            authMethodSelect.removeEventListener('change', window.handleAuthMethodChange);
+            // Re-attach listener
+            authMethodSelect.addEventListener('change', window.handleAuthMethodChange);
+            // Initialize display based on current value
+            window.handleAuthMethodChange({ currentTarget: authMethodSelect });
+        }
+    }
+
     // Expose functions globally for Jeedom to call them
     window.addCmdToTable = addCmdToTable;
+    window.printEqLogic = printEqLogic;
 
 })();
