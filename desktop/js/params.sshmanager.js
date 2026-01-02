@@ -51,7 +51,7 @@
     }
 
     function initParams() {
-        // Use event delegation for authentication method change (works in modals and main interface)
+        // Use event delegation for authentication method change (works everywhere)
         document.addEventListener('change', function(event) {
             const authMethodSelect = event.target.closest(SELECTORS.AUTH_METHOD);
             if (authMethodSelect) {
@@ -60,13 +60,26 @@
         });
 
         // Event delegation for password/passphrase visibility toggle
-        const pwdContainer = document.querySelector(SELECTORS.PWD_CONTAINER);
-        if (pwdContainer) {
-            pwdContainer.addEventListener('click', handlePasswordToggle);
-        }
+        document.addEventListener('click', handlePasswordToggle);
 
-        // Attach reformatSSHKey to button via event delegation
+        // Event delegation for reformatSSHKey button
         document.addEventListener('click', handleReformatSSHKey);
+        
+        // Watch for authentication method select to appear/change (for Jeedom's setValues)
+        const observer = new MutationObserver(() => {
+            const authMethodSelect = document.querySelector(SELECTORS.AUTH_METHOD);
+            if (authMethodSelect && authMethodSelect.value) {
+                handleAuthMethodChange({ currentTarget: authMethodSelect });
+            }
+        });
+        
+        // Observe the entire page container for DOM changes
+        observer.observe(document.body, { 
+            childList: true, 
+            subtree: true, 
+            attributes: true, 
+            attributeFilter: ['value']
+        });
     }
 
     function handleAuthMethodChange(event) {
