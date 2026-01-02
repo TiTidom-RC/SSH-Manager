@@ -51,11 +51,13 @@
     }
 
     function initParams() {
-        // Authentication method change handler
-        const authMethodSelect = document.querySelector(SELECTORS.AUTH_METHOD);
-        if (authMethodSelect) {
-            authMethodSelect.addEventListener('change', handleAuthMethodChange);
-        }
+        // Use event delegation for authentication method change (works in modals and main interface)
+        document.addEventListener('change', function(event) {
+            const authMethodSelect = event.target.closest(SELECTORS.AUTH_METHOD);
+            if (authMethodSelect) {
+                handleAuthMethodChange(event);
+            }
+        });
 
         // Event delegation for password/passphrase visibility toggle
         const pwdContainer = document.querySelector(SELECTORS.PWD_CONTAINER);
