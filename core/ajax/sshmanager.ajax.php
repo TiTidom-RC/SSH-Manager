@@ -47,7 +47,13 @@ try {
         if (!is_object($eqLogic) || $eqLogic->getEqType_name() != 'sshmanager') {
             throw new Exception(__('Equipement SSH introuvable', __FILE__));
         }
-        ajax::success($eqLogic);
+        // Convert to array for JavaScript consumption
+        $result = array(
+            'id' => $eqLogic->getId(),
+            'name' => $eqLogic->getName(),
+            'configuration' => $eqLogic->getConfiguration()
+        );
+        ajax::success($result);
     }
 
     if (init('action') == 'getTemplateCommands') {
