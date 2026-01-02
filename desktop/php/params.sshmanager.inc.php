@@ -95,4 +95,3 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
         </div>
     </div>
 </div>
-<?php include_file('desktop', 'params.sshmanager', 'js', 'sshmanager'); ?>

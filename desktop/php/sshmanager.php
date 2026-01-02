@@ -237,3 +237,5 @@ $eqLogics = eqLogic::byType($plugin->getId());
 <?php include_file('desktop', 'sshmanager', 'js', 'sshmanager'); ?>
 <!-- Inclusion du fichier javascript du core - NE PAS MODIFIER NI SUPPRIMER -->
 <?php include_file('core', 'plugin.template', 'js'); ?>
+<!-- Inclusion du fichier javascript pour les paramètres SSH -->
+<?php include_file('desktop', 'params.sshmanager', 'js', 'sshmanager'); ?>
