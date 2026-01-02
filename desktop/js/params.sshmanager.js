@@ -51,13 +51,13 @@
     }
 
     function initParams() {
-        // Use event delegation for authentication method change (works everywhere)
-        document.addEventListener('change', function(event) {
-            const authMethodSelect = event.target.closest(SELECTORS.AUTH_METHOD);
-            if (authMethodSelect) {
-                handleAuthMethodChange(event);
-            }
-        });
+        // Authentication method change handler - direct attachment
+        const authMethodSelect = document.querySelector(SELECTORS.AUTH_METHOD);
+        if (authMethodSelect) {
+            authMethodSelect.addEventListener('change', handleAuthMethodChange);
+            // Initialize display on load
+            handleAuthMethodChange({ currentTarget: authMethodSelect });
+        }
 
         // Event delegation for password/passphrase visibility toggle
         document.addEventListener('click', handlePasswordToggle);
@@ -65,47 +65,9 @@
         // Event delegation for reformatSSHKey button
         document.addEventListener('click', handleReformatSSHKey);
     }
-    
-    /**
-     * Initialize authentication method display
-     * Called by Jeedom when equipment is displayed
-     */
-    function initAuthMethodDisplay() {
-        const authMethodSelect = document.querySelector(SELECTORS.AUTH_METHOD);
-        const remotePwd = document.querySelector(SELECTORS.REMOTE_PWD);
-        const remoteKey = document.querySelector(SELECTORS.REMOTE_KEY);
-        
-        if (!authMethodSelect) return;
-        
-        const selectedMethod = authMethodSelect.value;
-        
-        switch (selectedMethod) {
-            case AUTH_METHOD_PASSWORD:
-                remotePwd?.seen();
-                remoteKey?.unseen();
-                break;
-            case AUTH_METHOD_SSH_KEY:
-                remotePwd?.unseen();
-                remoteKey?.seen();
-                break;
-            case AUTH_METHOD_AGENT:
-                remotePwd?.unseen();
-                remoteKey?.unseen();
-                break;
-            default:
-                remotePwd?.unseen();
-                remoteKey?.unseen();
-        }
-    }
-    
-    // Expose globally for Jeedom to call
-    window.initAuthMethodDisplay = initAuthMethodDisplay;
 
     function handleAuthMethodChange(event) {
-        // Compare against actual values (more robust than selectedIndex)
         const selectedMethod = event.currentTarget.value;
-        
-        // Recapture elements each time (important for modals with dynamic DOM)
         const remotePwd = document.querySelector(SELECTORS.REMOTE_PWD);
         const remoteKey = document.querySelector(SELECTORS.REMOTE_KEY);
         
@@ -123,7 +85,6 @@
                 remoteKey?.unseen();
                 break;
             default:
-                // Fallback for unknown values
                 remotePwd?.unseen();
                 remoteKey?.unseen();
         }
