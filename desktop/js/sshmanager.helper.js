@@ -98,7 +98,7 @@
     function openSSHModal(hostData) {
         const isEditMode = !!hostData;
         const modalTitle = isEditMode ? '{{SSH Manager - Éditer un hôte}}' : '{{SSH Manager - Ajouter un hôte}}';
-        const confirmButtonLabel = isEditMode ? '{{Enregistrer}}' : '{{Créer}}';
+        const confirmButtonLabel = isEditMode ? '{{Enregistrer Hôte}}' : '{{Créer Hôte}}';
         const cancelButtonLabel = '{{Annuler}}';
 
         jeeDialog.dialog({
