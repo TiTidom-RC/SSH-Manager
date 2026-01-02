@@ -26,7 +26,7 @@ sendVarToJS(sshmanager::CONST_TO_JS);
 
 <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
     <div role="tabpanel" class="tab-pane active">
-        <legend><i class="fas fa-list-alt"></i> {{Ajout d'un nouvel équipement SSH Manager :}}</legend>
+        <legend id="sshModalLegend"><i class="fas fa-list-alt"></i> {{Configuration de l'équipement SSH Manager}}</legend>
         <br />
         <div class="col-sm-12">
             <form class="form-horizontal">

@@ -109,6 +109,15 @@
             top: '10vh',
             contentUrl: 'index.php?v=d&plugin=sshmanager&modal=mod.add.sshmanager',
             callback: function () {
+                // Update legend text based on mode
+                const modal = jeeDialog.get('#mod_add_sshmanager', 'content');
+                const legend = modal?.querySelector('#sshModalLegend');
+                if (legend) {
+                    const icon = isEditMode ? 'fas fa-pencil-alt' : 'fas fa-plus-circle';
+                    const text = isEditMode ? '{{Édition de l\'équipement SSH Manager}}' : '{{Ajout d\'un nouvel équipement SSH Manager}}';
+                    legend.innerHTML = `<i class="${icon}"></i> ${text}`;
+                }
+                
                 // Si mode édition, pré-remplir les champs
                 if (isEditMode) {
                     setTimeout(() => {
