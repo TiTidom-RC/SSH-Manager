@@ -97,8 +97,9 @@
     // Open SSH modal (add or edit mode)
     function openSSHModal(hostData) {
         const isEditMode = !!hostData;
-        const modalTitle = isEditMode ? '{{SSH Manager - Éditer un hôte}}' : '{{SSH Manager}}';
-        const buttonLabel = isEditMode ? '{{Mettre à jour l\'hôte SSH}}' : '{{Sauvegarder Hôte SSH}}';
+        const modalTitle = isEditMode ? '{{SSH Manager - Éditer un hôte}}' : '{{SSH Manager - Ajouter un hôte}}';
+        const confirmButtonLabel = isEditMode ? '{{Enregistrer}}' : '{{Créer}}';
+        const cancelButtonLabel = '{{Annuler}}';
 
         jeeDialog.dialog({
             id: 'mod_add_sshmanager',
@@ -151,7 +152,7 @@
             },
             buttons: {
                 confirm: {
-                    label: buttonLabel,
+                    label: confirmButtonLabel,
                     className: 'success',
                     callback: {
                         click: function (event) {
@@ -193,7 +194,7 @@
                                 eqLogics: [eqLogicData],
                                 error: function (error) {
                                     jeedomUtils.showAlert({
-                                        title: "SSH Manager",
+                                        title: "SSH Manager - " + (id ? "{{Édition}}" : "{{Ajout}}"),
                                         message: "Error :: " + error.message,
                                         level: 'danger',
                                         emptyBefore: false
@@ -201,7 +202,7 @@
                                 },
                                 success: function (data) {
                                     jeedomUtils.showAlert({
-                                        title: "SSH Manager",
+                                        title: "SSH Manager - " + (id ? "{{Édition}}" : "{{Ajout}}"),
                                         message: "Success :: {{Equipement " + (id ? "mis à jour" : "créé") + "}} :: " + data.name + " (" + data.configuration['auth-method'] + ")",
                                         level: 'success',
                                         emptyBefore: false
@@ -215,12 +216,12 @@
                     }
                 },
                 cancel: {
-                    label: '{{Fermer}}',
+                    label: cancelButtonLabel,
                     className: 'warning',
                     callback: {
                         click: function (event) {
                             jeedomUtils.showAlert({
-                                title: "SSH Manager",
+                                title: "SSH Manager - " + (isEditMode ? "{{Édition}}" : "{{Ajout}}"),
                                 message: "{{Action annulée}}",
                                 level: 'warning',
                                 emptyBefore: false
