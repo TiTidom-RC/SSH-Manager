@@ -1,7 +1,9 @@
 {
     "plugins\/sshmanager\/core\/ajax\/sshmanager.ajax.php": {
         "401 - Accès non autorisé": "401 - Unberechtigter Zugriff",
-        "Aucune méthode correspondante à : ": "Keine passende Methode zu :"
+        "Aucune méthode correspondante à : ": "Keine passende Methode zu :",
+        "Equipement SSH introuvable": "SSH-Gerät nicht gefunden",
+        "ID manquant": "ID fehlt"
     },
     "plugins\/sshmanager\/core\/class\/sshmanager.class.php": {
         "%s cronCmd :: %s": "%s cronCmd :: %s",
@@ -21,12 +23,25 @@
     "plugins\/sshmanager\/desktop\/js\/mod.commands.js": {
         "Sélectionner une commande": "Einen Befehl auswählen"
     },
+    "plugins\/sshmanager\/desktop\/js\/params.sshmanager.js": {
+        "Format de la clé SSH invalide !": "Ungültiges Format des SSH-Schlüssels!",
+        "La clé SSH est déjà formatée en blocs de 64 caractères !": "Der SSH-Schlüssel ist bereits in Blöcken von 64 Zeichen formatiert!"
+    },
     "plugins\/sshmanager\/desktop\/js\/sshmanager.helper.js": {
-        "Equipement créé": "Erstellte Ausstattung",
-        "Fermer": "Schließen",
-        "SSH Manager": "SSH Manager",
-        "Sauvegarder Hôte SSH": "SSH-Host speichern",
-        "Sélectionner un hôte": "Einen Host auswählen"
+        "Action annulée": "Aktion abgebrochen",
+        "Ajout": "Hinzufügen",
+        "Ajout d\\'un nouvel équipement SSH Manager": "Hinzufügen einer neuen SSH-Manager-Ausrüstung",
+        "Annuler": "Abbrechen",
+        "Créer Hôte": "Host erstellen",
+        "Enregistrer Hôte": "Host registrieren",
+        "Equipement \" + (id ? \"mis à jour\" : \"créé\") + \"": "Ausstattung \" + (id ? \"aktualisiert\" : \"erstellt\") + \"",
+        "Hôte SSH introuvable": "SSH-Host nicht gefunden",
+        "SSH Manager - Ajouter un hôte": "SSH Manager – Host hinzufügen",
+        "SSH Manager - Éditer un hôte": "SSH Manager – Einen Host bearbeiten",
+        "Sélectionner un hôte": "Einen Host auswählen",
+        "Veuillez sélectionner un hôte SSH": "Bitte wählen Sie einen SSH-Host aus.",
+        "Édition": "Ausgabe",
+        "Édition de l\\'équipement SSH Manager": "Bearbeiten der SSH-Manager-Ausstattung"
     },
     "plugins\/sshmanager\/desktop\/js\/sshmanager.js": {
         "Action du Service": "Aktion des Dienstes",
@@ -56,7 +71,7 @@
     },
     "plugins\/sshmanager\/desktop\/modal\/mod.add.sshmanager.php": {
         "401 - Accès non autorisé": "401 - Unberechtigter Zugriff",
-        "Ajout d'un nouvel équipement SSH Manager :": "Hinzufügen eines neuen SSH-Manager-Geräts :",
+        "Configuration de l'équipement SSH Manager": "Konfiguration der SSH Manager-Ausrüstung",
         "Nom de l'équipement": "Name des Geräts"
     },
     "plugins\/sshmanager\/desktop\/modal\/mod.commands.php": {
@@ -77,10 +92,8 @@
         "Cliquez ici pour formater la clé SSH en blocs de 64 caractères": "Klicken Sie hier, um den SSH-Schlüssel in Blöcken von 64 Zeichen zu formatieren",
         "Clé SSH": "SSH-Schlüssel",
         "Durée maximale (en secondes) avant expiration de la connexion SSH<br\/>Laisser vide pour utiliser le timeout par défaut (recommandé)": "Maximale Zeit (in Sekunden), bevor die SSH-Verbindung abläuft<br\/>Leer lassen, um den Standard-Timeout zu verwenden (empfohlen)",
-        "Format de la clé SSH invalide !": "Ungültiges Format des SSH-Schlüssels!",
         "Hôte distant": "Entfernter Host",
         "Identifiant": "Benutzername",
-        "La clé SSH est déjà formatée en blocs de 64 caractères !": "Der SSH-Schlüssel ist bereits in Blöcken von 64 Zeichen formatiert!",
         "Laisser vide pour utiliser le port par défaut (recommandé)": "Leer lassen, um den Standardport zu verwenden (empfohlen)",
         "Mot de Passe": "Passwort",
         "Mot de passe": "Passwort",
