@@ -1,7 +1,9 @@
 {
     "plugins\/sshmanager\/core\/ajax\/sshmanager.ajax.php": {
         "401 - Accès non autorisé": "401 - Acesso não autorizado",
-        "Aucune méthode correspondante à : ": "Nenhum método correspondente a :"
+        "Aucune méthode correspondante à : ": "Nenhum método correspondente a :",
+        "Equipement SSH introuvable": "Equipamento SSH não encontrado",
+        "ID manquant": "ID ausente"
     },
     "plugins\/sshmanager\/core\/class\/sshmanager.class.php": {
         "%s cronCmd :: %s": "%s cronCmd :: %s",
@@ -21,12 +23,25 @@
     "plugins\/sshmanager\/desktop\/js\/mod.commands.js": {
         "Sélectionner une commande": "Selecionar um comando"
     },
+    "plugins\/sshmanager\/desktop\/js\/params.sshmanager.js": {
+        "Format de la clé SSH invalide !": "Formato de chave SSH inválido!",
+        "La clé SSH est déjà formatée en blocs de 64 caractères !": "A chave SSH já está formatada em blocos de 64 caracteres!"
+    },
     "plugins\/sshmanager\/desktop\/js\/sshmanager.helper.js": {
-        "Equipement créé": "Equipamento criado",
-        "Fermer": "Fechar",
-        "SSH Manager": "Gestor SSH",
-        "Sauvegarder Hôte SSH": "Guardar anfitrião SSH",
-        "Sélectionner un hôte": "Selecionar um anfitrião"
+        "Action annulée": "Ação cancelada",
+        "Ajout": "Adicionar",
+        "Ajout d\\'un nouvel équipement SSH Manager": "Adicionar um novo equipamento SSH Manager",
+        "Annuler": "Cancelar",
+        "Créer Hôte": "Criar Anfitrião",
+        "Enregistrer Hôte": "Registar Anfitrião",
+        "Equipement \" + (id ? \"mis à jour\" : \"créé\") + \"": "Equipamento \" + (id ? \"atualizado\" : \"criado\") + \"",
+        "Hôte SSH introuvable": "Host SSH não encontrado",
+        "SSH Manager - Ajouter un hôte": "SSH Manager - Adicionar um host",
+        "SSH Manager - Éditer un hôte": "SSH Manager - Editar um host",
+        "Sélectionner un hôte": "Selecionar um anfitrião",
+        "Veuillez sélectionner un hôte SSH": "Selecione um host SSH",
+        "Édition": "Edição",
+        "Édition de l\\'équipement SSH Manager": "Edição do equipamento SSH Manager"
     },
     "plugins\/sshmanager\/desktop\/js\/sshmanager.js": {
         "Action du Service": "Ação de serviço",
@@ -56,7 +71,7 @@
     },
     "plugins\/sshmanager\/desktop\/modal\/mod.add.sshmanager.php": {
         "401 - Accès non autorisé": "401 - Acesso não autorizado",
-        "Ajout d'un nouvel équipement SSH Manager :": "Adicionar um novo dispositivo SSH Manager :",
+        "Configuration de l'équipement SSH Manager": "Configuração do equipamento SSH Manager",
         "Nom de l'équipement": "Nome do equipamento"
     },
     "plugins\/sshmanager\/desktop\/modal\/mod.commands.php": {
@@ -77,10 +92,8 @@
         "Cliquez ici pour formater la clé SSH en blocs de 64 caractères": "Clique aqui para formatar a chave SSH em blocos de 64 caracteres",
         "Clé SSH": "Chave SSH",
         "Durée maximale (en secondes) avant expiration de la connexion SSH<br\/>Laisser vide pour utiliser le timeout par défaut (recommandé)": "Tempo máximo (em segundos) antes de a ligação SSH expirar<br\/>Deixar em branco para utilizar o tempo limite predefinido (recomendado)",
-        "Format de la clé SSH invalide !": "Formato de chave SSH inválido!",
         "Hôte distant": "Anfitrião remoto",
         "Identifiant": "Identificador",
-        "La clé SSH est déjà formatée en blocs de 64 caractères !": "A chave SSH já está formatada em blocos de 64 caracteres!",
         "Laisser vide pour utiliser le port par défaut (recommandé)": "Deixar em branco para utilizar a porta predefinida (recomendado)",
         "Mot de Passe": "Palavra-passe",
         "Mot de passe": "Palavra-passe",
