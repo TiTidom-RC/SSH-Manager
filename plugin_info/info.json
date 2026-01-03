@@ -17,8 +17,12 @@
 	"hasDependency": false,
 	"category": "programming",
 	"language": [
+		"de_DE",
 		"en_US",
-		"fr_FR"
+		"es_ES",
+		"fr_FR",
+		"it_IT",
+		"pt_PT"
 	],
 	"compatibility": [
 		"smart",
