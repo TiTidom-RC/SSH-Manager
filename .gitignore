@@ -1,4 +1,4 @@
 # Ignore VSCode directory
 .vscode/
-# but keep the settings file
-!.vscode/settings.json
+# but keep the cspell configuration
+!.vscode/cspell.json
