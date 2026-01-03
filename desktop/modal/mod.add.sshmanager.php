@@ -26,11 +26,12 @@ sendVarToJS(sshmanager::CONST_TO_JS);
 
 <div class="tab-content" style="height:calc(100% - 50px);overflow:auto;overflow-x: hidden;">
     <div role="tabpanel" class="tab-pane active">
-        <legend><i class="fas fa-list-alt"></i> {{Ajout d'un nouvel équipement SSH Manager :}}</legend>
+        <legend id="sshModalLegend"><i class="fas fa-list-alt"></i> {{Configuration de l'équipement SSH Manager}}</legend>
         <br />
         <div class="col-sm-12">
             <form class="form-horizontal">
                 <fieldset>
+                    <input type="hidden" class="eqLogicAttr" data-l1key="id" />
                     <div class="form-group">
                         <label class="col-md-4 control-label">{{Nom de l'équipement}}</label>
                         <div class="col-md-6">

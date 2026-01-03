@@ -38,6 +38,24 @@ try {
         ajax::success($remoteHosts);
     }
 
+    if (init('action') == 'getSSHHost') {
+        $id = init('id');
+        if (!$id) {
+            throw new Exception(__('ID manquant', __FILE__));
+        }
+        $eqLogic = eqLogic::byId($id);
+        if (!is_object($eqLogic) || $eqLogic->getEqType_name() != 'sshmanager') {
+            throw new Exception(__('Equipement SSH introuvable', __FILE__));
+        }
+        // Convert to array for JavaScript consumption
+        $result = array(
+            'id' => $eqLogic->getId(),
+            'name' => $eqLogic->getName(),
+            'configuration' => $eqLogic->getConfiguration()
+        );
+        ajax::success($result);
+    }
+
     if (init('action') == 'getTemplateCommands') {
         $commands = sshmanager::getTemplateCommands();
         ajax::success($commands);
