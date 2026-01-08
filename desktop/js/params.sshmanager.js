@@ -39,13 +39,6 @@
         REFORMAT_BTN: '.bt_reformatSSHKey'
     });
 
-    // Initialize once DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initParams);
-    } else {
-        initParams();
-    }
-
     function initParams() {
         // Authentication method change handler - direct attachment
         const authMethodSelect = document.querySelector(SELECTORS.AUTH_METHOD);
