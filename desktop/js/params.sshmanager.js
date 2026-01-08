@@ -53,7 +53,10 @@
     function handleAuthMethodChangeEvent(event) {
         // Check if the change event is from the auth method select
         if (event.target.matches(SELECTORS.AUTH_METHOD)) {
-            handleAuthMethodChange(event);
+            // Only handle if value is present (ignore early programmatic changes during initialization)
+            if (event.target.value) {
+                handleAuthMethodChange(event);
+            }
         }
     }
 
@@ -67,6 +70,12 @@
         } else if (eventOrValue?.target || eventOrValue?.currentTarget) {
             // Event object passed
             selectedMethod = eventOrValue.target?.value ?? eventOrValue.currentTarget?.value ?? eventOrValue.value;
+        }
+        
+        // If still no value, try reading directly from the select element as fallback
+        if (!selectedMethod) {
+            const authSelect = document.querySelector(SELECTORS.AUTH_METHOD);
+            selectedMethod = authSelect?.value;
         }
         
         if (!selectedMethod) {

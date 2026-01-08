@@ -279,7 +279,8 @@
         const authMethodSelect = document.querySelector(`.eqLogicAttr[data-l2key="${window.CONFIG_AUTH_METHOD || 'auth-method'}"]`);
         if (authMethodSelect && window.handleAuthMethodChange) {
             // Pass the value directly from _eqLogic instead of waiting for setJeeValues
-            const authMethodValue = _eqLogic?.configuration?.[window.CONFIG_AUTH_METHOD || 'auth-method'];
+            const configKey = window.CONFIG_AUTH_METHOD || 'auth-method';
+            const authMethodValue = _eqLogic?.configuration?.[configKey];
             if (authMethodValue) {
                 window.handleAuthMethodChange(authMethodValue);
             } else {
