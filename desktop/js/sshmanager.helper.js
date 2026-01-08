@@ -117,47 +117,68 @@
                 
                 // Si mode édition, pré-remplir les champs
                 if (isEditMode) {
-                    setTimeout(() => {
+                    // Function to fill modal fields with host data
+                    const fillModalFields = () => {
                         const modal = jeeDialog.get('#mod_add_sshmanager', 'content');
-                        if (modal) {
-                            const idInput = modal.querySelector('.eqLogicAttr[data-l1key="id"]');
-                            if (idInput) idInput.value = hostData.id || '';
+                        if (!modal) return false; // Modal not ready yet
+                        
+                        const idInput = modal.querySelector('.eqLogicAttr[data-l1key="id"]');
+                        if (!idInput) return false; // Content not loaded yet
+                        
+                        // Modal is ready, fill all fields
+                        idInput.value = hostData.id || '';
 
-                            const nameInput = modal.querySelector('.eqLogicAttr[data-l1key="name"]');
-                            if (nameInput) nameInput.value = hostData.name || '';
+                        const nameInput = modal.querySelector('.eqLogicAttr[data-l1key="name"]');
+                        if (nameInput) nameInput.value = hostData.name || '';
 
-                            const authMethodInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_AUTH_METHOD + '"]');
-                            if (authMethodInput) {
-                                authMethodInput.value = hostData.configuration?.['auth-method'] || AUTH_METHOD_PASSWORD;
-                            }
-
-                            const hostInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_HOST + '"]');
-                            if (hostInput) hostInput.value = hostData.configuration?.host || '';
-
-                            const portInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_PORT + '"]');
-                            if (portInput) portInput.value = hostData.configuration?.port || '';
-
-                            const timeoutInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_TIMEOUT + '"]');
-                            if (timeoutInput) timeoutInput.value = hostData.configuration?.timeout || '';
-
-                            const userInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_USERNAME + '"]');
-                            if (userInput) userInput.value = hostData.configuration?.username || '';
-
-                            const passwordInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_PASSWORD + '"]');
-                            if (passwordInput) passwordInput.value = hostData.configuration?.password || '';
-
-                            const keyInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_SSH_KEY + '"]');
-                            if (keyInput) keyInput.value = hostData.configuration?.['ssh-key'] || '';
-
-                            const passphraseInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_SSH_PASSPHRASE + '"]');
-                            if (passphraseInput) passphraseInput.value = hostData.configuration?.['ssh-passphrase'] || '';
-                            
-                            // Force authentication fields display update
-                            if (authMethodInput && typeof window.handleAuthMethodChange === 'function') {
-                                window.handleAuthMethodChange({ target: authMethodInput });
-                            }
+                        const authMethodInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_AUTH_METHOD + '"]');
+                        if (authMethodInput) {
+                            authMethodInput.value = hostData.configuration?.['auth-method'] || AUTH_METHOD_PASSWORD;
                         }
-                    }, 100);
+
+                        const hostInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_HOST + '"]');
+                        if (hostInput) hostInput.value = hostData.configuration?.host || '';
+
+                        const portInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_PORT + '"]');
+                        if (portInput) portInput.value = hostData.configuration?.port || '';
+
+                        const timeoutInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_TIMEOUT + '"]');
+                        if (timeoutInput) timeoutInput.value = hostData.configuration?.timeout || '';
+
+                        const userInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_USERNAME + '"]');
+                        if (userInput) userInput.value = hostData.configuration?.username || '';
+
+                        const passwordInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_PASSWORD + '"]');
+                        if (passwordInput) passwordInput.value = hostData.configuration?.password || '';
+
+                        const keyInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_SSH_KEY + '"]');
+                        if (keyInput) keyInput.value = hostData.configuration?.['ssh-key'] || '';
+
+                        const passphraseInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_SSH_PASSPHRASE + '"]');
+                        if (passphraseInput) passphraseInput.value = hostData.configuration?.['ssh-passphrase'] || '';
+                        
+                        // Force authentication fields display update
+                        if (authMethodInput && typeof window.handleAuthMethodChange === 'function') {
+                            const authValue = hostData.configuration?.['auth-method'] || AUTH_METHOD_PASSWORD;
+                            window.handleAuthMethodChange(authValue);
+                        }
+                        
+                        return true; // Success
+                    };
+                    
+                    // Try to fill fields, retry if modal not ready yet
+                    let attempts = 0;
+                    const maxAttempts = 10;
+                    const tryFill = () => {
+                        if (fillModalFields()) {
+                            return; // Success, done
+                        }
+                        attempts++;
+                        if (attempts < maxAttempts) {
+                            setTimeout(tryFill, 50); // Retry after 50ms
+                        }
+                    };
+                    tryFill();
                 }
             },
             buttons: {

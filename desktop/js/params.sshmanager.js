@@ -57,9 +57,17 @@
         }
     }
 
-    function handleAuthMethodChange(event) {
-        // Get authentication method value from event (real event, simulated call, or direct element)
-        const selectedMethod = event?.target?.value ?? event?.currentTarget?.value ?? event?.value;
+    function handleAuthMethodChange(eventOrValue) {
+        // Get authentication method value from event or direct value
+        let selectedMethod;
+        
+        if (typeof eventOrValue === 'string') {
+            // Direct value passed
+            selectedMethod = eventOrValue;
+        } else if (eventOrValue?.target || eventOrValue?.currentTarget) {
+            // Event object passed
+            selectedMethod = eventOrValue.target?.value ?? eventOrValue.currentTarget?.value ?? eventOrValue.value;
+        }
         
         if (!selectedMethod) {
             console.warn('[SSH Manager] Could not determine auth method value');

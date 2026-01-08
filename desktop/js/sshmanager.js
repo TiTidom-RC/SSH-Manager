@@ -278,8 +278,14 @@
         // Reinitialize authentication fields display after Jeedom's setJeeValues
         const authMethodSelect = document.querySelector(`.eqLogicAttr[data-l2key="${window.CONFIG_AUTH_METHOD || 'auth-method'}"]`);
         if (authMethodSelect && window.handleAuthMethodChange) {
-            // Slight delay to ensure setJeeValues has fully completed
-            setTimeout(() => window.handleAuthMethodChange({ currentTarget: authMethodSelect }), 50);
+            // Pass the value directly from _eqLogic instead of waiting for setJeeValues
+            const authMethodValue = _eqLogic?.configuration?.[window.CONFIG_AUTH_METHOD || 'auth-method'];
+            if (authMethodValue) {
+                window.handleAuthMethodChange(authMethodValue);
+            } else {
+                // Fallback: trigger with the select element
+                setTimeout(() => window.handleAuthMethodChange({ currentTarget: authMethodSelect }), 50);
+            }
         }
     }
 
