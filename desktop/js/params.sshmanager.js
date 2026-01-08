@@ -17,10 +17,6 @@
 (function() {
     'use strict';
 
-    // Flag to prevent multiple event attachments (SPA protection)
-    if (window.sshManagerParamsInit) return;
-    window.sshManagerParamsInit = true;
-
     // Use configuration constants injected by PHP via sendVarToJS()
     // These are set by sshmanager.php, mod.add.sshmanager.php, and mod.commands.php
     
@@ -55,8 +51,8 @@
         const authMethodSelect = document.querySelector(SELECTORS.AUTH_METHOD);
         if (authMethodSelect) {
             authMethodSelect.addEventListener('change', handleAuthMethodChange);
-            // Initialize display on load
-            handleAuthMethodChange({ currentTarget: authMethodSelect });
+            // NOTE: Do NOT initialize display here - values are not loaded yet
+            // Display will be initialized in printEqLogic() after Jeedom loads values
         }
 
         // Event delegation for password/passphrase visibility toggle
@@ -178,6 +174,19 @@
     }
 
     // Expose functions globally for Jeedom to call them
+    // These MUST be exposed every time, not just on first init
     window.handleAuthMethodChange = handleAuthMethodChange;
+    
+    // Flag to prevent multiple event attachments (SPA protection)
+    // This is placed AFTER function exports to ensure functions are always available
+    if (window.sshManagerParamsInit) return;
+    window.sshManagerParamsInit = true;
+
+    // Initialize once DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initParams);
+    } else {
+        initParams();
+    }
 
 })();
