@@ -17,10 +17,6 @@
 (() => {
     'use strict';
 
-    // Flag to prevent multiple event attachments (SPA protection)
-    if (window.sshManagerInit) return;
-    window.sshManagerInit = true;
-
     // DOM Selectors constants (better minification + no string repetition + immutable)
     const SELECTORS = Object.freeze({
         TABLE_CMD: '#table_cmd',
@@ -246,12 +242,14 @@
     });
 
     /**
-     * Charge les informations d'utilisation de l'équipement SSH
-     * @param {Object} _eqLogic - Equipement Jeedom
+     * Called by Jeedom when equipment is displayed
+     * Loads usage information and re-initializes authentication display
+     * @param {Object} _eqLogic - Equipment data from Jeedom
      */
     function printEqLogic(_eqLogic) {
         if (!_eqLogic) return;
         
+        // Load UsedBy information
         domUtils.ajax({
             type: 'POST',
             url: 'plugins/sshmanager/core/ajax/sshmanager.ajax.php',
@@ -276,6 +274,20 @@
                 document.getElementById('div_eqLogicList').innerHTML = data.result;
             }
         });
+        
+        // Reinitialize authentication fields display after Jeedom's setJeeValues
+        const authMethodSelect = document.querySelector(`.eqLogicAttr[data-l2key="${window.CONFIG_AUTH_METHOD || 'auth-method'}"]`);
+        if (authMethodSelect && window.handleAuthMethodChange) {
+            // Pass the value directly from _eqLogic instead of waiting for setJeeValues
+            const configKey = window.CONFIG_AUTH_METHOD || 'auth-method';
+            const authMethodValue = _eqLogic?.configuration?.[configKey];
+            if (authMethodValue) {
+                window.handleAuthMethodChange(authMethodValue);
+            } else {
+                // Fallback: trigger with the select element
+                setTimeout(() => window.handleAuthMethodChange({ currentTarget: authMethodSelect }), 50);
+            }
+        }
     }
 
     document.querySelector(SELECTORS.PAGE_CONTAINER).addEventListener("click", function(event) {
@@ -352,25 +364,14 @@
         }
     });
 
-    /**
-     * Called by Jeedom when equipment is displayed
-     * Re-attaches event handlers for equipment-specific elements
-     */
-    function printEqLogic() {
-        // Re-attach authentication method change handler when equipment changes
-        const authMethodSelect = document.querySelector('.eqLogicAttr[data-l2key="' + window.CONFIG_AUTH_METHOD + '"]');
-        if (authMethodSelect) {
-            // Remove old listener to avoid duplicates
-            authMethodSelect.removeEventListener('change', window.handleAuthMethodChange);
-            // Re-attach listener
-            authMethodSelect.addEventListener('change', window.handleAuthMethodChange);
-            // Initialize display based on current value
-            window.handleAuthMethodChange({ currentTarget: authMethodSelect });
-        }
-    }
-
     // Expose functions globally for Jeedom to call them
+    // These MUST be exposed every time, not just on first init
     window.addCmdToTable = addCmdToTable;
     window.printEqLogic = printEqLogic;
+    
+    // Flag to prevent multiple event attachments (SPA protection)
+    // This is placed AFTER function exports to ensure functions are always available
+    if (window.sshManagerInit) return;
+    window.sshManagerInit = true;
 
 })();

@@ -26,7 +26,7 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
         <select id="pwdorkey" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="<?= sshmanager::CONFIG_AUTH_METHOD ?>">
             <option value="<?= sshmanager::AUTH_METHOD_PASSWORD ?>" selected>{{Mot de Passe}}</option>
             <option value="<?= sshmanager::AUTH_METHOD_SSH_KEY ?>">{{Clé SSH}}</option>
-            <option value="<?= sshmanager::AUTH_METHOD_AGENT ?>">{{Agent (non-supporté)}}</option>
+            <option value="<?= sshmanager::AUTH_METHOD_AGENT ?>" hidden>{{Agent (non-supporté)}}</option>
         </select>
     </div>
 </div>
