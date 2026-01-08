@@ -25,7 +25,8 @@
     },
     "plugins\/sshmanager\/desktop\/js\/params.sshmanager.js": {
         "Format de la clé SSH invalide !": "Invalid SSH key format!",
-        "La clé SSH est déjà formatée en blocs de 64 caractères !": "The SSH key is already formatted in 64-character blocks!"
+        "La clé SSH est déjà formatée en blocs de 64 caractères !": "The SSH key is already formatted in 64-character blocks!",
+        "Le champ de clé SSH est vide": "The SSH key field is empty"
     },
     "plugins\/sshmanager\/desktop\/js\/sshmanager.helper.js": {
         "Action annulée": "Action canceled",
