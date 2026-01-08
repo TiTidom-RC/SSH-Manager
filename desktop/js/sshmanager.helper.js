@@ -132,7 +132,6 @@
                             const authMethodInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_AUTH_METHOD + '"]');
                             if (authMethodInput) {
                                 authMethodInput.value = hostData.configuration?.['auth-method'] || AUTH_METHOD_PASSWORD;
-                                authMethodInput.dispatchEvent(new Event('change'));
                             }
 
                             const hostInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_HOST + '"]');
@@ -155,6 +154,11 @@
 
                             const passphraseInput = modal.querySelector('.eqLogicAttr[data-l2key="' + CONFIG_SSH_PASSPHRASE + '"]');
                             if (passphraseInput) passphraseInput.value = hostData.configuration?.['ssh-passphrase'] || '';
+                            
+                            // Force authentication fields display update
+                            if (authMethodInput && typeof window.handleAuthMethodChange === 'function') {
+                                window.handleAuthMethodChange({ target: authMethodInput });
+                            }
                         }
                     }, 100);
                 }

@@ -40,13 +40,8 @@
     });
 
     function initParams() {
-        // Authentication method change handler - direct attachment
-        const authMethodSelect = document.querySelector(SELECTORS.AUTH_METHOD);
-        if (authMethodSelect) {
-            authMethodSelect.addEventListener('change', handleAuthMethodChange);
-            // NOTE: Do NOT initialize display here - values are not loaded yet
-            // Display will be initialized in printEqLogic() after Jeedom loads values
-        }
+        // Event delegation for authentication method change
+        document.addEventListener('change', handleAuthMethodChangeEvent);
 
         // Event delegation for password/passphrase visibility toggle
         document.addEventListener('click', handlePasswordToggle);
@@ -55,27 +50,50 @@
         document.addEventListener('click', handleReformatSSHKey);
     }
 
+    function handleAuthMethodChangeEvent(event) {
+        // Check if the change event is from the auth method select
+        if (event.target.matches(SELECTORS.AUTH_METHOD)) {
+            handleAuthMethodChange(event);
+        }
+    }
+
     function handleAuthMethodChange(event) {
-        const selectedMethod = event.currentTarget.value;
+        // Déterminer la valeur de la méthode d'authentification
+        let selectedMethod;
+        if (event && event.target && event.target.value !== undefined) {
+            // Événement réel : event.target est le select
+            selectedMethod = event.target.value;
+        } else if (event && event.currentTarget && event.currentTarget.value !== undefined) {
+            // Appel simulé depuis printEqLogic : event.currentTarget est le select
+            selectedMethod = event.currentTarget.value;
+        } else if (event && typeof event.value === 'string') {
+            // L'élément select passé directement
+            selectedMethod = event.value;
+        } else {
+            console.warn('[SSH Manager] Could not determine auth method value from event:', event);
+            return;
+        }
+        
         const remotePwd = document.querySelector(SELECTORS.REMOTE_PWD);
         const remoteKey = document.querySelector(SELECTORS.REMOTE_KEY);
         
+        if (!remotePwd || !remoteKey) return;
+        
+        // Switch authentication fields display based on selected method
         switch (selectedMethod) {
             case AUTH_METHOD_PASSWORD:
-                remotePwd?.seen();
-                remoteKey?.unseen();
+                remotePwd.style.display = 'block';
+                remoteKey.style.display = 'none';
                 break;
             case AUTH_METHOD_SSH_KEY:
-                remotePwd?.unseen();
-                remoteKey?.seen();
+                remotePwd.style.display = 'none';
+                remoteKey.style.display = 'block';
                 break;
             case AUTH_METHOD_AGENT:
-                remotePwd?.unseen();
-                remoteKey?.unseen();
-                break;
             default:
-                remotePwd?.unseen();
-                remoteKey?.unseen();
+                // Hide both for agent or unknown methods
+                remotePwd.style.display = 'none';
+                remoteKey.style.display = 'none';
         }
     }
 
@@ -114,7 +132,18 @@
             return;
         }
         
-        const sshKey = sshKeyField.value;
+        const sshKey = sshKeyField.value.trim();
+        
+        // Skip if field is empty
+        if (!sshKey) {
+            jeedomUtils.showAlert({
+                title: 'SSH Manager - Format SSH Key',
+                message: '{{Le champ de clé SSH est vide}}',
+                level: 'warning',
+                emptyBefore: false
+            });
+            return;
+        }
         
         // Regular expressions for header and footer
         const headerRegex = /-----BEGIN [A-Z ]+ KEY-----/;
