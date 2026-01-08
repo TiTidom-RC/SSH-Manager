@@ -18,29 +18,26 @@
     'use strict';
 
     // Flag to prevent multiple event attachments (SPA protection)
+    // This file can be loaded by multiple plugins, so we protect against duplicate listeners
     if (window.sshManagerHelperInit) return;
     window.sshManagerHelperInit = true;
 
-    // Initialize once DOM is ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initHelper);
-    } else {
-        initHelper();
-    }
+    // Use event delegation to handle clicks on .sshmanagerHelper elements
+    // This works even when the file is loaded before the plugin's DOM exists
+    document.addEventListener('click', function(event) {
+        const helperElement = event.target.closest('.sshmanagerHelper');
+        if (!helperElement) return;
 
-    function initHelper() {
-        // Add new SSH equipment modal
-        const addButton = document.querySelector('.sshmanagerHelper[data-helper=add]');
-        if (addButton) {
-            addButton.addEventListener('click', handleAddSSHModal);
-        }
+        const helper = helperElement.getAttribute('data-helper');
         
-        // Edit existing SSH equipment modal
-        const editButton = document.querySelector('.sshmanagerHelper[data-helper=edit]');
-        if (editButton) {
-            editButton.addEventListener('click', handleEditSSHModal);
+        if (helper === 'add') {
+            event.preventDefault();
+            handleAddSSHModal();
+        } else if (helper === 'edit') {
+            event.preventDefault();
+            handleEditSSHModal();
         }
-    }
+    });
 
     // Add new SSH equipment modal
     function handleAddSSHModal() {
