@@ -58,19 +58,11 @@
     }
 
     function handleAuthMethodChange(event) {
-        // Déterminer la valeur de la méthode d'authentification
-        let selectedMethod;
-        if (event && event.target && event.target.value !== undefined) {
-            // Événement réel : event.target est le select
-            selectedMethod = event.target.value;
-        } else if (event && event.currentTarget && event.currentTarget.value !== undefined) {
-            // Appel simulé depuis printEqLogic : event.currentTarget est le select
-            selectedMethod = event.currentTarget.value;
-        } else if (event && typeof event.value === 'string') {
-            // L'élément select passé directement
-            selectedMethod = event.value;
-        } else {
-            console.warn('[SSH Manager] Could not determine auth method value from event:', event);
+        // Get authentication method value from event (real event, simulated call, or direct element)
+        const selectedMethod = event?.target?.value ?? event?.currentTarget?.value ?? event?.value;
+        
+        if (!selectedMethod) {
+            console.warn('[SSH Manager] Could not determine auth method value');
             return;
         }
         
@@ -159,7 +151,6 @@
                 level: 'warning',
                 emptyBefore: false
             });
-            console.error('Invalid SSH key format');
             return;
         }
         

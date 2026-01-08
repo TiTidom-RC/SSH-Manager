@@ -276,13 +276,10 @@
         });
         
         // Reinitialize authentication fields display after Jeedom's setJeeValues
-        // This ensures the correct fields (password or SSH key) are shown
-        const authMethodSelect = document.querySelector('.eqLogicAttr[data-l2key="' + (window.CONFIG_AUTH_METHOD || 'auth-method') + '"]');
-        if (authMethodSelect && typeof window.handleAuthMethodChange === 'function') {
-            // Call with slight delay to ensure setJeeValues has fully completed
-            setTimeout(() => {
-                window.handleAuthMethodChange({ currentTarget: authMethodSelect });
-            }, 50);
+        const authMethodSelect = document.querySelector(`.eqLogicAttr[data-l2key="${window.CONFIG_AUTH_METHOD || 'auth-method'}"]`);
+        if (authMethodSelect && window.handleAuthMethodChange) {
+            // Slight delay to ensure setJeeValues has fully completed
+            setTimeout(() => window.handleAuthMethodChange({ currentTarget: authMethodSelect }), 50);
         }
     }
 
