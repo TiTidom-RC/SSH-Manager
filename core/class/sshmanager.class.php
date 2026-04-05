@@ -703,9 +703,9 @@ class sshmanager extends eqLogic {
 
             if (!empty($result)) {
                 $result = trim($result);
-                //TODO: '\n' should be escaped from $result before logging
+                $resultOneLine = str_replace(["\r\n", "\r", "\n"], '\\n', $result);
                 log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: ' . str_replace("\r\n", "\\r\\n", $command));
-                log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' Result :: ' . $result);
+                log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' Result :: ' . $resultOneLine);
             } else {
                 log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: ' . str_replace("\r\n", "\\r\\n", $command));
                 log::add(__CLASS__, 'debug', '[' . $this->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: Empty Result');
