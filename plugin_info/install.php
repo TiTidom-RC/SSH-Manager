@@ -67,21 +67,27 @@ function sshmanager_update() {
         $pathsToRemove = array(
             // Accepte fichiers ET répertoires (rm -rf) — ajouter ici les chemins à supprimer à chaque mise à jour
         );
+        $cleanupRemoved = 0;
+        $cleanupErrors = 0;
         foreach ($pathsToRemove as $path) {
-            log::add('sshmanager', 'debug', '[CLEANUP] Vérification du chemin : ' . $path);
             if (file_exists($path)) {
                 $output = array();
                 $returnVar = 0;
                 exec('rm -rf ' . escapeshellarg($path) . ' 2>&1', $output, $returnVar);
                 if ($returnVar !== 0) {
+                    $cleanupErrors++;
                     log::add('sshmanager', 'warning', '[CLEANUP_KO] Echec suppression "' . $path . '" (Code: ' . $returnVar . ') : ' . implode(' ', $output));
                 } else {
+                    $cleanupRemoved++;
                     log::add('sshmanager', 'info', '[CLEANUP_OK] Chemin supprimé : ' . $path);
                 }
-            } else {
-                log::add('sshmanager', 'debug', '[CLEANUP_NA] Chemin non trouvé, aucune action : ' . $path);
             }
         }
+        $cleanupSummary = count($pathsToRemove) . ' chemin(s) vérifié(s), ' . $cleanupRemoved . ' supprimé(s)';
+        if ($cleanupErrors > 0) {
+            $cleanupSummary .= ', ' . $cleanupErrors . ' erreur(s)';
+        }
+        log::add('sshmanager', 'debug', '[CLEANUP] ' . $cleanupSummary);
     } catch (Exception $e) {
         log::add('sshmanager', 'warning', '[CLEANUP_KO] Erreur lors du nettoyage : ' . $e->getMessage());
     }
