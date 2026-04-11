@@ -62,35 +62,28 @@ function sshmanager_update() {
     }
 
     /* Ménage dans les répertoires du plugin si besoin */
+    $pluginDir = dirname(__DIR__);
     try {
-        $dirToDelete = array(
-            /* __DIR__ . '/../ressources' */
+        $pathsToRemove = array(
+            // Accepte fichiers ET répertoires (rm -rf) — ajouter ici les chemins à supprimer à chaque mise à jour
         );
-        
-        $filesToDelete = array(
-            /* __DIR__ . '/../plugin_info/packages.json' */
-        );
-
-        foreach ($dirToDelete as $dir) {
-            log::add('sshmanager', 'debug', '[DIR-CHECK] Vérification de la présence du répertoire ' . $dir);
-            if (file_exists($dir)) {
-                shell_exec('sudo rm -rf ' . $dir);
-                log::add('sshmanager', 'debug', '[DIR-CHECK_OK] Le répertoire ' . $dir . ' a bien été effacé.');
+        foreach ($pathsToRemove as $path) {
+            log::add('sshmanager', 'debug', '[CLEANUP] Vérification du chemin : ' . $path);
+            if (file_exists($path)) {
+                $output = array();
+                $returnVar = 0;
+                exec('rm -rf ' . escapeshellarg($path) . ' 2>&1', $output, $returnVar);
+                if ($returnVar !== 0) {
+                    log::add('sshmanager', 'warning', '[CLEANUP_KO] Echec suppression "' . $path . '" (Code: ' . $returnVar . ') : ' . implode(' ', $output));
+                } else {
+                    log::add('sshmanager', 'info', '[CLEANUP_OK] Chemin supprimé : ' . $path);
+                }
             } else {
-                log::add('sshmanager', 'debug', '[DIR-CHECK_NA] Répertoire ' . $dir . ' non trouvé. Aucune action requise.');
-            }
-        }
-        foreach ($filesToDelete as $file) {
-            log::add('sshmanager', 'debug', '[FILE-CHECK] Vérification de la présence du fichier : ' . $file);
-            if (file_exists($file)) {
-                shell_exec('sudo rm -f ' . $file);
-                log::add('sshmanager', 'debug', '[FILE-CHECK_OK] Le fichier  ' . $file . ' a bien été effacé.');
-            } else {
-                log::add('sshmanager', 'debug', '[FILE-CHECK_NA] Fichier ' . $file . ' non trouvé. Aucune action requise.');
+                log::add('sshmanager', 'debug', '[CLEANUP_NA] Chemin non trouvé, aucune action : ' . $path);
             }
         }
     } catch (Exception $e) {
-        log::add('sshmanager', 'debug', '[DIR-FILE-CHECK_KO] Exception :: ' . $e->getMessage());
+        log::add('sshmanager', 'warning', '[CLEANUP_KO] Erreur lors du nettoyage : ' . $e->getMessage());
     }
 }
 
