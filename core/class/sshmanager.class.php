@@ -222,6 +222,7 @@ class sshmanager extends eqLogic {
                 if (trim($cmd) === '') {
                     log::add(__CLASS__, 'warning', '[' . $sshmanager->getName() . '] ' . (!empty($cmdName) ? $cmdName : 'Cmd') . ' :: Empty command (array)');
                     $results[] = '';
+                    continue;
                 }
                 $results[] = $sshmanager->internalExecuteCmd($cmd);
             }
