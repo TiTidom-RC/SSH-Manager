@@ -969,7 +969,7 @@ class sshmanagerCmd extends cmd {
             /** @var sshmanager */
             $eqLogic = $this->getEqLogic();
             $eqLogic->refreshAllInfo();
-            return;
+            return true;
         } elseif ($this->getConfiguration('cmdType') == 'refresh') {
             if ($this->getConfiguration('cmdToRefresh') != '') {
                 /** @var sshmanagerCmd $cmd */
@@ -977,7 +977,7 @@ class sshmanagerCmd extends cmd {
                 if (is_object($cmd)) {
                     log::add(get_class($this->getEqLogic()), 'info', '[' . $this->getEqLogic()->getName() . '][' . $cmd->getName() . '] ' . __('Refresh de la commande', __FILE__));
                     $cmd->refreshInfo();
-                    return;
+                    return true;
                 }   
             }   
         }
@@ -1012,5 +1012,6 @@ class sshmanagerCmd extends cmd {
         if ($this->getType() == 'info') {
             return $result; //TODO: what to do with '\n' in result?
         }
+        return true;
     }
 }
